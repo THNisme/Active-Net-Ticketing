@@ -202,3 +202,25 @@ input[type=file] {
 .create-tickettypes-btn i {
   margin-right: 10px;
 }
+
+.prev-btn {
+  background-color: #333;
+}
+
+.delete-btn {
+  background-color: red;
+}
+
+.modal-theme {
+  background-color: #333;
+  width: 1200px;
+}
+
+.modal-dialog {
+  max-width: fit-content;
+}
+
+.modal-price-input-wrapper {
+  display: flex;
+  align-items: center;
+}
