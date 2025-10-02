@@ -1,0 +1,42 @@
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  background-color: #1e1e1e;
+  border: none;
+  border-radius: 8px;
+  padding: 1.2rem;
+  color: #fff;
+}
+
+.progress {
+  background-color: #333;
+  height: 8px;
+  border-radius: 5px;
+}
+
+.progress-bar {
+  background-color: #f1c40f;
+}
+
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 6px solid #f1c40f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #fff;
+  margin-left: auto;
+}
+
+.section-title {
+  font-weight: bold;
+  margin: 20px 0 10px;
+}
