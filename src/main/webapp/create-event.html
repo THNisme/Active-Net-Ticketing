@@ -27,7 +27,7 @@
         </li>
         <span class="mx-3"><i class="bi bi-chevron-right"></i></span>
         <li class="nav-item" role="presentation">
-          <button class="nav-link disabled" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button">
+          <button class="nav-link " id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button">
             <span class="step-number">2</span> Cấu hình vé
           </button>
         </li>
@@ -111,16 +111,11 @@
             </div>
           </div>
 
-
-
-
-
           <div class="mb-3">
             <label for="eventDescription" class="form-label"><strong style="color: red;">*</strong>Thông tin sự
               kiện</label>
             <textarea id="eventDescription" required></textarea>
           </div>
-
 
           <button type="button" class="btn btn-primary next-btn" data-next="step2-tab">Tiếp theo</button>
         </div>
@@ -128,8 +123,37 @@
         <!-- Step 2 -->
         <div class="tab-pane fade" id="step2" role="tabpanel">
           <div class="mb-3">
-            <label for="eventDate" class="form-label">Tên loại vé</label>
-            <input type="text" class="form-control" id="ticketTypeName" name="ticketTypeName" required>
+            <h4 for="eventDate" class="form-label"><strong style="color: red;">*</strong> Loại vé</h4>
+            <ul class="ticket-types-list">
+              <li class="ticket-types-item mb-3">
+                <div class="ticket-types-name">
+                  <i class="bi bi-ticket-perforated"></i>
+                  <p>Standard</p>
+                </div>
+                <div class="manipulate-btn-group">
+                  <button type="button" class="btn mx-2"><i class="bi bi-pencil"></i></button>
+                  <button type="button" class="btn mx-2"><i class="bi bi-x-circle"></i></button>
+                </div>
+              </li>
+
+              <li class="ticket-types-item mb-3">
+                <div class="ticket-types-name">
+                  <i class="bi bi-ticket-perforated"></i>
+                  <p>VIP</p>
+                </div>
+                <div class="manipulate-btn-group">
+                  <button type="button" class="btn mx-2"><i class="bi bi-pencil"></i></button>
+                  <button type="button" class="btn mx-2"><i class="bi bi-x-circle"></i></button>
+                </div>
+              </li>
+
+            </ul>
+            <!-- Button trigger modal create ticket type -->
+            <button type="button" class="btn create-tickettypes-btn" data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop">
+              <i class="bi bi-plus-circle"></i>
+              Tạo loại vé mới
+            </button>
           </div>
           <button type="button" class="btn btn-secondary prev-btn" data-prev="step1-tab">Quay lại</button>
           <button type="submit" class="btn btn-success">Hoàn tất</button>
@@ -138,6 +162,13 @@
       </div>
     </form>
   </div>
+
+
+
+
+
+
+
   <!-- Elfsight Website Translator | Untitled Website Translator -->
   <!-- <script src="https://elfsightcdn.com/platform.js" async></script>
   <div class="elfsight-app-fbb67af7-dc8c-4557-90c3-fc51f6edee01" data-elfsight-app-lazy></div> -->

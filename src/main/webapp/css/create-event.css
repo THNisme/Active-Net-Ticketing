@@ -153,3 +153,52 @@ input[type=file] {
 .nav {
   align-items: center;
 }
+
+.ticket-types-list {
+  list-style: none;
+  padding: 0;
+}
+
+.ticket-types-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 8px;
+}
+
+.ticket-types-name {
+  /* width: fit-content; */
+  display: flex;
+  align-items: center;
+}
+
+.ticket-types-name p {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 1.4em;
+}
+
+.ticket-types-name i {
+  font-size: 2.4em;
+}
+
+.manipulate-btn-group {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  /* margin-right: 50px; */
+}
+
+.create-tickettypes-btn {
+  font-size: 1.4em;
+  background-color: transparent;
+  outline: solid var(--pink);
+  display: flex;
+  align-items: center;
+  margin: auto;
+}
+
+.create-tickettypes-btn i {
+  margin-right: 10px;
+}
