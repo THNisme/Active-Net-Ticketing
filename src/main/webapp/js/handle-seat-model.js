@@ -1,3 +1,19 @@
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el))
+
+function showControl() {
+  const checkOn = document.getElementById('checkIdentityTicket');
+  const initBlock = document.getElementById('init-seat-container');
+
+  checkOn.addEventListener("change", () => {
+    if (checkOn.checked) {
+      initBlock.classList.remove('disable');
+    } else {
+      initBlock.classList.add('disable');
+    }
+  });
+}
+
 function parseRows(input) {
   input = input.trim().toUpperCase();
   if (input.includes('-')) {
@@ -21,7 +37,7 @@ function generateSeats() {
   container.innerHTML = '';
 
   if (!rowsInput || !colsInput) {
-    alert("Vui lòng nhập đủ thông tin");
+    alert("Vui lòng nhập đủ thông tin (Dãy ghế - Số ghế)");
     return;
   }
 
@@ -43,3 +59,7 @@ function generateSeats() {
 
   container.appendChild(grid);
 }
+
+showControl();
+parseRows();
+generateSeats();
