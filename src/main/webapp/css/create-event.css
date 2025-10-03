@@ -258,3 +258,12 @@ input[type=file] {
 .controls-init-seat {
   margin-bottom: 15px;
 }
+
+#modalZoneMapImageWrapper {
+  overflow: hidden;
+}
+
+#modalZoneMapImageWrapper img {
+  display: flex;
+  margin: auto;
+}

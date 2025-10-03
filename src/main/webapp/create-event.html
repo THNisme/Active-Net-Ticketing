@@ -232,7 +232,8 @@
                 </div>
               </div>
               <div class="col">
-                <a href="#" class="float-end">Xem sơ đồ nơi tổ chức</a>
+                <a href="#" class="float-end" data-bs-toggle="modal" data-bs-target="#modalImageZoneMap">Xem sơ đồ nơi
+                  tổ chức</a>
               </div>
             </div>
 
@@ -271,23 +272,26 @@
 
 
   <!-- SUB MODAL -->
-  <div class="modal fade" id="modalCreateTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="modalCreateTicketTypeLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
+  <div class="modal fade" id="modalImageZoneMap" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modalImageZoneMapLable" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content modal-theme">
 
 
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Tạo loại vé</h1>
+          <h1 class="modal-title fs-5" id="modalImageZoneMap">Ảnh sơ đồ nơi chỗ chức: {place.name}</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
-          <img src="" alt="">
+          <div id="modalZoneMapImageWrapper">
+            <img src="./img/event-form-dashboard/sample-zonemap.jpg" alt="" id="modalZoneMapImage" width="600px">
+          </div>
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Lưu</button>
+          <button class="btn" onclick="zoomIn()">Zoom In</button>
+          <button class="btn" onclick="zoomOut()">Zoom Out</button>
         </div>
 
 
@@ -309,10 +313,7 @@
     src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
   <script src="./js/event-form-dashboard/custom-wysiwyg.js"></script>
   <script src="./js/event-form-dashboard/handle-seat-model.js"></script>
-  <script>
-
-
-  </script>
+  <script src="./js/event-form-dashboard/handle-zoom-image.js"></script>
 </body>
 
 </html>
