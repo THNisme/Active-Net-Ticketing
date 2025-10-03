@@ -175,96 +175,127 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="eventName" class="form-label"><strong style="color: red;">*</strong>Tên sự kiện</label>
-            <input type="text" class="form-control" id="eventName" name="eventName" required>
-          </div>
+        <form action="">
 
-          <div class="mb-3">
-            <div class="row">
-              <div class="col">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="eventName" class="form-label"><strong style="color: red;">*</strong>Tên sự kiện</label>
+              <input type="text" class="form-control" id="eventName" name="eventName" required>
+            </div>
 
-                <label for="ticketTypePrice" class="form-label"><strong style="color: red;">*</strong>Giá
-                  vé</label>
-                <div class="modal-price-input-wrapper">
-                  <div>
-                    <input type="number" class="form-control" id="ticketTypePrice" name="ticketTypePrice" min="1"
-                      required>
+            <div class="mb-3">
+              <div class="row">
+                <div class="col">
+
+                  <label for="ticketTypePrice" class="form-label"><strong style="color: red;">*</strong>Giá
+                    vé</label>
+                  <div class="modal-price-input-wrapper">
+                    <div>
+                      <input type="number" class="form-control" id="ticketTypePrice" name="ticketTypePrice" min="1"
+                        required>
+                    </div>
+
+                    <div class="form-check mx-2">
+                      <input class="form-check-input" type="checkbox" value="" id="checkFreeTicket">
+                      <label class="form-check-label" for="checkFreeTicket">
+                        Miễn phí
+                      </label>
+                    </div>
                   </div>
+                </div>
+                <div class="col">
+                  <label for="ticketTypeTotal" class="form-label"><strong style="color: red;">*</strong>Tổng số
+                    vé</label>
+                  <input type="number" class="form-control" id="ticketTypeTotal" name="ticketTypeTotal" min="1"
+                    required>
+                </div>
+                <div class="col">
+                  <label for="eventPlace" class="form-label"><strong style="color: red;">*</strong>Chọn zone vé</label>
+                  <a href="#" class="float-end">Tạo zone</a>
 
-                  <div class="form-check mx-2">
-                    <input class="form-check-input" type="checkbox" value="" id="checkFreeTicket">
-                    <label class="form-check-label" for="checkFreeTicket">
-                      Miễn phí
+                  <select class="form-select" aria-label="Default select example" id="eventPlace" required>
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="row">
+                <div class="col">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkIdentityTicket">
+                    <label class="form-check-label" for="checkIdentityTicket" data-bs-toggle="tooltip"
+                      data-bs-placement="right" data-bs-title="Chọn để tạo loại vé có vị trí chỗ ngồi cụ thể (ghế)">
+                      Khởi tạo vé có định danh <span style="opacity: 0.8;">(tùy chọn)</span>
                     </label>
                   </div>
                 </div>
-              </div>
-              <div class="col">
-                <label for="ticketTypeTotal" class="form-label"><strong style="color: red;">*</strong>Tổng số
-                  vé</label>
-                <input type="number" class="form-control" id="ticketTypeTotal" name="ticketTypeTotal" min="1" required>
-              </div>
-              <div class="col">
-                <label for="eventPlace" class="form-label"><strong style="color: red;">*</strong>Chọn zone vé</label>
-                <a href="#" class="float-end">Tạo zone</a>
+                <div class="col">
+                  <a class="float-end" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    Xem sơ đồ nơi tổ chức</a>
+                </div>
+                <div class="collapse mt-3" id="collapseExample">
+                  <div class="card card-body">
+                    <div id="modalZoneMapImageWrapper">
+                      <img src="./img/event-form-dashboard/sample-zonemap.jpg" alt="" id="modalZoneMapImage"
+                        width="600px">
+                      <div class="zoom-control-btn-group">
+                        <button class="btn" onclick="zoomIn()">Zoom In</button>
+                        <button class="btn" onclick="zoomOut()">Zoom Out</button>
+                      </div>
+                    </div>
 
-                <select class="form-select" aria-label="Default select example" id="eventPlace" required>
-                  <option selected>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
+                  </div>
+                </div>
+
+
               </div>
+
+
             </div>
-          </div>
 
-          <div class="mb-3">
-            <div class="row">
-              <div class="col">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="checkIdentityTicket">
-                  <label class="form-check-label" for="checkIdentityTicket" data-bs-toggle="tooltip"
-                    data-bs-placement="right" data-bs-title="Chọn để tạo loại vé có vị trí chỗ ngồi cụ thể (ghế)">
-                    Khởi tạo vé có định danh <span style="opacity: 0.8;">(tùy chọn)</span>
-                  </label>
+            <div class="mb-3 seat-init disable" id="init-seat-container">
+              <div class="row controls-init-seat">
+
+                <div class="col">
+                  <label for="rowsSeatInput" class="form-label"><strong style="color: red;">*</strong>Dãy ghế:</label>
+                  <input type="text" class="form-control" id="rowsSeatInput" placeholder="Ví dụ: A-D hoặc ABCD"
+                    name="rowsSeatInput" required>
+                </div>
+
+                <div class="col">
+                  <label for="rowsSeatInput" class="form-label"><strong style="color: red;">*</strong> Số ghế mỗi
+                    dãy:</label>
+                  <input type="number" class="form-control" id="colsSeatInput" placeholder="Ví dụ: 10"
+                    name="colsSeatInput" min="1" required>
+                </div>
+
+                <div class="col d-flex flex-column justify-content-end">
+                  <button type="button" class="btn " onclick="generateSeats()" data-bs-toggle="tooltip"
+                    data-bs-placement="right"
+                    data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực"
+                    style="width: fit-content;">
+                    Xem vé
+                  </button>
+
                 </div>
               </div>
-              <div class="col">
-                <a href="#" class="float-end" data-bs-toggle="modal" data-bs-target="#modalImageZoneMap">Xem sơ đồ nơi
-                  tổ chức</a>
-              </div>
+
+
+              <div id="seatModelContainer"></div>
             </div>
-
-
           </div>
 
-          <div class="mb-3 seat-init disable" id="init-seat-container">
-            <div class="controls-init-seat">
-              <label>
-                Dãy ghế:
-                <input type="text" id="rowsSeatInput" placeholder="Ví dụ: A-D hoặc ABCD">
-              </label>
-              <label>
-                Số ghế mỗi dãy:
-                <input type="number" id="colsSeatInput" placeholder="Ví dụ: 10">
-              </label>
-              <button type="button" class="btn" onclick="generateSeats()" data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực">
-                Xem vé
-              </button>
-            </div>
-
-            <div id="seatModelContainer"></div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Lưu</button>
           </div>
-        </div>
 
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Lưu</button>
-        </div>
-
+        </form>
 
       </div>
     </div>
@@ -284,9 +315,7 @@
         </div>
 
         <div class="modal-body">
-          <div id="modalZoneMapImageWrapper">
-            <img src="./img/event-form-dashboard/sample-zonemap.jpg" alt="" id="modalZoneMapImage" width="600px">
-          </div>
+
         </div>
 
         <div class="modal-footer">

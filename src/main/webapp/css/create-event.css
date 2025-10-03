@@ -261,9 +261,16 @@ input[type=file] {
 
 #modalZoneMapImageWrapper {
   overflow: hidden;
+  position: relative;
 }
 
 #modalZoneMapImageWrapper img {
   display: flex;
   margin: auto;
+}
+
+.zoom-control-btn-group {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
