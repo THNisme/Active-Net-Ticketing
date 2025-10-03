@@ -225,8 +225,9 @@
               <div class="col">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="" id="checkIdentityTicket">
-                  <label class="form-check-label" for="checkIdentityTicket">
-                    Khởi tạo vé có định danh
+                  <label class="form-check-label" for="checkIdentityTicket" data-bs-toggle="tooltip"
+                    data-bs-placement="right" data-bs-title="Chọn để tạo loại vé có vị trí chỗ ngồi cụ thể (ghế)">
+                    Khởi tạo vé có định danh <span style="opacity: 0.8;">(tùy chọn)</span>
                   </label>
                 </div>
               </div>
@@ -249,8 +250,8 @@
                 <input type="number" id="colsSeatInput" placeholder="Ví dụ: 10">
               </label>
               <button type="button" class="btn" onclick="generateSeats()" data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                data-bs-title="Sơ đồ vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực">
+                data-bs-placement="right"
+                data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực">
                 Xem vé
               </button>
             </div>
@@ -269,6 +270,31 @@
   </div>
 
 
+  <!-- SUB MODAL -->
+  <div class="modal fade" id="modalCreateTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modalCreateTicketTypeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+
+
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Tạo loại vé</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <img src="" alt="">
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Lưu</button>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
 
 
 
@@ -277,12 +303,12 @@
   <!-- <script src="https://elfsightcdn.com/platform.js" async></script>
   <div class="elfsight-app-fbb67af7-dc8c-4557-90c3-fc51f6edee01" data-elfsight-app-lazy></div> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="./js/handle-image-input.js"></script>
-  <script src="./js/step.js"></script>
+  <script src="./js/event-form-dashboard/handle-image-input.js"></script>
+  <script src="./js/event-form-dashboard/step.js"></script>
   <script type='text/javascript'
     src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
-  <script src="./js/custom-wysiwyg.js"></script>
-  <script src="./js/handle-seat-model.js"></script>
+  <script src="./js/event-form-dashboard/custom-wysiwyg.js"></script>
+  <script src="./js/event-form-dashboard/handle-seat-model.js"></script>
   <script>
 
 
