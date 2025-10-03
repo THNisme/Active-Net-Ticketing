@@ -193,8 +193,8 @@
                     </div>
 
                     <div class="form-check mx-2">
-                      <input class="form-check-input" type="checkbox" value="" id="checkDefault">
-                      <label class="form-check-label" for="checkDefault">
+                      <input class="form-check-input" type="checkbox" value="" id="checkFreeTicket">
+                      <label class="form-check-label" for="checkFreeTicket">
                         Miễn phí
                       </label>
                     </div>
@@ -220,49 +220,22 @@
             </div>
 
             <div class="mb-3">
-              <div class="row">
-                <div class="col">
-
-                  <label for="ticketTypeRow" class="form-label"><strong style="color: red;">*</strong>Hàng ghế</label>
-                  <div class="modal-price-input-wrapper">
-                    <div>
-                      <input type="text" class="form-control" id="ticketTypeRow" name="ticketTypeRow" required>
-                    </div>
-
-                    <div class="form-check mx-2">
-                      <input class="form-check-input" type="checkbox" value="" id="checkDefault">
-                      <label class="form-check-label" for="checkDefault">
-                        Miễn phí
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <label for="ticketTypeTotal" class="form-label"><strong style="color: red;">*</strong>Tổng số
-                    vé</label>
-                  <input type="number" class="form-control" id="ticketTypeTotal" name="ticketTypeTotal" min="1"
-                    required>
-                </div>
-                <div class="col">
-                  <label for="eventPlace" class="form-label"><strong style="color: red;">*</strong>Chọn zone vé</label>
-                  <a href="#" class="float-end">Tạo zone</a>
-                  <select class="form-select" aria-label="Default select example" id="eventPlace" required>
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
+              <div class="form-check mx-2">
+                <input class="form-check-input" type="checkbox" value="" id="checkIdentityTicket">
+                <label class="form-check-label" for="checkIdentityTicket">
+                  Khởi tạo vé có định danh
+                </label>
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Lưu</button>
-          </div>
-        </form>
-
       </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+      </div>
+      </form>
+
     </div>
+  </div>
   </div>
 
 
@@ -274,11 +247,16 @@
   <!-- <script src="https://elfsightcdn.com/platform.js" async></script>
   <div class="elfsight-app-fbb67af7-dc8c-4557-90c3-fc51f6edee01" data-elfsight-app-lazy></div> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="./js/imageInput.js"></script>
+  <script src="./js/handle-image-input.js"></script>
   <script src="./js/step.js"></script>
   <script type='text/javascript'
     src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
-  <script src="./js/eventDesEditor.js"></script>
+  <script src="./js/custom-wysiwyg.js"></script>
+  <script src="./js/handle-seat-model.js"></script>
+  <script>
+
+
+  </script>
 </body>
 
 </html>
