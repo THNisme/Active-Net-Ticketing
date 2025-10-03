@@ -4,11 +4,17 @@ const tooltipList = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el))
 function showControl() {
   const checkOn = document.getElementById('checkIdentityTicket');
   const initBlock = document.getElementById('init-seat-container');
+  const rowInput = document.getElementById('rowsSeatInput');
+  const colInput = document.getElementById('colsSeatInput');
 
   checkOn.addEventListener("change", () => {
     if (checkOn.checked) {
+      rowInput.removeAttribute('disabled');
+      colInput.removeAttribute('disabled');
       initBlock.classList.remove('disable');
     } else {
+      rowInput.setAttribute('disabled', true);
+      colInput.setAttribute('disabled', true);
       initBlock.classList.add('disable');
     }
   });

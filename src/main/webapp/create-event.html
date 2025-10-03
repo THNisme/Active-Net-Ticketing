@@ -167,15 +167,14 @@
   <div class="modal fade" id="modalCreateTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="modalCreateTicketTypeLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content modal-theme">
+      <form action="">
+        <div class="modal-content modal-theme">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Tạo loại vé</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
 
 
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Tạo loại vé</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <form action="">
 
           <div class="modal-body">
             <div class="mb-3">
@@ -245,18 +244,13 @@
                       <img src="./img/event-form-dashboard/sample-zonemap.jpg" alt="" id="modalZoneMapImage"
                         width="600px">
                       <div class="zoom-control-btn-group">
-                        <button class="btn" onclick="zoomIn()">Zoom In</button>
-                        <button class="btn" onclick="zoomOut()">Zoom Out</button>
+                        <button type="button" class="btn" onclick="zoomIn()">Zoom In</button>
+                        <button type="button" class="btn" onclick="zoomOut()">Zoom Out</button>
                       </div>
                     </div>
-
                   </div>
                 </div>
-
-
               </div>
-
-
             </div>
 
             <div class="mb-3 seat-init disable" id="init-seat-container">
@@ -265,14 +259,14 @@
                 <div class="col">
                   <label for="rowsSeatInput" class="form-label"><strong style="color: red;">*</strong>Dãy ghế:</label>
                   <input type="text" class="form-control" id="rowsSeatInput" placeholder="Ví dụ: A-D hoặc ABCD"
-                    name="rowsSeatInput" required>
+                    name="rowsSeatInput" required disabled>
                 </div>
 
                 <div class="col">
                   <label for="rowsSeatInput" class="form-label"><strong style="color: red;">*</strong> Số ghế mỗi
                     dãy:</label>
                   <input type="number" class="form-control" id="colsSeatInput" placeholder="Ví dụ: 10"
-                    name="colsSeatInput" min="1" required>
+                    name="colsSeatInput" min="1" required disabled>
                 </div>
 
                 <div class="col d-flex flex-column justify-content-end">
@@ -295,39 +289,11 @@
             <button type="submit" class="btn btn-primary">Lưu</button>
           </div>
 
-        </form>
+      </form>
 
-      </div>
     </div>
   </div>
-
-
-  <!-- SUB MODAL -->
-  <div class="modal fade" id="modalImageZoneMap" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="modalImageZoneMapLable" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content modal-theme">
-
-
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="modalImageZoneMap">Ảnh sơ đồ nơi chỗ chức: {place.name}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn" onclick="zoomIn()">Zoom In</button>
-          <button class="btn" onclick="zoomOut()">Zoom Out</button>
-        </div>
-
-
-      </div>
-    </div>
   </div>
-
 
 
 
