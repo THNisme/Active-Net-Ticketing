@@ -281,5 +281,11 @@ input[type=file] {
 }
 
 .seat-row-input-group {
-  width: fit-content;
+  width: 340px;
+}
+
+.span-row-lable {
+  font-weight: 600;
+  margin-left: 5px;
+  color: deeppink;
 }

@@ -58,17 +58,31 @@ function generateSeatInputs() {
     seatRows = seatRowsInput.split('');
   }
 
-  // Sinh input nhập số ghế
-  seatRows.forEach(row => {
-    const div = document.createElement('div');
-    div.innerHTML = `
-    <div class="input-group seat-row-input-group mb-3">
-      <span class="input-group-text">Số ghế dãy ${row}</span>
-      <input type="number" id="seat-row_${row}" min="1" class="form-control" placeholder="Nhập số ghế của dãy ${row}">
-    </div>
-    `;
-    seatContainer.appendChild(div);
-  });
+  // LAYOUT GRID 3 COlS
+  seatContainer.innerHTML = '';
+
+  for (let i = 0; i < seatRows.length; i += 3) {
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('row', 'mb-3');
+
+    for (let j = 0; j < 3; j++) {
+      if (seatRows[i + j]) {
+        const col = document.createElement('div');
+        col.classList.add('col-md-4'); // 3 cột = 12/3 = 4
+        col.innerHTML = `
+        <div class="input-group seat-row-input-group mb-3">
+          <span class="input-group-text">Số ghế dãy <span class="span-row-lable">${seatRows[i + j]}</span></span>
+          <input type="number" id="seat-row_${seatRows[i + j]}" min="1" class="form-control" placeholder="Nhập số ghế của dãy ${seatRows[i + j]}" name="seatCount[${seatRows[i + j]}]" required>
+        </div>
+      `;
+        rowDiv.appendChild(col);
+      }
+    }
+
+    seatContainer.appendChild(rowDiv);
+  }
+
+
 }
 
 function generateSeatGrid() {
