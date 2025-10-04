@@ -289,3 +289,7 @@ input[type=file] {
   margin-left: 5px;
   color: deeppink;
 }
+
+#seatModelGridContainer {
+  width: fit-content;
+}
