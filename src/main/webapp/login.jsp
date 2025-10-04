@@ -14,7 +14,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="css/login.css" />
+        <link rel="stylesheet" href="css/authentication-page/login.css" />
 
 
     </head>
@@ -157,8 +157,8 @@
                 </div>
             </div>
         </div>
-        <script src="js/index.js"></script>
-        <script src="js/register.js"></script>
+        <script src="js/authentication-page/index.js"></script>
+        <script src="js/authentication-page/register.js"></script>
         <c:if test="${not empty errorLogin}">
             <script>
                                 document.addEventListener("DOMContentLoaded", function () {
