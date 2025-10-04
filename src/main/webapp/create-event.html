@@ -259,34 +259,49 @@
                 <div class="col">
                   <label for="rowsSeatInput" class="form-label"><strong style="color: red;">*</strong>Dãy ghế:</label>
                   <input type="text" class="form-control" id="rowsSeatInput" placeholder="Ví dụ: A-D hoặc ABCD"
-                    name="rowsSeatInput" required disabled>
+                    name="rowsSeatInput" required>
                 </div>
 
-                <div class="col">
+                <!-- <div class="col">
                   <label for="rowsSeatInput" class="form-label"><strong style="color: red;">*</strong> Số ghế mỗi
                     dãy:</label>
                   <input type="number" class="form-control" id="colsSeatInput" placeholder="Ví dụ: 10"
                     name="colsSeatInput" min="1" required disabled>
-                </div>
+                </div> -->
 
                 <div class="col d-flex flex-column justify-content-end">
-                  <button type="button" class="btn " onclick="generateSeats()" data-bs-toggle="tooltip"
-                    data-bs-placement="right"
-                    data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực"
-                    style="width: fit-content;">
-                    Xem vé
-                  </button>
+                  <div class="d-flex">
+                    <button type="button" class="btn mx-2" onclick="generateSeatInputs()" style="width: fit-content;">
+                      Tạo dãy ghế
+                    </button>
+                    <button type="button" class="btn mx-2" onclick="generateSeatGrid()" data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực"
+                      style="width: fit-content;">
+                      Tạo mô hình ghế
+                    </button>
+                  </div>
+                </div>
 
+                <div class="mb-3 mt-3">
+                  <div id="seatInputs"></div>
                 </div>
               </div>
 
 
-              <div id="seatModelContainer"></div>
+              <div id="seatModelGridContainer"></div>
             </div>
           </div>
 
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Lưu</button>
+          <div class="modal-footer ticketType-modal-footer">
+            <div class="row">
+              <div class="col">
+                <p id="message" style="color: #f85c51; font-weight: bold;"></p>
+              </div>
+              <div class="col">
+                <button type="submit" class="btn btn-primary float-end">Lưu</button>
+              </div>
+            </div>
           </div>
 
       </form>

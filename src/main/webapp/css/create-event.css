@@ -2,6 +2,7 @@
   --pink: #ffb6b6;
   --black: #111;
   --white: #fff;
+  --error-color: #f85c51;
 }
 
 body {
@@ -273,4 +274,12 @@ input[type=file] {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.ticketType-modal-footer {
+  display: block;
+}
+
+.seat-row-input-group {
+  width: fit-content;
 }
