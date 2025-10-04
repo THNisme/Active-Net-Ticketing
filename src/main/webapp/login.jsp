@@ -17,14 +17,14 @@
             <!-- Register -->
             <div class="form-container register-container">
                 <form action="register" method="post">
-                    <h1>Register here.</h1>
+                    <h1>Đăng ký ngay.</h1>
 
                     <!-- Username -->
                     <div class="user-box">
                         <div class="input-with-icon">
 
                             <input type="text" name="username" id="register-username" required />
-                            <label>Username</label>
+                            <label>Tên đăng nhập</label>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none"
                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -42,7 +42,7 @@
                     <div class="user-box">
                         <div class="input-with-icon">
                             <input type="password" name="password" id="register-password" required />
-                            <label>Password</label>
+                            <label>Mật khẩu</label>
                             <span class="toggle-password" onclick="togglePassword('register-password', this)">
                                 <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -62,7 +62,7 @@
                     <div class="user-box">
                         <div class="input-with-icon">
                             <input type="password" name="repassword" id="register-repassword" required />
-                            <label>Confirm password</label>
+                            <label>Xác nhận mật khẩu</label>
                             <span class="toggle-password" onclick="togglePassword('register-repassword', this)">
                                 <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    <button type="submit">Register</button>
+                    <button type="submit">Tạo</button>
                 </form>
             </div>
 
@@ -86,11 +86,11 @@
             <!-- Login -->
             <div class="form-container login-container">
                 <form action="login" method="post">
-                    <h1>Login here.</h1>
+                    <h1>Đăng nhập ngay.</h1>
                     <div class="user-box">
                         <div class="input-with-icon">
                             <input type="text" name="username" required />
-                            <label>Username</label>
+                            <label>Tên đăng nhập</label>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                  class="lucide lucide-user-icon lucide-user">
@@ -102,7 +102,7 @@
                     <div class="user-box">
                         <div class="input-with-icon" style="position: relative;">
                             <input type="password" name="password" id="login-password" required />
-                            <label>Password</label>
+                            <label>Mật khẩu</label>
                             <!-- Nút con mắt -->
                             <span class="toggle-password" onclick="togglePassword('login-password', this)">
                                 <!-- SVG hình con mắt mở -->
@@ -123,7 +123,7 @@
                         </div>
                     </div>
 
-                    <button>Login</button>
+                    <button>OK</button>
                     <c:if test="${not empty errorLogin}">
                         <span style="color:red; display:block; margin-top:10px;">
                             <c:out value="${errorLogin}" />
@@ -136,15 +136,15 @@
             <div class="overlay-container">
                 <div class="overlay">
                     <div class="overlay-panel overlay-left">
-                        <h1 class="title">Hello <br />friends</h1>
-                        <button class="ghost" id="login">Login
+                        <h1 class="title">F-Active <br />Xin chào</h1>
+                        <button class="ghost" id="login">Đăng nhập
                             <i class="lni lni-arrow-left login"></i>
                         </button>
                     </div>
                     <div class="overlay-panel overlay-right">
-                        <h1 class="title">Start your <br />journey now</h1>
+                        <h1 class="title">Active Net <br />ticketing</h1>
 
-                        <button class="ghost" id="register">Register
+                        <button class="ghost" id="register">Đăng ký
                             <i class="lni lni-arrow-right register"></i>
                         </button>
                     </div>
