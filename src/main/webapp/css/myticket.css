@@ -1,0 +1,112 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #1e1e1e;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    text-align: center;
+}
+
+h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+/* Tabs chính */
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.tab {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #333;
+    color: #ccc;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tab.active {
+    background: #ffb6b6;
+    color: #fff;
+    font-weight: bold;
+}
+
+.tab:hover {
+    background: #444;
+}
+
+/* Tabs phụ */
+.sub-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 30px;
+    font-size: 14px;
+}
+
+.sub-tab {
+    cursor: pointer;
+    color: #aaa;
+    position: relative;
+}
+
+.sub-tab.active {
+    font-weight: bold;
+    color: #fff;
+}
+
+.sub-tab.active::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background: #ffb6b6;   /* ✅ đổi sang màu hồng */
+    width: 100%;
+    margin-top: 4px;
+}
+
+/* Empty ticket section */
+.ticket-empty {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.ticket-empty img {
+    border-radius: 50%;  
+    object-fit: cover;  
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* đổ bóng cho đẹp */
+}
+
+.ticket-empty p {
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+/* Nút Mua vé ngay */
+.btn-buy {
+    display: inline-block;
+    background-color: #ffb6b6;       
+    border: 2px solid #ffb6b6;  
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-buy:hover {
+    background: #e48a8a;       
+    border-color: #e48a8a;
+}
