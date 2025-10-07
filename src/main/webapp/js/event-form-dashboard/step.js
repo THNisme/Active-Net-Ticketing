@@ -53,7 +53,10 @@ document.querySelectorAll('.next-btn').forEach(btn => {
       valid = false;
     }
 
-    if (!valid) return; // chặn Next nếu chưa valid
+    if (!valid) {
+      alert('Vui lòng điền đầy đủ thông tin bắt buộc *.');
+      return;
+    }; // chặn Next nếu chưa valid
 
     // Nếu hợp lệ thì mở tab tiếp theo
     const nextTabId = btn.getAttribute('data-next');
@@ -90,10 +93,10 @@ document.getElementById('eventForm').addEventListener('submit', e => {
     }
   });
 
-  if (!validateDates()) {
-    document.getElementById('eventDateEnd').reportValidity();
-    valid = false;
-  }
+  // if (!validateDates()) {
+  //   document.getElementById('eventDateEnd').reportValidity();
+  //   valid = false;
+  // }
 
   if (!valid) {
     alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
