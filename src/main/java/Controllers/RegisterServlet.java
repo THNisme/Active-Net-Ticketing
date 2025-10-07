@@ -5,6 +5,7 @@
 package Controllers;
 
 import DAOs.UserDAO;
+import MD5.HashPassword;
 import Models.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +14,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import Utils.PasswordUtils;
 
 /**
  *
@@ -81,24 +81,24 @@ public class RegisterServlet extends HttpServlet {
 
         UserDAO userDAO = new UserDAO();
 
-        // Kiểm tra trùng username
+        // ✅ Kiểm tra trùng username
         if (userDAO.checkUsernameExists(username)) {
-            request.setAttribute("error", "Tên người dùng đã tồn tại!");
-            request.setAttribute("showRegister", true);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return; // dừng xử lý
-        }
-
-        // Kiểm tra mật khẩu nhập lại
-        if (!password.equals(repassword)) {
-            request.setAttribute("error", "Mật khẩu nhập lại không khớp!");
+            request.setAttribute("errorRegister", "Tên người dùng đã tồn tại!");
             request.setAttribute("showRegister", true);
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // Hash mật khẩu
-        String hashedPassword = PasswordUtils.hashPassword(password);
+        // ✅ Kiểm tra mật khẩu nhập lại
+        if (!password.equals(repassword)) {
+            request.setAttribute("errorRegister", "Mật khẩu nhập lại không khớp!");
+            request.setAttribute("showRegister", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // ✅ Mã hóa mật khẩu
+        String hashedPassword = HashPassword.hashMD5(password);
 
         User user = new User();
         user.setUsername(username);
@@ -108,23 +108,27 @@ public class RegisterServlet extends HttpServlet {
         boolean success = userDAO.register(user);
 
         if (success) {
+            // ✅ Chuyển hướng về login với thông báo
             request.setAttribute("message", "Đăng ký thành công, vui lòng đăng nhập!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
-            request.setAttribute("error", "Có lỗi khi đăng ký, thử lại!");
+            // ❗ Khi thất bại → vẫn giữ form đăng ký mở
+            request.setAttribute("errorRegister", "Có lỗi khi đăng ký, vui lòng thử lại!");
             request.setAttribute("showRegister", true);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
 
-}
+    }

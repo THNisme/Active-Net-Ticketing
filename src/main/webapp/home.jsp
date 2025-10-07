@@ -6,6 +6,7 @@
 
 <%@page import="Models.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <%
     User user = (User) session.getAttribute("user");
@@ -19,6 +20,7 @@
         <title>Trang chủ</title>
     </head>
     <body>
+        
         <h2>Xin chào, <%= user.getUsername()%>!</h2>
     </body>
 </html>

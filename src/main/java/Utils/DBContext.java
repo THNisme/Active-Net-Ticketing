@@ -29,21 +29,23 @@ public class DBContext {
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             if (conn != null) {
-                DatabaseMetaData dm = (DatabaseMetaData) conn.getMetaData();
+                DatabaseMetaData dm = conn.getMetaData();
+                System.out.println("✅ Kết nối DB thành công!");
                 System.out.println("Driver name: " + dm.getDriverName());
                 System.out.println("Driver version: " + dm.getDriverVersion());
-                System.out.println("Product name: "
-                        + dm.getDatabaseProductName());
-                System.out.println("Product version: "
-                        + dm.getDatabaseProductVersion());
+                System.out.println("Product name: " + dm.getDatabaseProductName());
+                System.out.println("Product version: " + dm.getDatabaseProductVersion());
             }
         } catch (SQLException ex) {
+            System.out.println("❌ Lỗi kết nối DB: " + ex.getMessage());
+            ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("❌ Không tìm thấy driver SQL Server!");
+            ex.printStackTrace();
         }
-    }
+}
 
-    public Connection getConnection() {
+public Connection getConnection() {
         return conn;
     }
 }

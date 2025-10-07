@@ -83,7 +83,11 @@
                             </span>
                         </div>
                     </div>
-
+                    <c:if test="${not empty errorRegister}">
+                        <p style="color: red; text-align: center; margin-top: 5px; font-weight:bold ">
+                            <c:out value="${errorRegister}"/>
+                        </p>
+                    </c:if>
                     <button type="submit">Tạo</button>
                 </form>
             </div>
@@ -165,6 +169,13 @@
                                     const container = document.getElementById("container");
                                     container.classList.remove("right-panel-active"); // đảm bảo hiện LOGIN
                                 });
+            </script>
+        </c:if>
+        <c:if test="${showRegister}">
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    document.getElementById("container").classList.add("right-panel-active");
+                });
             </script>
         </c:if>
     </body>

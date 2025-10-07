@@ -1,21 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAOs;
 
 import Models.User;
 import Utils.DBContext;
-import Utils.PasswordUtils;
+import MD5.HashPassword;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author NguyenDuc
- */
 public class UserDAO extends DBContext {
 
     public User login(String username, String password) {
@@ -27,7 +19,8 @@ public class UserDAO extends DBContext {
 
             if (rs.next()) {
                 String hashedPassword = rs.getString("passwordHash");
-                if (PasswordUtils.checkPassword(password, hashedPassword)) {
+                // So sánh MD5
+                if (HashPassword.hashMD5(password).equalsIgnoreCase(hashedPassword)) {
                     User u = new User();
                     u.setUserID(rs.getInt("userID"));
                     u.setUsername(rs.getString("username"));
@@ -38,16 +31,16 @@ public class UserDAO extends DBContext {
                 }
             }
         } catch (SQLException e) {
+            System.out.println("Lỗi khi đăng kí " + e.getMessage());
             e.printStackTrace();
         }
 
-        // ✅ luôn trả về user rỗng, tránh null
+        // Trả về user rỗng nếu sai
         User u = new User();
         u.setUserID(-1);
         return u;
     }
 
-    // Đăng ký
     public boolean register(User user) {
         String sql = "INSERT INTO [Users](username, passwordHash, role, createdAt) VALUES (?, ?, ?, GETDATE())";
         try {
@@ -63,14 +56,15 @@ public class UserDAO extends DBContext {
         return false;
     }
 
-    // Check username trùng
     public boolean checkUsernameExists(String username) {
         String sql = "SELECT 1 FROM Users WHERE username = ?";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-            return rs.next(); // tồn tại
+            return rs.next();
         } catch (SQLException e) {
+            System.out.println("Lỗi checkUsernameExists: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
