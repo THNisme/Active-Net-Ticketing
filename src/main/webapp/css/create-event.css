@@ -217,6 +217,11 @@ input[type=file] {
   width: 1200px;
 }
 
+.modal-theme.delete {
+  background-color: #333;
+  width: 600px;
+}
+
 .modal-dialog {
   max-width: fit-content;
 }
@@ -292,4 +297,8 @@ input[type=file] {
 
 #seatModelGridContainer {
   width: fit-content;
+}
+
+.form-control-plaintext {
+  color: var(--white);
 }

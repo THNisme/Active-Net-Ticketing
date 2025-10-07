@@ -143,7 +143,8 @@
                 </div>
                 <div class="manipulate-btn-group">
                   <button type="button" class="btn mx-2"><i class="bi bi-pencil"></i></button>
-                  <button type="button" class="btn mx-2 delete-btn"><i class="bi bi-x-circle"></i></button>
+                  <button type="button" class="btn mx-2 delete-btn" data-bs-toggle="modal"
+                    data-bs-target="#modalDeleteTicketType"><i class="bi bi-x-circle"></i></button>
                 </div>
               </li>
 
@@ -163,7 +164,38 @@
     </form>
   </div>
 
-  <!-- Modal Create Ticke Type -->
+
+  <!-- Modal Delete Ticket Type -->
+  <div class="modal fade" id="modalDeleteTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modalDeleteTicketTypeLable" aria-hidden="true">
+    <div class="modal-dialog">
+      <form action="">
+        <div class="modal-content modal-theme delete">
+
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalDeleteTicketTypeLable">Xác nhận xóa loại vé</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3 row">
+              <label for="staticEmail" class="col-sm-5 col-form-label">Bạn có chắc muốn xóa hạng vé </label>
+              <div class="col-sm-4">
+                <input type="text" readonly class="form-control-plaintext fw-bolder text-danger" id="staticEmail"
+                  value="VIP">
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary d-flex justify-content-end">Xóa</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Create/Edit Ticket Type -->
   <div class="modal fade" id="modalCreateTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="modalCreateTicketTypeLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -308,7 +340,11 @@
 
     </div>
   </div>
-  </div>
+
+
+
+
+
 
 
 
