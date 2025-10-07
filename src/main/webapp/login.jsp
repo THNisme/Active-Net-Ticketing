@@ -49,6 +49,7 @@
                         <div class="input-with-icon">
                             <input type="password" name="password" id="register-password" required />
                             <label>Mật khẩu</label>
+
                             <span class="toggle-password" onclick="togglePassword('register-password', this)">
                                 <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -62,6 +63,7 @@
                                 </svg>
                             </span>
                         </div>
+                        <span id="passwordError" style="color:red; font-size:13px;"></span>
                     </div>
 
                     <!-- Re-password -->
@@ -82,6 +84,7 @@
                                 </svg>
                             </span>
                         </div>
+                        <span id="repasswordError" style="color:red; font-size:13px;"></span>
                     </div>
                     <c:if test="${not empty errorRegister}">
                         <p style="color: red; text-align: center; margin-top: 5px; font-weight:bold ">
@@ -178,6 +181,40 @@
                 });
             </script>
         </c:if>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const password = document.getElementById("password");
+                const repassword = document.getElementById("repassword");
+                const passwordError = document.getElementById("passwordError");
+                const repasswordError = document.getElementById("repasswordError");
+
+                password.addEventListener("input", function () {
+                    const value = password.value;
+                    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+
+                    if (value.length === 0) {
+                        passwordError.textContent = "";
+                    } else if (!regex.test(value)) {
+                        passwordError.textContent = "❌ Mật khẩu phải có ≥8 ký tự, 1 chữ in hoa, 1 số và 1 ký tự đặc biệt.";
+                    } else {
+                        passwordError.textContent = "✅ Mật khẩu hợp lệ.";
+                        passwordError.style.color = "green";
+                    }
+                });
+
+                repassword.addEventListener("input", function () {
+                    if (repassword.value.length === 0) {
+                        repasswordError.textContent = "";
+                    } else if (repassword.value !== password.value) {
+                        repasswordError.textContent = "❌ Mật khẩu nhập lại không khớp.";
+                        repasswordError.style.color = "red";
+                    } else {
+                        repasswordError.textContent = "✅ Mật khẩu khớp.";
+                        repasswordError.style.color = "green";
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>

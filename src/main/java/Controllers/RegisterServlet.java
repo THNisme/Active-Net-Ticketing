@@ -89,7 +89,16 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // ✅ Kiểm tra mật khẩu nhập lại
+        // ✅ Kiểm tra tiêu chuẩn mật khẩu
+        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$";
+        if (!password.matches(passwordPattern)) {
+            request.setAttribute("errorRegister", "Mật khẩu phải có ít nhất 8 ký tự, gồm ít nhất 1 chữ in hoa, 1 số và 1 ký tự đặc biệt!");
+            request.setAttribute("showRegister", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // ✅ Kiểm tra khớp mật khẩu
         if (!password.equals(repassword)) {
             request.setAttribute("errorRegister", "Mật khẩu nhập lại không khớp!");
             request.setAttribute("showRegister", true);
@@ -119,16 +128,14 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-        /**
-         * Returns a short description of the servlet.
-         *
-         * @return a String containing servlet description
-         */
-        @Override
-        public String getServletInfo
-        
-            () {
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
         return "Short description";
-        }// </editor-fold>
+    }// </editor-fold>
 
-    }
+}
