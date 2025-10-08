@@ -18,6 +18,7 @@
 }
 
 .logo img {
+    border-radius: 8px;
     width: 50px;
     height: auto;
 }
@@ -39,10 +40,15 @@
     outline: none;
 }
 .search-box button {
-    background: #eee;
+    background: #ff6b6b;
     border: none;
     padding: 0 15px;
     cursor: pointer;
+    color: #fff;
+}
+
+.search-box button:active {
+    opacity: 0.9;
 }
 
 .header-right {
@@ -66,11 +72,19 @@
     transition: background 0.3s, color 0.3s;
 }
 
+.create-event-box i {
+    margin-right: 10px;
+}
+
+.account-btn i {
+    margin-right: 10px
+}
+
 .active-net-box:hover,
 .create-event-box:hover,
 .account-btn:hover {
-    background-color: rgba(255,255,255,0.2);
-    color: #fff;
+    background-color: rgba(255,255,255, 1);
+    color: #000;
 }
 
 /* ===== Dropdown Tài khoản ===== */
