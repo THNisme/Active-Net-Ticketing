@@ -10,10 +10,12 @@
 
     <!-- Ô tìm kiếm -->
     <div class="search-box">
-        <input type="text" placeholder="Bạn tìm gì hôm nay?">
-        <button>Tìm kiếm</button>
+        <form action="<%= request.getContextPath()%>/search" method="get" class="search-form">
+            <input type="text" name="keyword" placeholder="Bạn tìm gì hôm nay?" 
+                   value="<%= request.getAttribute("keyword") != null ? request.getAttribute("keyword") : ""%>">
+            <button type="submit">Tìm kiếm</button>
+        </form>
     </div>
-
     <!-- Khu vực bên phải -->
     <div class="header-right">
         <!-- 🎟 Vé của tôi -->
