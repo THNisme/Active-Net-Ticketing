@@ -1,6 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <style>
+    :root {
+        --pink: #ffb6b6;
+    }
+    
     footer {
         font-family: sans-serif;
         color: #ccc;
@@ -16,7 +20,7 @@
     }
 
     footer a:hover {
-        color: #00b894;
+        color: var(--pink);
     }
 
     footer a:active {
@@ -31,7 +35,7 @@
     footer h4 {
         font-size: 1.4em;
         font-weight: bold;
-        margin-bottom: 12px;
+        /*margin-bottom: 12px;*/
         color: #fff;
     }
 
@@ -53,9 +57,13 @@
     }
 
     .highlight {
-        color: #1dd1a1;
+        color: var(--pink);
         font-size: 18px;
         font-weight: bold;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
     }
 </style>
 
@@ -65,24 +73,30 @@
 
             <!-- Cột 1: Hotline + Email + Văn phòng -->
             <div class="footer-col">
-                <h4>Hotline</h4>
-                <p>📞 Thứ 2 - Chủ Nhật (8:00 - 22:00)</p>
-                <p class="highlight">0808.1508</p>
-
-                <h4>Email</h4>
-                <p>✉️ <a>hifive.team1201@gmail.com</a></p>
-
-                <h4>Văn phòng chính</h4>
-                <p>📍 600 Nguyễn Văn Cừ Nối Dài, An Bình, Bình Thủy, Cần Thơ</p>
+                <div class="mb-3">
+                    <h4>Hotline</h4>
+                    <p>Thứ 2 - Chủ Nhật (8:00 - 22:00)</p>
+                    <p class="highlight">070 490 6670</p>
+                </div>
+                <div class="mb-3">
+                    <h4>Email</h4>
+                    <p><a>hclbfactive1420@gmail.com</a></p>
+                </div>
+                <div class="mb-3">
+                    <h4>Văn phòng chính</h4>
+                    <p>600 Nguyễn Văn Cừ Nối Dài, An Bình, Bình Thủy, Cần Thơ</p>
+                </div>
             </div>
             <!-- Cột 2: Dành cho khách hàng -->
             <div class="footer-col">
-                <h4>Dành cho Khách hàng</h4>
-                <p><a href="terms.jsp">Điều khoản sử dụng cho khách hàng</a></p>
-                <br>
-
-                <h4>Dành cho Ban Tổ chức</h4>
-                <p><a href="termsorganizer.jsp">Điều khoản sử dụng cho ban tổ chức</a></p>
+                <div class="mb-3">
+                    <h4>Dành cho Khách hàng</h4>
+                    <p><a href="terms.jsp">Điều khoản sử dụng cho khách hàng</a></p>
+                </div>
+                <div class="mb-3">
+                    <h4>Dành cho Ban Tổ chức</h4>
+                    <p><a href="termsorganizer.jsp">Điều khoản sử dụng cho ban tổ chức</a></p>
+                </div>
             </div>
 
             <!-- Cột 3: Về công ty -->
