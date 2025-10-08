@@ -5,6 +5,7 @@
 package Models;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -13,22 +14,47 @@ import java.sql.Date;
 public class Event {
 
     private int eventID;
+    private int categoryID;
     private String eventName;
     private String description;
     private String imageURL;
-    private Date startDate;
-    private Date endDate;
-    private String categoryName;
-    private String placeName;
-    private String placeAddress;
+    private Timestamp startDate;
+    private Timestamp endDate;
+    private int placeID;
+    private int statusID;
 
-    // Getter & Setter
+    public Event() {
+    }
+
+    public Event(int eventID, int categoryID, String eventName, String description,
+            String imageURL, Timestamp startDate, Timestamp endDate,
+            int placeID, int statusID) {
+        this.eventID = eventID;
+        this.categoryID = categoryID;
+        this.eventName = eventName;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.placeID = placeID;
+        this.statusID = statusID;
+    }
+
+    // Getters & Setters
     public int getEventID() {
         return eventID;
     }
 
     public void setEventID(int eventID) {
         this.eventID = eventID;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getEventName() {
@@ -55,43 +81,35 @@ public class Event {
         this.imageURL = imageURL;
     }
 
-    public Date getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public int getPlaceID() {
+        return placeID;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setPlaceID(int placeID) {
+        this.placeID = placeID;
     }
 
-    public String getPlaceName() {
-        return placeName;
+    public int getStatusID() {
+        return statusID;
     }
 
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
-    }
-
-    public String getPlaceAddress() {
-        return placeAddress;
-    }
-
-    public void setPlaceAddress(String placeAddress) {
-        this.placeAddress = placeAddress;
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
     }
 }
