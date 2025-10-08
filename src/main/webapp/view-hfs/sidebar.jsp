@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Sidebar</title>
-    <link href="../css/sidebar.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/navigationUI/sidebar.css" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome để có icon -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 </head>
@@ -17,14 +17,14 @@
     </button>
             <ul>
                 <li><a href="#"><i class="fa-solid fa-chart-pie"></i> Tổng kết</a></li>
-                <li><a href="#"><i class="fa-solid fa-chart-line"></i> Phân tích</a></li>
+                <!--<li><a href="#"><i class="fa-solid fa-chart-line"></i> Phân tích</a></li>-->
                 <li><a href="#"><i class="fa-solid fa-list"></i> Danh sách đơn hàng</a></li>
                 <li class="menu-title">Cài đặt sự kiện</li>
-                <li><a href="#"><i class="fa-solid fa-user"></i> Thành viên</a></li>
+                <!--<li><a href="#"><i class="fa-solid fa-user"></i> Thành viên</a></li>-->
                 <li><a href="#"><i class="fa-solid fa-pen"></i> Chỉnh sửa</a></li>
-                <li><a href="#"><i class="fa-solid fa-chair"></i> Sơ đồ ghế</a></li>
-                <li class="menu-title">Marketing</li>
-                <li><a href="#"><i class="fa-solid fa-ticket"></i> Voucher</a></li>
+                <li><a href="#"><i class="fa-solid fa-trash"></i>Xóa</a></li>
+                <!--<li class="menu-title">Marketing</li>-->
+                <!--<li><a href="#"><i class="fa-solid fa-ticket"></i> Voucher</a></li>-->
             </ul>
         </div>
 

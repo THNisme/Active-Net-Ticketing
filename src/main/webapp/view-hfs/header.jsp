@@ -1,6 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
-<link href="../css/header.css" rel="stylesheet" type="text/css"/>
-
+<link href="../css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
 <!-- ✅ Header User + Admin (Fragment) -->
 <header class="header"> 
     <!-- Logo -->
