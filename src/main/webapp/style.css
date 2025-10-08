@@ -1,0 +1,54 @@
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  background-color: #1e1e1e;
+  border: none;
+  border-radius: 8px;
+  padding: 1.2rem;
+  color: #fff;
+}
+
+.progress {
+  background-color: #333;
+  height: 8px;
+  border-radius: 5px;
+}
+
+.progress-bar {
+  background-color: #333;
+}
+
+
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 6px solid #ffb6b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #fff;
+  margin-left: auto;
+}
+
+/* .circle.black {
+  border-color: #333; 
+  color: #fff;
+}
+
+.circle.pink {
+  border-color: #ffb6b6;
+  color: #fff;
+} */
+
+
+.section-title {
+  font-weight: bold;
+  margin: 20px 0 10px;
+}
