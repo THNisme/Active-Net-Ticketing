@@ -93,7 +93,6 @@
                 <p><a href="complaint.jsp">Cơ chế giải quyết tranh chấp/ khiếu nại</a></p>
                 <p><a href="returnpolicy.jsp">Chính sách đổi trả và kiểm hàng</a></p>
                 <p><a href="shipping.jsp">Điều kiện vận chuyển và giao nhận</a></p>
-                <p><a href="#">Phương thức thanh toán</a></p>
             </div>
 
         </div>
