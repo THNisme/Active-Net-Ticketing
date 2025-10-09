@@ -41,19 +41,50 @@ public class PlaceDAO extends DBContext {
         return list;
     }
 
+    //GET BY ID
+    public Place getById(int id) {
+        String sql = "SELECT * FROM Places WHERE PlaceID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Place(
+                        rs.getInt("PlaceID"),
+                        rs.getString("PlaceName"),
+                        rs.getString("Address"),
+                        rs.getString("SeatMapURL"),
+                        rs.getString("Description"),
+                        rs.getInt("StatusID")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         PlaceDAO dao = new PlaceDAO();
 
-        List<Place> list = dao.getAll();
+//        List<Place> list = dao.getAll();
+//
+//        for (Place p : list) {
+//            System.out.println("ID: " + p.getPlaceID());
+//            System.out.println("Name: " + p.getPlaceName());
+//            System.out.println("Address: " + p.getAddress());
+//            System.out.println("ImgURL: " + p.getSeatMapURL());
+//            System.out.println("Description: " + p.getDescription());
+//            System.out.println("Status: " + p.getStatusID());
+//
+//        }
+        Place p = dao.getById(2);
 
-        for (Place p : list) {
-            System.out.println("ID: " + p.getPlaceID());
-            System.out.println("Name: " + p.getPlaceName());
-            System.out.println("Address: " + p.getAddress());
-            System.out.println("ImgURL: " + p.getSeatMapURL());
-            System.out.println("Description: " + p.getDescription());
-            System.out.println("Status: " + p.getStatusID());
-
-        }
+        System.out.println("ID: " + p.getPlaceID());
+        System.out.println("Name: " + p.getPlaceName());
+        System.out.println("Address: " + p.getAddress());
+        System.out.println("ImgURL: " + p.getSeatMapURL());
+        System.out.println("Description: " + p.getDescription());
+        System.out.println("Status: " + p.getStatusID());
     }
 }
