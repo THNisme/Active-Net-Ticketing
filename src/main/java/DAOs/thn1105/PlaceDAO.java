@@ -99,6 +99,20 @@ public class PlaceDAO extends DBContext {
         }
         return false;
     }
+    
+    
+    //DELETE A PLACE
+    public boolean delete(int id) {
+        String sql = "DELETE FROM Places WHERE PlaceID=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         PlaceDAO dao = new PlaceDAO();
@@ -136,16 +150,19 @@ public class PlaceDAO extends DBContext {
 
 
 
-        Place updateP = new Place();
-        
-        updateP.setPlaceID(1);
-        updateP.setPlaceName("Kho F-ACTIVE");
-        updateP.setAddress("FTPU");
-        updateP.setSeatMapURL("place/img/seatmap/sm4.jpg");
-        updateP.setDescription("Phong Kho F-ACTIVE");
-        updateP.setStatusID(1);
-        
-        dao.update(updateP);
+//        Place updateP = new Place();
+//        
+//        updateP.setPlaceID(1);
+//        updateP.setPlaceName("Kho F-ACTIVE");
+//        updateP.setAddress("FTPU");
+//        updateP.setSeatMapURL("place/img/seatmap/sm4.jpg");
+//        updateP.setDescription("Phong Kho F-ACTIVE");
+//        updateP.setStatusID(1);
+//        
+//        dao.update(updateP);
+
+    
+        dao.delete(1);
 
         List<Place> list = dao.getAll();
 
