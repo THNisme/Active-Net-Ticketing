@@ -17,7 +17,7 @@ import java.util.List;
  * @author Tran Hieu Nghia - CE191115
  */
 public class EventCategoryDAO extends DBContext {
-    
+
     //GET ALL EVENTCATEGORY
     public List<EventCategory> getAll() {
         List<EventCategory> list = new ArrayList<>();
@@ -37,15 +37,38 @@ public class EventCategoryDAO extends DBContext {
         }
         return list;
     }
-    
+
+    // GET BY ID
+    public EventCategory getById(int id) {
+        String sql = "SELECT * FROM EventCategories WHERE CategoryID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new EventCategory(
+                        rs.getInt("CategoryID"),
+                        rs.getString("CategoryName"),
+                        rs.getString("Description")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         EventCategoryDAO dao = new EventCategoryDAO();
-        List<EventCategory> list = dao.getAll();
+//        List<EventCategory> list = dao.getAll();
+//
+//        for (EventCategory c : list) {
+//            System.out.println("ID: " + c.getCategoryID());
+//            System.out.println("CateName: " + c.getCategoryName());
+//        }
 
-        for (EventCategory c : list) {
-            System.out.println("ID: " + c.getCategoryID());
-            System.out.println("CateName: " + c.getCategoryName());
-        }
-
+        EventCategory c = dao.getById(3);
+        System.out.println("ID: " + c.getCategoryID());
+        System.out.println("CateName: " + c.getCategoryName());
     }
 }
