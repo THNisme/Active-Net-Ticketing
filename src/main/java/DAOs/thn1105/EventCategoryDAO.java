@@ -87,6 +87,19 @@ public class EventCategoryDAO extends DBContext {
         return false;
     }
 
+    // DELETE A CATEGORY
+    public boolean delete(int id) {
+        String sql = "DELETE FROM EventCategories WHERE CategoryID=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         EventCategoryDAO dao = new EventCategoryDAO();
 //        List<EventCategory> list = dao.getAll();
@@ -113,15 +126,29 @@ public class EventCategoryDAO extends DBContext {
 //            System.out.println("CateName: " + c.getCategoryName());
 //            System.out.println("CateDescription: " + c.getDescription());
 //        }
-        EventCategory updateCate = new EventCategory();
-        
-        updateCate.setCategoryID(6);
-        
-        updateCate.setCategoryName("SOL");
-        updateCate.setDescription("FACTIVE EVENT CLUB - Shafts of light");
 
-        dao.update(updateCate);
 
+
+//        EventCategory updateCate = new EventCategory();
+//
+//        updateCate.setCategoryID(6);
+//
+//        updateCate.setCategoryName("SOL");
+//        updateCate.setDescription("FACTIVE EVENT CLUB - Shafts of light");
+//
+//        dao.update(updateCate);
+//
+//        List<EventCategory> list = dao.getAll();
+//
+//        for (EventCategory c : list) {
+//            System.out.println("ID: " + c.getCategoryID());
+//            System.out.println("CateName: " + c.getCategoryName());
+//            System.out.println("CateDescription: " + c.getDescription());
+//        }
+
+
+        dao.delete(2);
+        
         List<EventCategory> list = dao.getAll();
 
         for (EventCategory c : list) {
