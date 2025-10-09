@@ -82,6 +82,24 @@ public class PlaceDAO extends DBContext {
         return false;
     }
 
+    //UPADTE PLACE
+    public boolean update(Place p) {
+        String sql = "UPDATE Places SET PlaceName=?, Address=?, SeatMapURL=?, Description=?, StatusID=? WHERE PlaceID=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, p.getPlaceName());
+            ps.setString(2, p.getAddress());
+            ps.setString(3, p.getSeatMapURL());
+            ps.setString(4, p.getDescription());
+            ps.setInt(5, p.getStatusID());
+            ps.setInt(6, p.getPlaceID());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         PlaceDAO dao = new PlaceDAO();
 
@@ -105,8 +123,6 @@ public class PlaceDAO extends DBContext {
 //        System.out.println("Description: " + p.getDescription());
 //        System.out.println("Status: " + p.getStatusID());
 //    }
-
-
 //        Place newP = new Place();
 //        
 //        newP.setPlaceName("G404");
@@ -117,6 +133,20 @@ public class PlaceDAO extends DBContext {
 //        
 //        dao.create(newP);
 //
+
+
+
+        Place updateP = new Place();
+        
+        updateP.setPlaceID(1);
+        updateP.setPlaceName("Kho F-ACTIVE");
+        updateP.setAddress("FTPU");
+        updateP.setSeatMapURL("place/img/seatmap/sm4.jpg");
+        updateP.setDescription("Phong Kho F-ACTIVE");
+        updateP.setStatusID(1);
+        
+        dao.update(updateP);
+
         List<Place> list = dao.getAll();
 
         for (Place p : list) {
