@@ -18,7 +18,7 @@
 <div class="container-fluid p-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="text-success">Danh sách người dùng</h4>
-    <a href="UserController?action=new" class="btn btn-success btn-sm">+ Thêm người dùng</a>
+    <a href="UserServlet?action=new" class="btn btn-success btn-sm">+ Thêm người dùng</a>
   </div>
 
   <div class="table-responsive bg-dark border rounded">
@@ -50,8 +50,8 @@
           </td>
           <td><%=u.getCreatedAt()%></td>
           <td>
-            <a href="UserController?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
-            <a href="UserController?action=delete&id=<%=u.getUserID()%>" class="btn btn-danger btn-sm"
+            <a href="UserServlet?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
+            <a href="UserServlet?action=delete&id=<%=u.getUserID()%>" class="btn btn-danger btn-sm"
                onclick="return confirm('Bạn có chắc muốn xóa người dùng này không?')">Xóa</a>
           </td>
         </tr>
