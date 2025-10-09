@@ -72,6 +72,21 @@ public class EventCategoryDAO extends DBContext {
         return false;
     }
 
+    // UPDATE CATEGORY
+    public boolean update(EventCategory c) {
+        String sql = "UPDATE EventCategories SET CategoryName=?, Description=? WHERE CategoryID=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, c.getCategoryName());
+            ps.setString(2, c.getDescription());
+            ps.setInt(3, c.getCategoryID());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         EventCategoryDAO dao = new EventCategoryDAO();
 //        List<EventCategory> list = dao.getAll();
@@ -84,14 +99,28 @@ public class EventCategoryDAO extends DBContext {
 //        EventCategory c = dao.getById(3);
 //        System.out.println("ID: " + c.getCategoryID());
 //        System.out.println("CateName: " + c.getCategoryName());
+//        EventCategory newCate = new EventCategory();
+//
+//        newCate.setCategoryName("F-Active");
+//        newCate.setDescription("FACTIVE EVENT CLUB");
+//
+//        dao.create(newCate);
+//
+//        List<EventCategory> list = dao.getAll();
+//
+//        for (EventCategory c : list) {
+//            System.out.println("ID: " + c.getCategoryID());
+//            System.out.println("CateName: " + c.getCategoryName());
+//            System.out.println("CateDescription: " + c.getDescription());
+//        }
+        EventCategory updateCate = new EventCategory();
+        
+        updateCate.setCategoryID(6);
+        
+        updateCate.setCategoryName("SOL");
+        updateCate.setDescription("FACTIVE EVENT CLUB - Shafts of light");
 
-
-        EventCategory newCate = new EventCategory();
-
-        newCate.setCategoryName("F-Active");
-        newCate.setDescription("FACTIVE EVENT CLUB");
-
-        dao.create(newCate);
+        dao.update(updateCate);
 
         List<EventCategory> list = dao.getAll();
 
