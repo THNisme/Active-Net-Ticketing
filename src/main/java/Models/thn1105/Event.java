@@ -2,30 +2,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package Models.thn1105;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
  * @author Tran Hieu Nghia - CE191115
  */
 public class Event {
+
     private int eventID;
     private int categoryID;
     private String eventName;
     private String description;
     private String imageURL;
-    private Date startDate;
-    private Date endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private int placeID;
     private int statusID;
 
     public Event() {
     }
 
-    public Event(int eventID, int categoryID, String eventName, String description, String imageURL, Date startDate, Date endDate, int placeID, int statusID) {
+    public Event(int eventID, int categoryID, String eventName, String description, String imageURL, Timestamp startDate, Timestamp endDate, int placeID, int statusID) {
         this.eventID = eventID;
         this.categoryID = categoryID;
         this.eventName = eventName;
@@ -77,19 +77,19 @@ public class Event {
         this.imageURL = imageURL;
     }
 
-    public Date getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
@@ -108,6 +108,6 @@ public class Event {
     public void setStatusID(int statusID) {
         this.statusID = statusID;
     }
-    
+
     
 }
