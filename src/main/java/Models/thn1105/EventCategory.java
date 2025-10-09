@@ -21,7 +21,7 @@ public class EventCategory {
         this.categoryName = categoryName;
         this.description = description;
     }
-
+    
     public int getCategoryID() {
         return categoryID;
     }

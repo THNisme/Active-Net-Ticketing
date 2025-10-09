@@ -58,6 +58,20 @@ public class EventCategoryDAO extends DBContext {
         return null;
     }
 
+    // CREATE NEW EVENT CATEGORY
+    public boolean create(EventCategory c) {
+        String sql = "INSERT INTO EventCategories (CategoryName, Description) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, c.getCategoryName());
+            ps.setString(2, c.getDescription());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         EventCategoryDAO dao = new EventCategoryDAO();
 //        List<EventCategory> list = dao.getAll();
@@ -67,8 +81,25 @@ public class EventCategoryDAO extends DBContext {
 //            System.out.println("CateName: " + c.getCategoryName());
 //        }
 
-        EventCategory c = dao.getById(3);
-        System.out.println("ID: " + c.getCategoryID());
-        System.out.println("CateName: " + c.getCategoryName());
+//        EventCategory c = dao.getById(3);
+//        System.out.println("ID: " + c.getCategoryID());
+//        System.out.println("CateName: " + c.getCategoryName());
+
+
+        EventCategory newCate = new EventCategory();
+
+        newCate.setCategoryName("F-Active");
+        newCate.setDescription("FACTIVE EVENT CLUB");
+
+        dao.create(newCate);
+
+        List<EventCategory> list = dao.getAll();
+
+        for (EventCategory c : list) {
+            System.out.println("ID: " + c.getCategoryID());
+            System.out.println("CateName: " + c.getCategoryName());
+            System.out.println("CateDescription: " + c.getDescription());
+        }
+
     }
 }
