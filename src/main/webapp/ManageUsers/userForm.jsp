@@ -4,52 +4,54 @@
     Author     : Acer
 --%>
 
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%> 
 <%@ page import="Models.User" %>
 <%
-  User user = (User) request.getAttribute("user");
-  boolean isEdit = (user != null);
+    User user = (User) request.getAttribute("user");
+    boolean isEdit = (user != null);
 %>
 
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới" %> người dùng</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <%@include file="../view-hfs/header.jsp" %>
+    <body class="bg-dark text-white">
+        <div class="container py-4">
+            <h3 class="text-success mb-3"><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</h3>
 
-<body class="bg-dark text-white">
-<div class="container py-4">
-  <h3 class="text-success mb-3"><%= isEdit ? "Chỉnh sửa" : "Thêm mới" %> người dùng</h3>
+            <form action="UserController" method="post">
+                <input type="hidden" name="userID" value="<%= isEdit ? user.getUserID() : ""%>">
 
-  <form action="UserController" method="post">
-    <input type="hidden" name="userID" value="<%= isEdit ? user.getUserID() : "" %>">
+                <div class="mb-3">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" name="username" class="form-control"
+                           value="<%= isEdit ? user.getUsername() : ""%>" required>
+                </div>
 
-    <div class="mb-3">
-      <label class="form-label">Tên đăng nhập</label>
-      <input type="text" name="username" class="form-control"
-             value="<%= isEdit ? user.getUsername() : "" %>" required>
-    </div>
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu (đã mã hóa)</label>
+                    <input type="text" name="passwordHash" class="form-control"
+                           value="<%= isEdit ? user.getPassword() : ""%>" required>
+                </div>
 
-    <div class="mb-3">
-      <label class="form-label">Mật khẩu (đã mã hóa)</label>
-      <input type="text" name="passwordHash" class="form-control"
-             value="<%= isEdit ? user.getPassword(): "" %>" required>
-    </div>
+                <div class="mb-3">
+                    <label class="form-label">Vai trò</label>
+                    <select name="role" class="form-select">
+                        <option value="0" <%= isEdit && user.getRole() == 0 ? "selected" : ""%>>User</option>
+                        <option value="1" <%= isEdit && user.getRole() == 1 ? "selected" : ""%>>Admin</option>
+                    </select>
+                </div>
 
-    <div class="mb-3">
-      <label class="form-label">Vai trò</label>
-      <select name="role" class="form-select">
-        <option value="0" <%= isEdit && user.getRole() == 0 ? "selected" : "" %>>User</option>
-        <option value="1" <%= isEdit && user.getRole() == 1 ? "selected" : "" %>>Admin</option>
-      </select>
-    </div>
+                <button type="submit" class="btn btn-success"><%= isEdit ? "Cập nhật" : "Thêm mới"%></button>
+                <a href="UserController?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
+            </form>
+        </div>
 
-    <button type="submit" class="btn btn-success"><%= isEdit ? "Cập nhật" : "Thêm mới" %></button>
-    <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
-  </form>
-</div>
-</body>
+    </body>
+    <%@include file="../view-hfs/footer.jsp" %>
 </html>
 
