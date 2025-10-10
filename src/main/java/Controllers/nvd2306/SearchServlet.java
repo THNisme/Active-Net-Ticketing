@@ -1,10 +1,11 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.nvd2306;
 
-import DAOs.UserDAO;
+import DAOs.nvd2306.EventDao;
+import Models.nvd2306.Event;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
+import java.util.List;
 
 /**
  *
  * @author NguyenDuc
  */
-@WebServlet(name = "CheckUsernameServlet", urlPatterns = {"/check"})
-public class CheckUsernameServlet extends HttpServlet {
+@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
+public class SearchServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class CheckUsernameServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckUsernameServlet</title>");
+            out.println("<title>Servlet SearchServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckUsernameServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SearchServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,20 +60,18 @@ public class CheckUsernameServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        UserDAO userDAO = new UserDAO();
+        String keyword = request.getParameter("keyword");
+        EventDao dao = new EventDao();
+        List<Event> events = dao.searchEvents(keyword);
 
-        boolean exists = userDAO.checkUsernameExists(username);
+        // Gửi dữ liệu sang JSP
+        request.setAttribute("events", events);
+        request.setAttribute("keyword", keyword);
 
-        // Trả về JSON cho JS
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+        // ⚡ Thêm dòng này để JSP biết đây là trang kết quả tìm kiếm
+        request.setAttribute("isSearch", true);
 
-        JSONObject json = new JSONObject();
-        json.put("exists", exists);
-
-        response.getWriter().write(json.toString());
-
+        request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 
     /**

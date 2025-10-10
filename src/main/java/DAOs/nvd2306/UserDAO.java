@@ -1,6 +1,6 @@
-package DAOs;
+package DAOs.nvd2306;
 
-import Models.User;
+import Models.nvd2306.User;
 import Utils.nvd2603.DBContext;
 import MD5.HashPassword;
 import java.sql.Connection;

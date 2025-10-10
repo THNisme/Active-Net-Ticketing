@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DAOs;
+package DAOs.nvd2306;
 
-import Models.Event;
+import Models.nvd2306.Event;
 import Utils.nvd2603.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

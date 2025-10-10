@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.nvd2306;
 
-import DAOs.UserDAO;
+import DAOs.nvd2306.UserDAO;
 import MD5.HashPassword;
-import Models.User;
+import Models.nvd2306.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
