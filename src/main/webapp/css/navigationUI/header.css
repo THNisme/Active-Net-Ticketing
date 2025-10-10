@@ -45,6 +45,7 @@
     padding: 0 15px;
     cursor: pointer;
     color: #fff;
+    height: 100%;
 }
 
 .search-box button:active {
