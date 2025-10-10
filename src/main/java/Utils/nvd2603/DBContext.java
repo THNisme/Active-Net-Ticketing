@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Utils;
+package Utils.nvd2603;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Tran Hieu Nghia - CE191115
+ * @author Nguyen Viet Duc
  */
 public class DBContext {
 
@@ -23,9 +23,9 @@ public class DBContext {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=EventManagementDB;"
+                    + "databaseName=Active-Net-Ticketing;"
                     + "user=sa;"
-                    + "password=nd291005;"
+                    + "password=123456;"
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             if (conn != null) {
