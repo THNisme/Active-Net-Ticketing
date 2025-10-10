@@ -67,12 +67,12 @@ public class UserServlet extends HttpServlet {
 
         switch (action) {
             case "new":
-                req.getRequestDispatcher("/ManageUsers/userFrom.jsp").forward(req, res);
+                req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
                 break;
             case "edit":
                 int id = Integer.parseInt(req.getParameter("id"));
                 req.setAttribute("user", dao.getUserById(id));
-                req.getRequestDispatcher("/ManageUsers/userFrom.jsp").forward(req, res);
+                req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
                 break;
             case "delete":
                 dao.deleteUser(Integer.parseInt(req.getParameter("id")));
