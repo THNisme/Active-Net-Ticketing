@@ -4,9 +4,8 @@
     Author     : NguyenDuc
 --%>
 
+<%@page import="Models.nvd2306.Event"%>
 <%@page import="java.util.List"%>
-<%@page import="Models.Event"%>
-<%@page import="Models.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -19,7 +18,7 @@
     </head>
     <body style="background-color:#0d0d0d; color:#fff;">
 
-        <%@include file="view/header.jsp" %>
+        <%@include file="view-hfs/header.jsp" %>
 
         <section class="events-section py-5">
             <div class="container">
