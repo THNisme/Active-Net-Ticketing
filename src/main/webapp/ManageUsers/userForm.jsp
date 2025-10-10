@@ -48,7 +48,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-pink"><%= isEdit ? "Cập nhật" : "Thêm mới"%></button>
-                <a href="UserServet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
+                <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>
 
