@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
 <%@ page import="Models.User" %>
+<link href="../css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
 <%
     User user = (User) request.getAttribute("user");
     boolean isEdit = (user != null);
@@ -16,15 +17,17 @@
     <head>
         <meta charset="UTF-8">
         <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</title>
+        <base href="<%= request.getContextPath()%>/">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
     </head>
+    
     <%@include file="../view-hfs/header.jsp" %>
     <body class="bg-dark text-white">
         <div class="container py-4">
             <h3 class="text-pink mb-3"><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</h3>
 
-            <form action="UserServet" method="post">
+            <form action="UserServlet" method="post">
                 <input type="hidden" name="userID" value="<%= isEdit ? user.getUserID() : ""%>">
 
                 <div class="mb-3">
@@ -34,11 +37,15 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Mật khẩu (đã mã hóa)</label>
+                    <label class="form-label">Mật khẩu</label>
                     <input type="text" name="passwordHash" class="form-control"
                            value="<%= isEdit ? user.getPassword() : ""%>" required>
                 </div>
-
+                <div class="mb-3">
+                    <label class="form-label">Xác nhận mật khẩu</label>
+                    <input type="text" name="passwordHash" class="form-control"
+                           value="<%= isEdit ? user.getPassword() : ""%>" required>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Vai trò</label>
                     <select name="role" class="form-select">
@@ -48,11 +55,18 @@
                 </div>
 
                 <button type="submit" class="btn btn-pink"><%= isEdit ? "Cập nhật" : "Thêm mới"%></button>
+                <% if (!isEdit) { %>
+                <button type="submit" name="actionType" value="saveAndSend" class="btn btn-pink">
+                    Thêm và gửi mail
+                </button>
+                <% }%>
+
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>
 
     </body>
+
     <%@include file="../view-hfs/footer.jsp" %>
 </html>
 
