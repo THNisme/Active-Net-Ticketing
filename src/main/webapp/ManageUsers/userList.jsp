@@ -12,13 +12,14 @@
         <meta charset="UTF-8">
         <title>Quản lý người dùng</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
     </head>
     <%@include file="../view-hfs/header.jsp" %>
     <body class="bg-dark text-white">
         <div class="container-fluid p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-success">Danh sách người dùng</h4>
-                <a href="UserServlet?action=new" class="btn btn-success btn-sm">+ Thêm người dùng</a>
+                <h4 class="text-pink">Danh sách người dùng</h4>
+                <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
             </div>
 
             <div class="table-responsive bg-dark border rounded">

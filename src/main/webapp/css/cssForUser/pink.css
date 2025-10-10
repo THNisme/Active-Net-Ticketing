@@ -1,0 +1,29 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 10 Oct 2025, 09.43.48
+    Author     : Acer
+*/
+:root {
+  --bs-pink: #ffb6b6;
+  --bs-pink-hover: #ff9a9a;
+}
+
+.text-pink {
+  color: var(--bs-pink) !important;
+}
+
+.btn-pink {
+  background-color: var(--bs-pink) !important;
+  border-color: var(--bs-pink) !important;
+  color: #fff !important;
+}
+
+.btn-pink:hover {
+  background-color: var(--bs-pink-hover) !important;
+  border-color: var(--bs-pink-hover) !important;
+  color: #fff !important;
+}
+

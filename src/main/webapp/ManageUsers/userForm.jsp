@@ -17,13 +17,14 @@
         <meta charset="UTF-8">
         <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
     </head>
     <%@include file="../view-hfs/header.jsp" %>
     <body class="bg-dark text-white">
         <div class="container py-4">
-            <h3 class="text-success mb-3"><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</h3>
+            <h3 class="text-pink mb-3"><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</h3>
 
-            <form action="UserController" method="post">
+            <form action="UserServet" method="post">
                 <input type="hidden" name="userID" value="<%= isEdit ? user.getUserID() : ""%>">
 
                 <div class="mb-3">
@@ -46,8 +47,8 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-success"><%= isEdit ? "Cập nhật" : "Thêm mới"%></button>
-                <a href="UserController?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
+                <button type="submit" class="btn btn-pink"><%= isEdit ? "Cập nhật" : "Thêm mới"%></button>
+                <a href="UserServet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>
 
