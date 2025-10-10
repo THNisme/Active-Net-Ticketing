@@ -12,7 +12,6 @@
 <html>
     <head>
         <title>Trang chủ</title>
-        <link href="css/header.css" rel="stylesheet" type="text/css"/>
         <link href="css/customer-page/home.css" rel="stylesheet" type="text/css"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
@@ -87,7 +86,7 @@
             </div>
         </section>
 
-        <%@include file="view/footer.jsp" %>
+        <%@include file="view-hfs/footer.jsp" %>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
