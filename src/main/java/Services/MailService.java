@@ -17,8 +17,8 @@ import java.util.Properties;
 
 public class MailService {
 
-    private static final String FROM_EMAIL = "your_email@gmail.com"; // 📧 Gmail gửi đi
-    private static final String FROM_PASSWORD = "your_app_password"; // 🔑 App Password Gmail
+    private static final String FROM_EMAIL = "your_email@gmail.com"; 
+    private static final String FROM_PASSWORD = "your_app_password"; 
 
     public static void sendAccountEmail(String toEmail, String username, String password) {
         String subject = "Tài khoản Active Net Ticketing";
@@ -54,7 +54,7 @@ public class MailService {
             message.setText(body);
 
             Transport.send(message);
-            System.out.println("✅ Email sent to " + to);
+            System.out.println("Email sent to " + to);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
