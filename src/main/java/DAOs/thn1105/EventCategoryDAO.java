@@ -5,7 +5,8 @@
 package DAOs.thn1105;
 
 import Models.thn1105.EventCategory;
-import Utils.DBContext;
+import Utils.singleton.DBContext;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,9 @@ import java.util.List;
  *
  * @author Tran Hieu Nghia - CE191115
  */
-public class EventCategoryDAO extends DBContext {
+public class EventCategoryDAO{
+
+    private Connection conn = DBContext.getInstance().getConnection();
 
     //GET ALL EVENTCATEGORY
     public List<EventCategory> getAll() {
@@ -126,9 +129,6 @@ public class EventCategoryDAO extends DBContext {
 //            System.out.println("CateName: " + c.getCategoryName());
 //            System.out.println("CateDescription: " + c.getDescription());
 //        }
-
-
-
 //        EventCategory updateCate = new EventCategory();
 //
 //        updateCate.setCategoryID(6);
@@ -145,10 +145,8 @@ public class EventCategoryDAO extends DBContext {
 //            System.out.println("CateName: " + c.getCategoryName());
 //            System.out.println("CateDescription: " + c.getDescription());
 //        }
-
-
         dao.delete(2);
-        
+
         List<EventCategory> list = dao.getAll();
 
         for (EventCategory c : list) {

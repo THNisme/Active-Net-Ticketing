@@ -5,11 +5,11 @@
 package DAOs.thn1105;
 
 import Models.thn1105.Place;
-import Utils.DBContext;
+import Utils.singleton.DBContext;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import static java.sql.Types.NULL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author Tran Hieu Nghia - CE191115
  */
-public class PlaceDAO extends DBContext {
-
+public class PlaceDAO {
+    private Connection conn = DBContext.getInstance().getConnection();
     // GET ALL PLACE
     public List<Place> getAll() {
         List<Place> list = new ArrayList<>();

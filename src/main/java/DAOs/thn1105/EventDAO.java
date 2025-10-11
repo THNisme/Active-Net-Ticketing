@@ -5,7 +5,8 @@
 package DAOs.thn1105;
 
 import Models.thn1105.Event;
-import Utils.DBContext;
+import Utils.singleton.DBContext;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,8 +17,9 @@ import java.util.List;
  *
  * @author Tran Hieu Nghia - CE191115
  */
-public class EventDAO extends DBContext {
+public class EventDAO {
 
+     private Connection conn = DBContext.getInstance().getConnection();
     // GET ALL EVENT
     public List<Event> getAll() {
         List<Event> list = new ArrayList<>();

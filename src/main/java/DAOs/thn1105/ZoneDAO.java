@@ -5,7 +5,8 @@
 package DAOs.thn1105;
 
 import Models.thn1105.Zone;
-import Utils.DBContext;
+import Utils.singleton.DBContext;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,8 +17,9 @@ import java.util.List;
  *
  * @author Tran Hieu Nghia - CE191115
  */
-public class ZoneDAO extends DBContext {
+public class ZoneDAO {
 
+    private Connection conn = DBContext.getInstance().getConnection();
     // GET ALL
     public List<Zone> getAll() {
         List<Zone> list = new ArrayList<>();
@@ -149,8 +151,6 @@ public class ZoneDAO extends DBContext {
 //            System.out.println("Zone Name: " + z.getZoneName());
 //            System.out.println("Zone của place (ID): " + z.getPlaceID());
 //        }
-
-
 //        Zone updateZ = new Zone();
 //        
 //        updateZ.setZoneID(7);
@@ -158,9 +158,8 @@ public class ZoneDAO extends DBContext {
 //        updateZ.setZoneName("Super-V3");
 //        
 //        dao.update(updateZ);
-
         dao.delete(6);
-        
+
         List<Zone> list = dao.getAllZoneOfPlace(10);
 
         for (Zone z : list) {
