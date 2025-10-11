@@ -30,7 +30,7 @@
         <div class="container py-4">
             <h3 class="text-pink mb-3"><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</h3>
 
-            <form id="userForm" action="UserServlet" method="post">
+            <form id="userForm" action="UserServlet" method="post" onsubmit="return validateForm();">
                 <input type="hidden" name="userID" value="<%= isEdit ? user.getUserID() : ""%>">
 
                 <div class="mb-3">
@@ -41,12 +41,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">Mật khẩu</label>
-                    <input type="text" name="passwordHash" class="form-control"
+                    <input type="password" id="password" name="passwordHash" class="form-control"
                            value="<%= isEdit ? user.getPassword() : ""%>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Xác nhận mật khẩu</label>
-                    <input type="text" name="confirmPassword" class="form-control"
+                    <input type="password" id="confirmPassword" class="form-control"
                            value="<%= isEdit ? user.getPassword() : ""%>" required>
                 </div>
                 <div class="mb-3">
@@ -71,6 +71,18 @@
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>          
+<script>
+function validateForm() {
+    const pass = document.getElementById("password").value.trim();
+    const confirm = document.getElementById("confirmPassword").value.trim();
+
+    if (pass !== confirm) {
+        alert("❌ Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
+        return false;
+    }
+    return true;
+}
+</script>
 
 
     </body>

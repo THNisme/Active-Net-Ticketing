@@ -110,7 +110,7 @@ public class UserServlet extends HttpServlet {
         String password = req.getParameter("passwordHash");
         int role = Integer.parseInt(req.getParameter("role"));
         String actionType = req.getParameter("actionType");
-        String email = username + "@gmail.com"; // hoặc lấy từ form nếu có trường email
+        String email = username + "@gmail.com"; 
 
         User user = new User();
         user.setUserID(id);
@@ -119,8 +119,7 @@ public class UserServlet extends HttpServlet {
         user.setRole(role);
 
         if (id == 0) {
-            dao.addUser(user);
-            // Nếu chọn “Thêm và gửi mail”
+            dao.addUser(user);            
             if ("saveAndSend".equals(actionType)) {
                 Services.MailService.sendAccountEmail(email, username, password);
             }
