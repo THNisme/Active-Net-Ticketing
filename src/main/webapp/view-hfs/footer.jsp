@@ -91,22 +91,22 @@
             <div class="footer-col">
                 <div class="mb-3">
                     <h4>Dành cho Khách hàng</h4>
-                    <p><a href="terms.jsp">Điều khoản sử dụng cho khách hàng</a></p>
+                    <p><a href="${pageContext.request.contextPath}/view-hfs/terms.jsp">Điều khoản sử dụng cho khách hàng</a></p>
                 </div>
                 <div class="mb-3">
                     <h4>Dành cho Ban Tổ chức</h4>
-                    <p><a href="termsorganizer.jsp">Điều khoản sử dụng cho ban tổ chức</a></p>
+                    <p><a href="${pageContext.request.contextPath}/view-hfs/termsorganizer.jsp">Điều khoản sử dụng cho ban tổ chức</a></p>
                 </div>
             </div>
 
             <!-- Cột 3: Về công ty -->
             <div class="footer-col">
                 <h4>Về công ty chúng tôi</h4>
-                <p><a href="regulation.jsp">Quy chế hoạt động</a></p>
-                <p><a href="privacy.jsp">Chính sách bảo mật thông tin</a></p>
-                <p><a href="complaint.jsp">Cơ chế giải quyết tranh chấp/ khiếu nại</a></p>
-                <p><a href="returnpolicy.jsp">Chính sách đổi trả và kiểm hàng</a></p>
-                <p><a href="shipping.jsp">Điều kiện vận chuyển và giao nhận</a></p>
+                <p><a href="${pageContext.request.contextPath}/view-hfs/regulation.jsp">Quy chế hoạt động</a></p>
+                <p><a href="${pageContext.request.contextPath}/view-hfs/privacy.jsp">Chính sách bảo mật thông tin</a></p>
+                <p><a href="${pageContext.request.contextPath}/view-hfs/complaint.jsp">Cơ chế giải quyết tranh chấp/ khiếu nại</a></p>
+                <p><a href="${pageContext.request.contextPath}/view-hfs/returnpolicy.jsp">Chính sách đổi trả và kiểm hàng</a></p>
+                <p><a href="${pageContext.request.contextPath}/view-hfs/shipping.jsp">Điều kiện vận chuyển và giao nhận</a></p>
             </div>
 
         </div>
