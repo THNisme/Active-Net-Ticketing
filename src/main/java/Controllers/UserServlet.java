@@ -108,9 +108,10 @@ public class UserServlet extends HttpServlet {
 
         String username = req.getParameter("username");
         String password = req.getParameter("passwordHash");
+        String confirmPassword = req.getParameter("confirmPassword");
         int role = Integer.parseInt(req.getParameter("role"));
         String actionType = req.getParameter("actionType");
-        String email = username + "@gmail.com"; 
+        String email = username + "@gmail.com";
 
         User user = new User();
         user.setUserID(id);
@@ -118,10 +119,17 @@ public class UserServlet extends HttpServlet {
         user.setPassword(password);
         user.setRole(role);
 
+        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
+            req.setAttribute("error", "Mật khẩu xác nhận không khớp!");
+            req.getRequestDispatcher("ManageUsers/userForm.jsp").forward(req, res);
+            return;
+        }
+
         if (id == 0) {
-            dao.addUser(user);            
-            if ("saveAndSend".equals(actionType)) {
+            dao.addUser(user);
+            if ("saveAndSend".equals(actionType)) {                
                 Services.MailService.sendAccountEmail(email, username, password);
+                req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
             }
         } else {
             dao.updateUser(user);
