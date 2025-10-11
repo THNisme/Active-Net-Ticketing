@@ -4,26 +4,35 @@
  */
 package Services;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
+
 
 public class MailService {
 
-    private static final String FROM_EMAIL = "yourmail@gmail.com";
-    private static final String FROM_PASSWORD = "app_password_here";
+    private static final String FROM_EMAIL = "your_email@gmail.com"; // 📧 Gmail gửi đi
+    private static final String FROM_PASSWORD = "your_app_password"; // 🔑 App Password Gmail
 
-    public static void sendAccountEmail(String to, String username, String password)
-            throws MessagingException {
-
-        String subject = "Tài khoản mới trên Active Net Ticketing";
+    public static void sendAccountEmail(String toEmail, String username, String password) {
+        String subject = "Tài khoản Active Net Ticketing";
         String body = "Xin chào " + username + ",\n\n"
                 + "Tài khoản của bạn đã được tạo thành công.\n"
                 + "Tên đăng nhập: " + username + "\n"
                 + "Mật khẩu: " + password + "\n\n"
-                + "Vui lòng đăng nhập và đổi mật khẩu sớm nhất.\n\n"
-                + "Trân trọng,\nActive Net Ticketing Team";
+                + "Vui lòng đăng nhập và đổi mật khẩu sau khi sử dụng lần đầu.\n\n"
+                + "Trân trọng,\nActive Net Ticketing";
 
+        sendMail(toEmail, subject, body);
+    }
+
+    private static void sendMail(String to, String subject, String body) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -37,13 +46,17 @@ public class MailService {
             }
         });
 
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(FROM_EMAIL));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-        message.setSubject(subject);
-        message.setText(body);
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(FROM_EMAIL));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setSubject(subject);
+            message.setText(body);
 
-        Transport.send(message);
-        System.out.println("✅ Email đã gửi tới: " + to);
+            Transport.send(message);
+            System.out.println("✅ Email sent to " + to);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }

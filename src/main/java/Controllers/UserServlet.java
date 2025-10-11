@@ -60,8 +60,10 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-         String action = req.getParameter("action");
-        if (action == null) action = "list";
+        String action = req.getParameter("action");
+        if (action == null) {
+            action = "list";
+        }
 
         UsersDAO dao = new UsersDAO();
 
@@ -83,8 +85,8 @@ public class UserServlet extends HttpServlet {
                 req.setAttribute("userList", list);
                 req.getRequestDispatcher("/ManageUsers/userList.jsp").forward(req, res);
                 break;
-        
-    }
+
+        }
     }
 
     /**
@@ -104,17 +106,29 @@ public class UserServlet extends HttpServlet {
         int id = req.getParameter("userID") != null && !req.getParameter("userID").isEmpty()
                 ? Integer.parseInt(req.getParameter("userID")) : 0;
 
+        String username = req.getParameter("username");
+        String password = req.getParameter("passwordHash");
+        int role = Integer.parseInt(req.getParameter("role"));
+        String actionType = req.getParameter("actionType");
+        String email = username + "@gmail.com"; // hoặc lấy từ form nếu có trường email
+
         User user = new User();
         user.setUserID(id);
-        user.setUsername(req.getParameter("username"));
-        user.setPassword(req.getParameter("passwordHash"));
-        user.setRole(Integer.parseInt(req.getParameter("role")));
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setRole(role);
 
-        if (id == 0) dao.addUser(user);
-        else dao.updateUser(user);
+        if (id == 0) {
+            dao.addUser(user);
+            // Nếu chọn “Thêm và gửi mail”
+            if ("saveAndSend".equals(actionType)) {
+                Services.MailService.sendAccountEmail(email, username, password);
+            }
+        } else {
+            dao.updateUser(user);
+        }
 
         res.sendRedirect("UserServlet?action=list");
-    
     }
 
     /**

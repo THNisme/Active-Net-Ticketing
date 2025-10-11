@@ -23,13 +23,14 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
     </head>
-    
+
     <%@include file="../view-hfs/header.jsp" %>
+
     <body class="bg-dark text-white">
         <div class="container py-4">
             <h3 class="text-pink mb-3"><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</h3>
 
-            <form action="UserServlet" method="post">
+            <form id="userForm" action="UserServlet" method="post">
                 <input type="hidden" name="userID" value="<%= isEdit ? user.getUserID() : ""%>">
 
                 <div class="mb-3">
@@ -45,7 +46,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Xác nhận mật khẩu</label>
-                    <input type="text" name="passwordHash" class="form-control"
+                    <input type="text" name="confirmPassword" class="form-control"
                            value="<%= isEdit ? user.getPassword() : ""%>" required>
                 </div>
                 <div class="mb-3">
@@ -56,16 +57,21 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-pink"><%= isEdit ? "Cập nhật" : "Thêm mới"%></button>
+                <button type="submit" name="actionType" value="save" class="btn btn-pink">
+                    <%= isEdit ? "Cập nhật" : "Thêm mới"%>
+                </button>
+
                 <% if (!isEdit) { %>
-                <button type="submit" name="actionType" value="saveAndSend" class="btn btn-pink">
+                <button type="submit" name="actionType" value="saveAndSend" class="btn btn-pink ms-2">
                     Thêm và gửi mail
                 </button>
                 <% }%>
 
+
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
-        </div>
+        </div>          
+
 
     </body>
 
