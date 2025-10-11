@@ -6,7 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
 <%@ page import="Models.User" %>
-<link href="../css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
+<link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
+<link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
+
 <%
     User user = (User) request.getAttribute("user");
     boolean isEdit = (user != null);
