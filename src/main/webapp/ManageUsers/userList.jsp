@@ -23,6 +23,18 @@
         <div class="container-fluid p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="text-pink">Danh sách người dùng</h4>
+                <% if (request.getAttribute("mailStatus") != null) {%>
+                <div class="alert alert-success">
+                    <%= request.getAttribute("mailStatus")%>
+                </div>
+                <% } %>
+
+                <% if (request.getAttribute("error") != null) {%>
+                <div class="alert alert-danger">
+                    <%= request.getAttribute("error")%>
+                </div>
+                <% } %>
+
                 <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
             </div>
 
@@ -61,7 +73,7 @@
                             </td>
                         </tr>
                         <% }
-        } else { %>
+                        } else { %>
                         <tr><td colspan="5" class="text-center">Không có người dùng nào</td></tr>
                         <% }%>
                     </tbody>
