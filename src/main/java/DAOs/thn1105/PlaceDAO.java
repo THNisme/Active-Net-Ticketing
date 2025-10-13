@@ -113,6 +113,42 @@ public class PlaceDAO {
         }
         return false;
     }
+    
+    //SOFT DELETE
+    public boolean softDelete(int id) {
+        String sql = "UPDATE Places SET StatusID=3 WHERE PlaceID=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // GET ALL PLACES ARE SOFT DELETED
+    public List<Place> getAllSoftDelete() {
+        List<Place> list = new ArrayList<>();
+        String sql = "SELECT * FROM Places WHERE StatusID=3";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Place(
+                        rs.getInt("PlaceID"),
+                        rs.getString("PlaceName"),
+                        rs.getString("Address"),
+                        rs.getString("SeatMapURL"),
+                        rs.getString("Description"),
+                        rs.getInt("StatusID")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     public static void main(String[] args) {
         PlaceDAO dao = new PlaceDAO();
@@ -126,7 +162,6 @@ public class PlaceDAO {
 //            System.out.println("ImgURL: " + p.getSeatMapURL());
 //            System.out.println("Description: " + p.getDescription());
 //            System.out.println("Status: " + p.getStatusID());
-//
 //        }
 //        Place p = dao.getById(2);
 //
@@ -139,7 +174,7 @@ public class PlaceDAO {
 //    }
 //        Place newP = new Place();
 //
-//        newP.setPlaceName("G404");
+//        newP.setPlaceName("G999");
 //        newP.setAddress("FTPU");
 //        newP.setSeatMapURL("place/img/seatmap/sm4.jpg");
 //        newP.setDescription("Phong hoc G404");
@@ -147,8 +182,6 @@ public class PlaceDAO {
 //        
 //        dao.create(newP);
 //
-
-
 
 //        Place updateP = new Place();
 //        
@@ -162,9 +195,9 @@ public class PlaceDAO {
 //        dao.update(updateP);
 
     
-        dao.delete(1);
+//        dao.softDelete(1);
 
-        List<Place> list = dao.getAll();
+        List<Place> list = dao.getAllSoftDelete();
 
         for (Place p : list) {
             System.out.println("ID: " + p.getPlaceID());

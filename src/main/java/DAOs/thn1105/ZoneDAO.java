@@ -20,6 +20,7 @@ import java.util.List;
 public class ZoneDAO {
 
     private Connection conn = DBContext.getInstance().getConnection();
+
     // GET ALL
     public List<Zone> getAll() {
         List<Zone> list = new ArrayList<>();
@@ -31,7 +32,8 @@ public class ZoneDAO {
                 list.add(new Zone(
                         rs.getInt("ZoneID"),
                         rs.getInt("PlaceID"),
-                        rs.getString("ZoneName")
+                        rs.getString("ZoneName"),
+                        rs.getInt("StatusID")
                 ));
             }
         } catch (SQLException e) {
@@ -52,7 +54,8 @@ public class ZoneDAO {
                 list.add(new Zone(
                         rs.getInt("ZoneID"),
                         rs.getInt("PlaceID"),
-                        rs.getString("ZoneName")
+                        rs.getString("ZoneName"),
+                        rs.getInt("StatusID")
                 ));
             }
         } catch (SQLException e) {
@@ -72,7 +75,8 @@ public class ZoneDAO {
                 return new Zone(
                         rs.getInt("ZoneID"),
                         rs.getInt("PlaceID"),
-                        rs.getString("ZoneName")
+                        rs.getString("ZoneName"),
+                        rs.getInt("StatusID")
                 );
             }
         } catch (SQLException e) {
@@ -97,12 +101,13 @@ public class ZoneDAO {
 
     // UPADTE A ZONE
     public boolean update(Zone z) {
-        String sql = "UPDATE Zones SET PlaceID=?, ZoneName=? WHERE ZoneID=?";
+        String sql = "UPDATE Zones SET PlaceID=?, ZoneName=?, StatusID=? WHERE ZoneID=?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, z.getPlaceID());
             ps.setString(2, z.getZoneName());
             ps.setInt(3, z.getZoneID());
+            ps.setInt(4, z.getStatusID());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,9 +115,9 @@ public class ZoneDAO {
         return false;
     }
 
-    //DELETE A ZONE
-    public boolean delete(int id) {
-        String sql = "DELETE FROM Zones WHERE ZoneID=?";
+    //SOFT DELETE A ZONE
+    public boolean softDelete(int id) {
+        String sql = "UPDATE Zones SET StatusID=3 WHERE ZoneID=?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -158,7 +163,7 @@ public class ZoneDAO {
 //        updateZ.setZoneName("Super-V3");
 //        
 //        dao.update(updateZ);
-        dao.delete(6);
+//        dao.delete(6);
 
         List<Zone> list = dao.getAllZoneOfPlace(10);
 

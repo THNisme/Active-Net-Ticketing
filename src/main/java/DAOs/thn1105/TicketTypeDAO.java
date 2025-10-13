@@ -1,6 +1,5 @@
 package DAOs.thn1105;
 
-
 import DAOs.thn1105.EventDAO;
 import DAOs.thn1105.ZoneDAO;
 import Models.thn1105.TicketType;
@@ -36,7 +35,8 @@ public class TicketTypeDAO {
                         rs.getInt("EventID"),
                         rs.getInt("ZoneID"),
                         rs.getString("TypeName"),
-                        rs.getBigDecimal("Price")
+                        rs.getBigDecimal("Price"),
+                        rs.getInt("StatusID")
                 );
                 list.add(t);
             }
@@ -58,7 +58,8 @@ public class TicketTypeDAO {
                         rs.getInt("EventID"),
                         rs.getInt("ZoneID"),
                         rs.getString("TypeName"),
-                        rs.getBigDecimal("Price")
+                        rs.getBigDecimal("Price"),
+                        rs.getInt("StatusID")
                 );
             }
         } catch (SQLException e) {
@@ -84,13 +85,14 @@ public class TicketTypeDAO {
 
     // UPDATE A TICKET TYPE
     public boolean update(TicketType t) {
-        String sql = "UPDATE TicketTypes SET EventID=?, ZoneID=?, TypeName=?, Price=? WHERE TicketTypeID=?";
+        String sql = "UPDATE TicketTypes SET EventID=?, ZoneID=?, TypeName=?, Price=?, StatusID=? WHERE TicketTypeID=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, t.getEventID());
             ps.setInt(2, t.getZoneID());
             ps.setString(3, t.getTypeName());
             ps.setBigDecimal(4, t.getPrice());
             ps.setInt(5, t.getTicketTypeID());
+            ps.setInt(6, t.getStatusID());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,40 +100,18 @@ public class TicketTypeDAO {
         return false;
     }
 
-    // DELELTE TICKET -> TICKET TYPE
-    public boolean delete(int id) {
-        String deleteTickets = "DELETE FROM Tickets WHERE TicketTypeID = ?";
-        String deleteTicketType = "DELETE FROM TicketTypes WHERE TicketTypeID = ?";
-
-        try {
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement ps1 = conn.prepareStatement(deleteTickets); PreparedStatement ps2 = conn.prepareStatement(deleteTicketType)) {
-
-                ps1.setInt(1, id);
-                ps1.executeUpdate(); // Xóa tất cả ticket thuộc ticket type đó
-
-                ps2.setInt(1, id);
-                int rows = ps2.executeUpdate(); // Rồi mới xóa ticket type
-
-                conn.commit();
-                return rows > 0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                conn.rollback();
-            } catch (SQLException ignored) {
-            }
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException ignored) {
-            }
+    // SOFT DELETE A TICKET TYPE
+     public boolean softDelete(int id) {
+        String sql = "UPDATE TicketTypes SET StatusID=3 WHERE TicketTypesID=?";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id);
+            return st.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return false;
     }
-
+     
     // thêm optional: lấy tất cả loại vé của 1 event
     public List<TicketType> getAllByEventID(int eventID) {
         List<TicketType> list = new ArrayList<>();
@@ -145,7 +125,8 @@ public class TicketTypeDAO {
                         rs.getInt("EventID"),
                         rs.getInt("ZoneID"),
                         rs.getString("TypeName"),
-                        rs.getBigDecimal("Price")
+                        rs.getBigDecimal("Price"),
+                        rs.getInt("StatusID")
                 );
                 list.add(t);
             }
@@ -181,9 +162,7 @@ public class TicketTypeDAO {
 //          updateTicketType.setPrice(BigDecimal.valueOf(499000));
 //          
 //          dao.update(updateTicketType);
-
-
-        dao.delete(4);
+//        dao.delete(4);
         List<TicketType> list = dao.getAll();
 
 //        System.out.println("Cac loai ve cua su kien co ID = 11");

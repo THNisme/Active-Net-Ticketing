@@ -13,14 +13,16 @@ public class Zone {
     private int zoneID;
     private int placeID;
     private String zoneName;
+    private int statusID;
 
     public Zone() {
     }
 
-    public Zone(int zoneID, int placeID, String zoneName) {
+    public Zone(int zoneID, int placeID, String zoneName, int statusID) {
         this.zoneID = zoneID;
         this.placeID = placeID;
         this.zoneName = zoneName;
+        this.statusID = statusID;
     }
 
     public int getZoneID() {
@@ -47,5 +49,12 @@ public class Zone {
         this.zoneName = zoneName;
     }
 
-    
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
+    }
+
 }

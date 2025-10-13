@@ -74,7 +74,7 @@ public class EventDAO {
     }
 
     public boolean create(Event e) {
-        String sql = "INSERT INTO Events (CategoryID, EventName, Description, ImageURL, StartDate, EndDate, PlaceID, StatusID) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Events (CategoryID, EventName, Description, ImageURL, StartDate, EndDate, PlaceID) VALUES (?,?,?,?,?,?,?)";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, e.getCategoryID());
             st.setString(2, e.getEventName());
@@ -83,7 +83,6 @@ public class EventDAO {
             st.setTimestamp(5, new Timestamp(e.getStartDate().getTime()));
             st.setTimestamp(6, new Timestamp(e.getEndDate().getTime()));
             st.setInt(7, e.getPlaceID());
-            st.setInt(8, e.getStatusID());
             return st.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -110,42 +109,10 @@ public class EventDAO {
         return false;
     }
 
-    // HARD DELETE: EVENT BE DELETE PERMANNENTLY
-    public boolean hardDelete(int id) {
-        String deleteTicketTypes = "DELETE FROM TicketTypes WHERE EventID = ?";
-        String deleteEvent = "DELETE FROM Events WHERE EventID = ?";
-        try {
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement st1 = conn.prepareStatement(deleteTicketTypes); PreparedStatement st2 = conn.prepareStatement(deleteEvent)) {
-
-                st1.setInt(1, id);
-                st1.executeUpdate();
-
-                st2.setInt(1, id);
-                int rows = st2.executeUpdate();
-
-                conn.commit();
-                return rows > 0;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            try {
-                conn.rollback();
-            } catch (SQLException ignored) {
-            }
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException ignored) {
-            }
-        }
-        return false;
-    }
 
 //    SOFT DELETE: EVENT BE SET STATUS DELELTE AND THROW IN TRASH BIN
     public boolean softDelete(int id) {
-        String sql = "UPDATE Events SET StatusID=2 WHERE EventID=?";
+        String sql = "UPDATE Events SET StatusID=3 WHERE EventID=?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             return st.executeUpdate() > 0;
@@ -158,7 +125,7 @@ public class EventDAO {
     // GET ALL EVENT BE SOFT DELETED
     public List<Event> getAllSoftDelete() {
         List<Event> list = new ArrayList<>();
-        String sql = "SELECT * FROM Events WHERE StatusID = 2";
+        String sql = "SELECT * FROM Events WHERE StatusID = 3";
         try (PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 Event e = new Event(
@@ -197,7 +164,7 @@ public class EventDAO {
         //            System.out.println("");
         //        }
 
-        dao.hardDelete(7);
+//        dao.hardDelete(7);
         List<Event> list = dao.getAllSoftDelete();
 
         for (Event e : list) {

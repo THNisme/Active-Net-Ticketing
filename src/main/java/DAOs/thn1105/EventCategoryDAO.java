@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Tran Hieu Nghia - CE191115
  */
-public class EventCategoryDAO{
+public class EventCategoryDAO {
 
     private Connection conn = DBContext.getInstance().getConnection();
 
@@ -32,7 +32,8 @@ public class EventCategoryDAO{
                 list.add(new EventCategory(
                         rs.getInt("CategoryID"),
                         rs.getString("CategoryName"),
-                        rs.getString("Description")
+                        rs.getString("Description"),
+                        rs.getInt("StatusID")
                 ));
             }
         } catch (SQLException e) {
@@ -52,7 +53,8 @@ public class EventCategoryDAO{
                 return new EventCategory(
                         rs.getInt("CategoryID"),
                         rs.getString("CategoryName"),
-                        rs.getString("Description")
+                        rs.getString("Description"),
+                        rs.getInt("StatusID")
                 );
             }
         } catch (SQLException e) {
@@ -77,12 +79,13 @@ public class EventCategoryDAO{
 
     // UPDATE CATEGORY
     public boolean update(EventCategory c) {
-        String sql = "UPDATE EventCategories SET CategoryName=?, Description=? WHERE CategoryID=?";
+        String sql = "UPDATE EventCategories SET CategoryName=?, Description=?, StatusID=? WHERE CategoryID=?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, c.getCategoryName());
             ps.setString(2, c.getDescription());
             ps.setInt(3, c.getCategoryID());
+            ps.setInt(4, c.getStatusID());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,6 +96,19 @@ public class EventCategoryDAO{
     // DELETE A CATEGORY
     public boolean delete(int id) {
         String sql = "DELETE FROM EventCategories WHERE CategoryID=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // SOFT DELETE A CATEGORY
+    public boolean softDelete(int id) {
+        String sql = "UPDATE EventCategories SET CategoryName=?, Description=? WHERE CategoryID=?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);

@@ -17,16 +17,18 @@ public class TicketType {
     private int zoneID;
     private String typeName;
     private BigDecimal price;
+    private int statusID;
 
     public TicketType() {
     }
 
-    public TicketType(int ticketTypeID, int eventID, int zoneID, String typeName, BigDecimal price) {
+    public TicketType(int ticketTypeID, int eventID, int zoneID, String typeName, BigDecimal price, int statusID) {
         this.ticketTypeID = ticketTypeID;
         this.eventID = eventID;
         this.zoneID = zoneID;
         this.typeName = typeName;
         this.price = price;
+        this.statusID = statusID;
     }
 
     public int getTicketTypeID() {
@@ -68,6 +70,15 @@ public class TicketType {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-    
-    
+
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
+    }
+
+   
+
 }

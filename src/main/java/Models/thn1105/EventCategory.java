@@ -12,16 +12,18 @@ public class EventCategory {
     private int categoryID;
     private String categoryName;
     private String description;
-
+    private int statusID;
+    
     public EventCategory() {
     }
 
-    public EventCategory(int categoryID, String categoryName, String description) {
+    public EventCategory(int categoryID, String categoryName, String description, int statusID) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
         this.description = description;
+        this.statusID = statusID;
     }
-    
+
     public int getCategoryID() {
         return categoryID;
     }
@@ -46,5 +48,14 @@ public class EventCategory {
         this.description = description;
     }
 
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
+    }
+
+   
     
 }
