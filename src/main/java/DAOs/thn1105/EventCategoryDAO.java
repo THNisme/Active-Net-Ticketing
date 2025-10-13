@@ -84,8 +84,8 @@ public class EventCategoryDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, c.getCategoryName());
             ps.setString(2, c.getDescription());
-            ps.setInt(3, c.getCategoryID());
-            ps.setInt(4, c.getStatusID());
+            ps.setInt(3, c.getStatusID());
+            ps.setInt(4, c.getCategoryID());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,22 +93,10 @@ public class EventCategoryDAO {
         return false;
     }
 
-    // DELETE A CATEGORY
-    public boolean delete(int id) {
-        String sql = "DELETE FROM EventCategories WHERE CategoryID=?";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     // SOFT DELETE A CATEGORY
     public boolean softDelete(int id) {
-        String sql = "UPDATE EventCategories SET CategoryName=?, Description=? WHERE CategoryID=?";
+        String sql = "UPDATE EventCategories SET StatusID=3 WHERE CategoryID=?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -122,12 +110,11 @@ public class EventCategoryDAO {
     public static void main(String[] args) {
         EventCategoryDAO dao = new EventCategoryDAO();
 //        List<EventCategory> list = dao.getAll();
-//
+
 //        for (EventCategory c : list) {
 //            System.out.println("ID: " + c.getCategoryID());
 //            System.out.println("CateName: " + c.getCategoryName());
 //        }
-
 //        EventCategory c = dao.getById(3);
 //        System.out.println("ID: " + c.getCategoryID());
 //        System.out.println("CateName: " + c.getCategoryName());
@@ -147,11 +134,12 @@ public class EventCategoryDAO {
 //        }
 //        EventCategory updateCate = new EventCategory();
 //
-//        updateCate.setCategoryID(9);
+//        updateCate.setCategoryID(10);
 //
-//        updateCate.setCategoryName("SOL");
-//        updateCate.setDescription("FACTIVE EVENT CLUB - Shafts of light");
-//
+//        updateCate.setCategoryName("Tzy");
+//        updateCate.setDescription("My baeee <3");
+//        updateCate.setStatusID(1);
+//        
 //        dao.update(updateCate);
 //
 //        List<EventCategory> list = dao.getAll();
@@ -161,15 +149,16 @@ public class EventCategoryDAO {
 //            System.out.println("CateName: " + c.getCategoryName());
 //            System.out.println("CateDescription: " + c.getDescription());
 //        }
-        dao.delete(8);
-
-        List<EventCategory> list = dao.getAll();
-
-        for (EventCategory c : list) {
-            System.out.println("ID: " + c.getCategoryID());
-            System.out.println("CateName: " + c.getCategoryName());
-            System.out.println("CateDescription: " + c.getDescription());
-        }
+//        dao.softDelete(9);
+//
+//        List<EventCategory> list = dao.getAll();
+//
+//        for (EventCategory c : list) {
+//            System.out.println("ID: " + c.getCategoryID());
+//            System.out.println("CateName: " + c.getCategoryName());
+//            System.out.println("CateDescription: " + c.getDescription());
+//            System.out.println("Status: " + c.getStatusID());
+//        }
 
     }
 }
