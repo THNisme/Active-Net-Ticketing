@@ -106,8 +106,8 @@ public class ZoneDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, z.getPlaceID());
             ps.setString(2, z.getZoneName());
-            ps.setInt(3, z.getZoneID());
-            ps.setInt(4, z.getStatusID());
+            ps.setInt(3, z.getStatusID());
+            ps.setInt(4, z.getZoneID());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,33 +144,36 @@ public class ZoneDAO {
 //        System.out.println("Zone của place (ID): " + z.getPlaceID());
 //        Zone newZ = new Zone();
 //        
-//        newZ.setPlaceID(10);
-//        newZ.setZoneName("Super");
+//        newZ.setPlaceID(4);
+//        newZ.setZoneName("Standard");
 //        
 //        dao.create(newZ);
 //        
-//        List<Zone> list = dao.getAllZoneOfPlace(10);
+//        List<Zone> list = dao.getAllZoneOfPlace(3);
 //
 //        for (Zone z : list) {
 //            System.out.println("ID: " + z.getZoneID());
 //            System.out.println("Zone Name: " + z.getZoneName());
-//            System.out.println("Zone của place (ID): " + z.getPlaceID());
+//            System.out.println("Zone cua place (ID): " + z.getPlaceID());
+//            System.out.println("StatusID: " + z.getStatusID());
 //        }
-//        Zone updateZ = new Zone();
-//        
-//        updateZ.setZoneID(7);
-//        updateZ.setPlaceID(10);
-//        updateZ.setZoneName("Super-V3");
-//        
-//        dao.update(updateZ);
-//        dao.delete(6);
+        Zone updateZ = new Zone();
 
-        List<Zone> list = dao.getAllZoneOfPlace(10);
+        updateZ.setZoneID(6);
+        updateZ.setPlaceID(9);
+        updateZ.setZoneName("Super-VTEST");
+        updateZ.setStatusID(1);
+        dao.update(updateZ);
+        
+        dao.softDelete(6);
+
+        List<Zone> list = dao.getAll();
 
         for (Zone z : list) {
             System.out.println("ID: " + z.getZoneID());
             System.out.println("Zone Name: " + z.getZoneName());
             System.out.println("Zone của place (ID): " + z.getPlaceID());
+            System.out.println("StatusID: " + z.getStatusID());
         }
     }
 }
