@@ -109,7 +109,6 @@ public class EventDAO {
         return false;
     }
 
-
 //    SOFT DELETE: EVENT BE SET STATUS DELELTE AND THROW IN TRASH BIN
     public boolean softDelete(int id) {
         String sql = "UPDATE Events SET StatusID=3 WHERE EventID=?";
@@ -149,23 +148,64 @@ public class EventDAO {
 
     public static void main(String[] args) {
         EventDAO dao = new EventDAO();
-        //        List<Event> list = dao.getAll();
-        //
-        //        for (Event e : list) {
-        //            System.out.println("ID: " + e.getEventID());
-        //            System.out.println("CateID: " + e.getCategoryID());
-        //            System.out.println("Name: " + e.getEventName());
-        //            System.out.println("Description: " + e.getDescription());
-        //            System.out.println("ImgURL: " + e.getImageURL());
-        //            System.out.println("Start: " + e.getStartDate());
-        //            System.out.println("End: " + e.getEndDate());
-        //            System.out.println("Place: " + e.getPlaceID());
-        //            System.out.println("Status: " + e.getStatusID());
-        //            System.out.println("");
-        //        }
+//        List<Event> list = dao.getAll();
+//
+//        for (Event e : list) {
+//            System.out.println("ID: " + e.getEventID());
+//            System.out.println("CateID: " + e.getCategoryID());
+//            System.out.println("Name: " + e.getEventName());
+//            System.out.println("Description: " + e.getDescription());
+//            System.out.println("ImgURL: " + e.getImageURL());
+//            System.out.println("Start: " + e.getStartDate());
+//            System.out.println("End: " + e.getEndDate());
+//            System.out.println("Place: " + e.getPlaceID());
+//            System.out.println("Status: " + e.getStatusID());
+//            System.out.println("");
+//        }
 
-//        dao.hardDelete(7);
-        List<Event> list = dao.getAllSoftDelete();
+//        Event e = dao.getById(3);
+//
+//        System.out.println("ID: " + e.getEventID());
+//        System.out.println("CateID: " + e.getCategoryID());
+//        System.out.println("Name: " + e.getEventName());
+//        System.out.println("Description: " + e.getDescription());
+//        System.out.println("ImgURL: " + e.getImageURL());
+//        System.out.println("Start: " + e.getStartDate());
+//        System.out.println("End: " + e.getEndDate());
+//        System.out.println("Place: " + e.getPlaceID());
+//        System.out.println("Status: " + e.getStatusID());
+        
+
+//          Event newEvent = new Event();
+//          
+//          newEvent.setEventName("Test");
+//          newEvent.setCategoryID(1);
+//          newEvent.setPlaceID(1);
+//          newEvent.setImageURL("imgtest");
+//          newEvent.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
+//          newEvent.setEndDate(Timestamp.valueOf(LocalDateTime.now()));
+//          newEvent.setDescription("desdasdasd");
+//          
+//          dao.create(newEvent);
+
+          Event updateEvent = new Event();
+          
+          updateEvent.setEventID(5);
+          updateEvent.setEventName("Test-Update");
+          updateEvent.setCategoryID(1);
+          updateEvent.setPlaceID(2);
+          updateEvent.setImageURL("imgtest-Update");
+          updateEvent.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
+          updateEvent.setEndDate(Timestamp.valueOf(LocalDateTime.now()));
+          updateEvent.setDescription("desdasdasd");
+          updateEvent.setStatusID(1);
+          
+          dao.update(updateEvent);
+          
+        
+
+//        dao.softDelete(4);
+        List<Event> list = dao.getAll();
 
         for (Event e : list) {
             System.out.println("ID: " + e.getEventID());
