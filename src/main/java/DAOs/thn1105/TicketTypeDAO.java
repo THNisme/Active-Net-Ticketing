@@ -91,8 +91,8 @@ public class TicketTypeDAO {
             ps.setInt(2, t.getZoneID());
             ps.setString(3, t.getTypeName());
             ps.setBigDecimal(4, t.getPrice());
-            ps.setInt(5, t.getTicketTypeID());
-            ps.setInt(6, t.getStatusID());
+            ps.setInt(5, t.getStatusID());
+            ps.setInt(6, t.getTicketTypeID());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,8 +101,8 @@ public class TicketTypeDAO {
     }
 
     // SOFT DELETE A TICKET TYPE
-     public boolean softDelete(int id) {
-        String sql = "UPDATE TicketTypes SET StatusID=3 WHERE TicketTypesID=?";
+    public boolean softDelete(int id) {
+        String sql = "UPDATE TicketTypes SET StatusID=3 WHERE TicketTypeID=?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             return st.executeUpdate() > 0;
@@ -111,7 +111,7 @@ public class TicketTypeDAO {
         }
         return false;
     }
-     
+
     // thêm optional: lấy tất cả loại vé của 1 event
     public List<TicketType> getAllByEventID(int eventID) {
         List<TicketType> list = new ArrayList<>();
@@ -155,16 +155,17 @@ public class TicketTypeDAO {
 //        }
 //          TicketType updateTicketType = new TicketType();
 //          
-//          updateTicketType.setTicketTypeID(11);
-//          updateTicketType.setEventID(11);
-//          updateTicketType.setTypeName("FAC Member");
-//          updateTicketType.setZoneID(2);
-//          updateTicketType.setPrice(BigDecimal.valueOf(499000));
+//          updateTicketType.setTicketTypeID(6);
+//          updateTicketType.setEventID(3);
+//          updateTicketType.setTypeName("AAAA");
+//          updateTicketType.setZoneID(4);
+//          updateTicketType.setPrice(BigDecimal.valueOf(10000));
+//          updateTicketType.setStatusID(1);
 //          
 //          dao.update(updateTicketType);
-//        dao.delete(4);
-        List<TicketType> list = dao.getAll();
-
+//        dao.softDelete(6);
+        
+        List<TicketType> list = dao.getAllByEventID(1);
 //        System.out.println("Cac loai ve cua su kien co ID = 11");
         for (TicketType t : list) {
             System.out.println("ID: " + t.getTicketTypeID());
@@ -172,6 +173,7 @@ public class TicketTypeDAO {
             System.out.println("Loai ve thuoc zone: " + zDao.getById(t.getZoneID()).getZoneName());
             System.out.println("Ten loai ve: " + t.getTypeName());
             System.out.println("Gia cua ve loai " + t.getTypeName() + " la " + t.getPrice());
+            System.out.println("StatusID: " + t.getStatusID());
         }
     }
 }
