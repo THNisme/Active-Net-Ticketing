@@ -131,7 +131,7 @@ public class EventCategoryDAO{
 //        }
 //        EventCategory updateCate = new EventCategory();
 //
-//        updateCate.setCategoryID(6);
+//        updateCate.setCategoryID(9);
 //
 //        updateCate.setCategoryName("SOL");
 //        updateCate.setDescription("FACTIVE EVENT CLUB - Shafts of light");
@@ -145,7 +145,7 @@ public class EventCategoryDAO{
 //            System.out.println("CateName: " + c.getCategoryName());
 //            System.out.println("CateDescription: " + c.getDescription());
 //        }
-        dao.delete(2);
+        dao.delete(8);
 
         List<EventCategory> list = dao.getAll();
 
