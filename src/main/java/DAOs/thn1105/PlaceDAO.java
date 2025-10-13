@@ -99,7 +99,7 @@ public class PlaceDAO {
         }
         return false;
     }
-    
+
     
     //DELETE A PLACE
     public boolean delete(int id) {
@@ -138,7 +138,7 @@ public class PlaceDAO {
 //        System.out.println("Status: " + p.getStatusID());
 //    }
 //        Place newP = new Place();
-//        
+//
 //        newP.setPlaceName("G404");
 //        newP.setAddress("FTPU");
 //        newP.setSeatMapURL("place/img/seatmap/sm4.jpg");
