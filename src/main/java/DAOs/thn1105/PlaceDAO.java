@@ -177,7 +177,7 @@ public class PlaceDAO {
 //        newP.setPlaceName("G999");
 //        newP.setAddress("FTPU");
 //        newP.setSeatMapURL("place/img/seatmap/sm4.jpg");
-//        newP.setDescription("Phong hoc G404");
+//        newP.setDescription("Phong hoc G999");
 //        newP.setStatusID(1);
 //        
 //        dao.create(newP);
@@ -185,7 +185,7 @@ public class PlaceDAO {
 
 //        Place updateP = new Place();
 //        
-//        updateP.setPlaceID(1);
+//        updateP.setPlaceID(9);
 //        updateP.setPlaceName("Kho F-ACTIVE");
 //        updateP.setAddress("FTPU");
 //        updateP.setSeatMapURL("place/img/seatmap/sm4.jpg");
@@ -195,7 +195,7 @@ public class PlaceDAO {
 //        dao.update(updateP);
 
     
-//        dao.softDelete(1);
+        dao.softDelete(9);
 
         List<Place> list = dao.getAllSoftDelete();
 
