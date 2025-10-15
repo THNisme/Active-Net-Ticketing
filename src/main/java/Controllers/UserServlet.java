@@ -119,6 +119,12 @@ public class UserServlet extends HttpServlet {
         user.setPassword(password);
         user.setRole(role);
 
+        if (dao.checkUsernameExists(username) && req.getParameter("userID").isEmpty()) {
+            req.setAttribute("error", "Tài khoản đã tồn tại!");
+            req.getRequestDispatcher("ManageUsers/userForm.jsp").forward(req, res);
+            return;
+        }
+
         if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
             req.setAttribute("error", "Mật khẩu xác nhận không khớp!");
             req.getRequestDispatcher("ManageUsers/userForm.jsp").forward(req, res);
@@ -127,7 +133,7 @@ public class UserServlet extends HttpServlet {
 
         if (id == 0) {
             dao.addUser(user);
-            if ("saveAndSend".equals(actionType)) {                
+            if ("saveAndSend".equals(actionType)) {
                 Services.MailService.sendAccountEmail(email, username, password);
                 req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
             }
