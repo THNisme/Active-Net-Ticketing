@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
-<link href="../css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
+<link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 
 <!-- ✅ Header User + Admin (Fragment) -->
