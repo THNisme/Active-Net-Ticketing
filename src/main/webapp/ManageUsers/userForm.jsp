@@ -42,8 +42,13 @@
                 <div class="mb-3">
                     <label class="form-label">Mật khẩu</label>
                     <input type="password" id="password" name="passwordHash" class="form-control"
-                           value="<%= isEdit ? user.getPassword() : ""%>" required>
+                           value="<%= isEdit ? user.getPassword() : ""%>" 
+                           placeholder="" required>
+                    <small class="text-warning">
+                        Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ, số và ít nhất 1 ký tự đặc biệt.
+                    </small>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Xác nhận mật khẩu</label>
                     <input type="password" id="confirmPassword" class="form-control"
@@ -71,18 +76,18 @@
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>          
-<script>
-function validateForm() {
-    const pass = document.getElementById("password").value.trim();
-    const confirm = document.getElementById("confirmPassword").value.trim();
+        <script>
+            function validateForm() {
+                const pass = document.getElementById("password").value.trim();
+                const confirm = document.getElementById("confirmPassword").value.trim();
 
-    if (pass !== confirm) {
-        alert("❌ Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
-        return false;
-    }
-    return true;
-}
-</script>
+                if (pass !== confirm) {
+                    alert("❌ Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
+                    return false;
+                }
+                return true;
+            }
+        </script>
 
 
     </body>

@@ -17,19 +17,18 @@ import java.sql.SQLException;
  * @author Acer
  */
 public class UsersDAO extends DBContext {
-    
+
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM Users ORDER BY UserID DESC";
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(new User(
-                    rs.getInt("UserID"),
-                    rs.getString("Username"),
-                    rs.getString("PasswordHash"),
-                    rs.getInt("Role"),
-                    rs.getDate("CreatedAt")
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("PasswordHash"),
+                        rs.getInt("Role"),
+                        rs.getDate("CreatedAt")
                 ));
             }
         } catch (SQLException e) {
@@ -38,7 +37,7 @@ public class UsersDAO extends DBContext {
         return list;
     }
 
-       public void addUser(User user) {
+    public void addUser(User user) {
         String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt) VALUES (?, ?, ?, GETDATE())";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
@@ -50,18 +49,18 @@ public class UsersDAO extends DBContext {
         }
     }
 
-       public User getUserById(int id) {
+    public User getUserById(int id) {
         String sql = "SELECT * FROM Users WHERE UserID=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new User(
-                    rs.getInt("UserID"),
-                    rs.getString("Username"),
-                    rs.getString("PasswordHash"),
-                    rs.getInt("Role"),
-                    rs.getDate("CreatedAt")
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("PasswordHash"),
+                        rs.getInt("Role"),
+                        rs.getDate("CreatedAt")
                 );
             }
         } catch (SQLException e) {
@@ -70,7 +69,7 @@ public class UsersDAO extends DBContext {
         return null;
     }
 
-        public void updateUser(User user) {
+    public void updateUser(User user) {
         String sql = "UPDATE Users SET Username=?, PasswordHash=?, Role=? WHERE UserID=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
@@ -83,7 +82,7 @@ public class UsersDAO extends DBContext {
         }
     }
 
-       public void deleteUser(int id) {
+    public void deleteUser(int id) {
         String sql = "DELETE FROM Users WHERE UserID=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -91,6 +90,20 @@ public class UsersDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }  
-}
+    }
 
+    public boolean checkUsernameExists(String username) {
+        String sql = "SELECT COUNT(*) FROM Users WHERE Username = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+}
