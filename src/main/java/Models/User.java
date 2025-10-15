@@ -22,6 +22,15 @@ public class User {
     public User() {
     }
 
+    public User(int userID, String username, String password, int role, Date createdAt, int statusID) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.statusID = statusID;
+    }
+
     public User(int userID, String username, String password, int role, Date createdAt) {
         this.userID = userID;
         this.username = username;
@@ -84,5 +93,5 @@ public class User {
     public void setStatusID(int statusID) {
         this.statusID = statusID;
     }
-    
+
 }
