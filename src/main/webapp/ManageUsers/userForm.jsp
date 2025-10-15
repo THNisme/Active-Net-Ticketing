@@ -48,15 +48,17 @@
 
                 <div class="mb-3">
                     <label class="form-label">Tên đăng nhập</label>
-                    <input type="text" name="username" class="form-control"
+                    <input type="text" name="username" class="form-control" 
+                           placeholder="Nhập tên đăng nhập người dùng" 
                            value="<%= isEdit ? user.getUsername() : ""%>" required>
+
                 </div>
 
                 <% if (!isEdit) { %>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control"
-                           placeholder="Nhập email người dùng" required>
+                           placeholder="Nhập email để gửi thông tin đăng nhập cho người dùng" required>
                 </div>
                 <% }%>
 
@@ -99,7 +101,7 @@
         <script>
             function validateForm() {
                 const pass = document.getElementById("password").value.trim();
-                const confirm = document.getElementById("confirmPassword").value.trim();                
+                const confirm = document.getElementById("confirmPassword").value.trim();
                 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
                 if (!passwordRegex.test(pass)) {
                     alert("⚠️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt!");
