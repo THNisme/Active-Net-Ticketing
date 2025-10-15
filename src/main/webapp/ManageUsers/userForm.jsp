@@ -62,7 +62,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Mật khẩu</label><small class="text-warning">
-                        (có ít nhất 8 ký tự, bao gồm chữ, số và ít nhất 1 ký tự đặc biệt va chữ in hoa)
+                        (có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt)
                     </small>
                     <input type="password" id="password" name="passwordHash" class="form-control"
                            value="<%= isEdit ? user.getPassword() : ""%>" required>                    
@@ -99,11 +99,10 @@
         <script>
             function validateForm() {
                 const pass = document.getElementById("password").value.trim();
-                const confirm = document.getElementById("confirmPassword").value.trim();
-                const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
-
+                const confirm = document.getElementById("confirmPassword").value.trim();                
+                const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
                 if (!passwordRegex.test(pass)) {
-                    alert("⚠️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
+                    alert("⚠️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt!");
                     return false;
                 }
 
