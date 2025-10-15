@@ -151,11 +151,12 @@ public class ThongKeDAO {
         ORDER BY e.EventName
     """;
 
-    try {
-              PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+    try (Connection con = DBContext.getInstance().getConnection();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
         while (rs.next()) {
-             ThongKe tk = new ThongKe(
+            ThongKe tk = new ThongKe(
                 rs.getString("EventName"),
                 rs.getInt("totalTickets"),
                 rs.getInt("soldTickets"),
@@ -163,8 +164,10 @@ public class ThongKeDAO {
             );
             list.add(tk);
         }
-    } catch (Exception e) {
+
+    } catch (SQLException e) {
         e.printStackTrace();
+        System.err.println("❌ Lỗi truy vấn thống kê sự kiện: " + e.getMessage());
     }
     return list;
 }
