@@ -71,6 +71,7 @@ public class ThongKeServlet extends HttpServlet {
         int tongVeDaBan = dao.getTongVeDaBan();
         double phanTramVeBan = dao.getPhanTramVeBan();
         double phanTramDoanhThu = dao.getPhanTramDoanhThu();
+        List<ThongKe> ticketStats = dao.getThongKeTheoSuKien();
 
         // ✅ Đẩy dữ liệu lên JSP
         request.setAttribute("tongDoanhThu", tongDoanhThu);
@@ -78,8 +79,7 @@ public class ThongKeServlet extends HttpServlet {
         request.setAttribute("tongVeDaBan", tongVeDaBan);
         request.setAttribute("phanTramVeBan", phanTramVeBan);
         request.setAttribute("phanTramDoanhThu", phanTramDoanhThu);
-         request.setAttribute("ticketStats", ticketStats);
-
+        request.setAttribute("ticketStats", ticketStats);
         // ✅ Chuyển hướng sang trang JSP hiển thị
         request.getRequestDispatcher("thongke.jsp").forward(request, response);
     }
