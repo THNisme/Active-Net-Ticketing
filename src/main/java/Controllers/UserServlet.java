@@ -6,6 +6,7 @@ package Controllers;
 
 import DAOs.UsersDAO;
 import Models.User;
+import Services.MailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,6 +61,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+
         String action = req.getParameter("action");
         if (action == null) {
             action = "list";
@@ -71,21 +73,24 @@ public class UserServlet extends HttpServlet {
             case "new":
                 req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
                 break;
+
             case "edit":
                 int id = Integer.parseInt(req.getParameter("id"));
                 req.setAttribute("user", dao.getUserById(id));
                 req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
                 break;
+
             case "delete":
-                dao.deleteUser(Integer.parseInt(req.getParameter("id")));
+                int deleteId = Integer.parseInt(req.getParameter("id"));
+                dao.softDeleteUser(deleteId);
                 res.sendRedirect("UserServlet?action=list");
                 break;
+
             default:
                 List<User> list = dao.getAllUsers();
                 req.setAttribute("userList", list);
                 req.getRequestDispatcher("/ManageUsers/userList.jsp").forward(req, res);
                 break;
-
         }
     }
 
@@ -110,37 +115,49 @@ public class UserServlet extends HttpServlet {
         String password = req.getParameter("passwordHash");
         String confirmPassword = req.getParameter("confirmPassword");
         int role = Integer.parseInt(req.getParameter("role"));
+        String email = req.getParameter("email");
         String actionType = req.getParameter("actionType");
-        String email = username + "@gmail.com";
-
+        
+        if (id == 0 && dao.checkUsernameExists(username)) {
+            req.setAttribute("error", "Tài khoản đã tồn tại!");
+            req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+            return;
+        }
+        
+        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
+            req.setAttribute("error", "❌ Mật khẩu xác nhận không khớp!");
+            req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+            return;
+        }
+        
+        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
+            req.setAttribute("error", "❌ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
+            req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+            return;
+        }
+      
         User user = new User();
         user.setUserID(id);
         user.setUsername(username);
         user.setPassword(password);
         user.setRole(role);
-
-        if (dao.checkUsernameExists(username) && req.getParameter("userID").isEmpty()) {
-            req.setAttribute("error", "Tài khoản đã tồn tại!");
-            req.getRequestDispatcher("ManageUsers/userForm.jsp").forward(req, res);
-            return;
-        }
-
-        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
-            req.setAttribute("error", "Mật khẩu xác nhận không khớp!");
-            req.getRequestDispatcher("ManageUsers/userForm.jsp").forward(req, res);
-            return;
-        }
+        user.setStatusID(1); 
 
         if (id == 0) {
             dao.addUser(user);
+            
             if ("saveAndSend".equals(actionType)) {
-                Services.MailService.sendAccountEmail(email, username, password);
-                req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
+                try {
+                    MailService.sendAccountEmail(email, username, password);
+                    req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
+                } catch (Exception e) {
+                    req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
+                }
             }
+
         } else {
             dao.updateUser(user);
-        }
-
+        }     
         res.sendRedirect("UserServlet?action=list");
     }
 

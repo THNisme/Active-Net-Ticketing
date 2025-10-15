@@ -110,7 +110,7 @@ public class UsersDAO {
         }
     }
 
-    public void deleteUser(int id) {
+    public void softDeleteUser(int id) {
         String sql = "UPDATE Users SET StatusID = ? WHERE UserID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, STATUS_DELETED);
