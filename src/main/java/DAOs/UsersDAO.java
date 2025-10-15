@@ -4,10 +4,11 @@
  */
 package DAOs;
 
-import Utils.DBContext;
+import Utils.singleton.DBContext;
 import java.util.ArrayList;
 import java.util.List;
 import Models.User;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,8 @@ import java.sql.SQLException;
  *
  * @author Acer
  */
-public class UsersDAO extends DBContext {
+public class UsersDAO {
+private Connection conn = DBContext.getInstance().getConnection();
 
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();

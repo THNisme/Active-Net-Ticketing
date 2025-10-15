@@ -17,6 +17,7 @@ public class User {
     private String password;
     private int role; // 0 = user, 1 = admin
     private Date createdAt;
+    private int statusID;
 
     public User() {
     }
@@ -74,6 +75,14 @@ public class User {
 
     public void setCreatedAt(Date cretedAt) {
         this.createdAt = cretedAt;
+    }
+
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
     }
     
 }
