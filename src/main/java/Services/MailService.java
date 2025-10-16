@@ -17,8 +17,8 @@ import java.util.Properties;
 
 public class MailService {
 
-    private static final String FROM_EMAIL = "your_email@gmail.com"; 
-    private static final String FROM_PASSWORD = "your_app_password"; 
+    private static final String FROM_EMAIL = "letkiet714@gmail.com"; 
+    private static final String FROM_PASSWORD = "yxeykgqmxiuanptr"; 
 
     public static void sendAccountEmail(String toEmail, String username, String password) {
         String subject = "Tài khoản Active Net Ticketing";

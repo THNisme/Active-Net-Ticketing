@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import MD5.HashPassword;
+
 /**
  *
  * @author Acer
@@ -117,47 +118,49 @@ public class UserServlet extends HttpServlet {
         int role = Integer.parseInt(req.getParameter("role"));
         String email = req.getParameter("email");
         String actionType = req.getParameter("actionType");
-        
+
         if (id == 0 && dao.checkUsernameExists(username)) {
             req.setAttribute("error", "Tài khoản đã tồn tại!");
             req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
             return;
         }
-        
+
         if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
             req.setAttribute("error", "❌ Mật khẩu xác nhận không khớp!");
             req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
             return;
         }
-        
+
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
             req.setAttribute("error", "❌ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
             req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
             return;
         }
-      
+
         User user = new User();
         user.setUserID(id);
         user.setUsername(username);
         user.setPassword(HashPassword.hashMD5(password));
         user.setRole(role);
-        user.setStatusID(1); 
+        user.setStatusID(1);
 
         if (id == 0) {
-            dao.addUser(user);
-            
+
             if ("saveAndSend".equals(actionType)) {
                 try {
                     MailService.sendAccountEmail(email, username, password);
                     req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
+                    dao.addUser(user);
                 } catch (Exception e) {
                     req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
                 }
+            } else {
+                dao.addUser(user);
             }
 
         } else {
             dao.updateUser(user);
-        }     
+        }
         res.sendRedirect("UserServlet?action=list");
     }
 
