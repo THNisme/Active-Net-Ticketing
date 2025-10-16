@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-
+import MD5.HashPassword;
 /**
  *
  * @author Acer
@@ -139,7 +139,7 @@ public class UserServlet extends HttpServlet {
         User user = new User();
         user.setUserID(id);
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(HashPassword.hashMD5(password));
         user.setRole(role);
         user.setStatusID(1); 
 
