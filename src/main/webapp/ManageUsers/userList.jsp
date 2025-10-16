@@ -6,20 +6,25 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
 <%@ page import="java.util.*, Models.User" %>
-<link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
-<link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
 
 <!DOCTYPE html>
 <html lang="vi">
+    <%@include file="../view-hfs/header.jsp" %>
     <head>
         <meta charset="UTF-8">
         <title>Quản lý người dùng</title>
+        <!--Inter font - Google Fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+            rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
+
     </head>
 
-    <%@include file="../view-hfs/header.jsp" %>
+
     <body class="bg-dark text-white">
         <div class="container-fluid p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -93,7 +98,7 @@
                             </td>
                         </tr>
                         <% }
-                    } else { %>
+                        } else { %>
                         <tr><td colspan="6" class="text-center">Không có người dùng nào</td></tr>
                         <% }%>
                     </tbody>
