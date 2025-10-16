@@ -25,6 +25,16 @@ public class ThongKe {
         this.totalRevenue = totalRevenue;
     }
 
+    public ThongKe(String typeName, int soldTickets, int totalTickets, double totalRevenue) {
+        this.typeName = typeName;
+        this.soldTickets = soldTickets;
+        this.totalTickets = totalTickets;
+        this.totalRevenue = totalRevenue;
+    }
+
+ 
+    
+
     public String getTypeName() {
         return typeName;
     }
