@@ -51,10 +51,37 @@ body {
 
 .event-status.coming>i {
   color: #FF9800;
-  font-size: 2em;
+  font-size: 3em;
+  animation: heartbeat-opacity 1.5s infinite ease-in-out;
 }
 
 .event-status.onsite>i {
   color: green;
-  font-size: 2em;
+  font-size: 3em;
+  animation: heartbeat-opacity 1.5s infinite ease-in-out;
+}
+
+@keyframes heartbeat-opacity {
+  0% {
+    opacity: 0.4;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  /* nhịp mạnh */
+  40% {
+    opacity: 0.6;
+  }
+
+  /* nghỉ nhẹ */
+  60% {
+    opacity: 1;
+  }
+
+  /* nhịp phụ/nhịp 2 */
+  100% {
+    opacity: 0.4;
+  }
 }
