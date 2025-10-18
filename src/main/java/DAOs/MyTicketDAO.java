@@ -18,8 +18,6 @@ public class MyTicketDAO {
             = "SELECT o.OrderID, t.TicketID, e.EventName, z.ZoneName, "
             + "       (s.RowLabel + CAST(s.SeatNumber AS NVARCHAR)) AS SeatLabel, "
             + "       e.StartDate, e.EndDate, "
-            + "       so.Code AS OrderStatus, "
-            + "       st.Code AS TicketStatus, "
             + "       od.UnitPrice "
             + "FROM Orders o "
             + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
