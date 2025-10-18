@@ -14,23 +14,23 @@ public class MyTicketDAO {
     }
 
     // ✅ Base SQL cho mọi loại vé
-    private static final String BASE_SQL = 
-        "SELECT o.OrderID, t.TicketID, e.EventName, z.ZoneName, " +
-        "       (s.RowLabel + CAST(s.SeatNumber AS NVARCHAR)) AS SeatLabel, " +
-        "       e.StartDate, e.EndDate, " +
-        "       so.Code AS OrderStatus, " +
-        "       st.Code AS TicketStatus, " +
-        "       od.UnitPrice " +
-        "FROM Orders o " +
-        "JOIN OrderDetails od ON o.OrderID = od.OrderID " +
-        "JOIN Tickets t ON od.TicketID = t.TicketID " +
-        "JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID " +
-        "JOIN Events e ON tt.EventID = e.EventID " +
-        "JOIN Zones z ON tt.ZoneID = z.ZoneID " +
-        "LEFT JOIN Seats s ON t.SeatID = s.SeatID " +
-        "JOIN Status so ON o.StatusID = so.StatusID " +
-        "JOIN Status st ON t.StatusID = st.StatusID " +
-        "WHERE o.UserID = ? ";
+    private static final String BASE_SQL
+            = "SELECT o.OrderID, t.TicketID, e.EventName, z.ZoneName, "
+            + "       (s.RowLabel + CAST(s.SeatNumber AS NVARCHAR)) AS SeatLabel, "
+            + "       e.StartDate, e.EndDate, "
+            + "       so.Code AS OrderStatus, "
+            + "       st.Code AS TicketStatus, "
+            + "       od.UnitPrice "
+            + "FROM Orders o "
+            + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
+            + "JOIN Tickets t ON od.TicketID = t.TicketID "
+            + "JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID "
+            + "JOIN Events e ON tt.EventID = e.EventID "
+            + "JOIN Zones z ON tt.ZoneID = z.ZoneID "
+            + "LEFT JOIN Seats s ON t.SeatID = s.SeatID "
+            + "JOIN Status so ON o.StatusID = so.StatusID "
+            + "JOIN Status st ON t.StatusID = st.StatusID "
+            + "WHERE o.UserID = ? ";
 
     // 🔹 Tất cả vé
     public List<MyTicket> getAllTicketsByUser(int userId) {
@@ -71,8 +71,6 @@ public class MyTicketDAO {
                 t.setSeatLabel(rs.getString("SeatLabel"));
                 t.setStartDate(rs.getTimestamp("StartDate"));
                 t.setEndDate(rs.getTimestamp("EndDate"));
-                t.setOrderStatus(rs.getString("OrderStatus"));
-                t.setTicketStatus(rs.getString("TicketStatus"));
                 t.setPrice(rs.getDouble("UnitPrice"));
                 list.add(t);
             }

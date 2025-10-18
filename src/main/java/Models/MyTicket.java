@@ -4,10 +4,10 @@
  */
 package Models;
 
-
 import java.util.Date;
 
 public class MyTicket {
+
     private int orderId;
     private int ticketId;
     private String eventName;
@@ -18,6 +18,7 @@ public class MyTicket {
     private String orderStatus;
     private String ticketStatus;
     private double price;
+
     public MyTicket() {
     }
 
@@ -29,8 +30,6 @@ public class MyTicket {
         this.seatLabel = seatLabel;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.orderStatus = orderStatus;
-        this.ticketStatus = ticketStatus;
         this.price = price;
     }
 
@@ -90,22 +89,6 @@ public class MyTicket {
         this.endDate = endDate;
     }
 
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public String getTicketStatus() {
-        return ticketStatus;
-    }
-
-    public void setTicketStatus(String ticketStatus) {
-        this.ticketStatus = ticketStatus;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -113,6 +96,5 @@ public class MyTicket {
     public void setPrice(double price) {
         this.price = price;
     }
-
 
 }
