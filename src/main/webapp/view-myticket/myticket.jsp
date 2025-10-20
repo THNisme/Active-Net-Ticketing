@@ -11,7 +11,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
         <style>
-            /* === Dark Theme Tổng Thể === */
             body {
                 background-color: #121212;
                 color: #f5f5f5;
@@ -24,7 +23,6 @@
                 text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
             }
 
-            /* === Tabs === */
             .nav-tabs {
                 border-bottom: 1px solid #444;
             }
@@ -45,7 +43,6 @@
                 border-radius: 8px 8px 0 0;
             }
 
-            /* === Bảng vé === */
             .card {
                 background-color: #1e1e1e;
                 border: 1px solid #333;
@@ -66,19 +63,16 @@
                 transition: background-color 0.3s;
             }
 
-            /* === Cột giá === */
             td:last-child {
                 color: #ffb6b6;
                 font-weight: bold;
             }
 
-            /* === Trạng thái === */
             td:nth-last-child(2),
             td:nth-last-child(3) {
                 font-weight: 600;
             }
 
-            /* === Nút quay lại / hành động (nếu có) === */
             .btn-ff6b6b {
                 background-color: #ffb6b6;
                 color: #fff;
