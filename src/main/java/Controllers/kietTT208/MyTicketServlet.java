@@ -1,7 +1,7 @@
-package Controllers;
+package Controllers.kietTT208;
 
-import DAOs.MyTicketDAO;
-import Models.MyTicket;
+import DAOs.kietTT208.MyTicketDAO;
+import Models.kietTT208.MyTicket;
 //import Models.Account; // 🔹 Import model Account (class dùng để lưu thông tin user đăng nhập)
 
 import jakarta.servlet.RequestDispatcher;

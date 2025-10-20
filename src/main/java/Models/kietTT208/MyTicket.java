@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Models;
+package Models.kietTT208;
 
 import java.util.Date;
 
@@ -30,7 +30,7 @@ public class MyTicket {
         this.seatLabel = seatLabel;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.price = price;
+        this.price = price; 
     }
 
     public int getOrderId() {

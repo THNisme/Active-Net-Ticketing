@@ -1,6 +1,6 @@
-package DAOs;
+package DAOs.kietTT208;
 
-import Models.MyTicket;
+import Models.kietTT208.MyTicket;
 import Utils.singleton.DBContext;
 import java.sql.*;
 import java.util.*;
@@ -38,7 +38,7 @@ public class MyTicketDAO {
         return getTickets(userId, filter);
     }
 
-    // 🔹 Vé đã kết thúc (EndDate < hiện tại, chưa hủy)
+    // Vé đã kết thúc (EndDate < hiện tại, chưa hủy)
     public List<MyTicket> getEndedTicketsByUser(int userId) {
         String filter = "AND e.EndDate < GETDATE() AND st.Code != 'DELETED' AND so.Code != 'DELETED' ";
         return getTickets(userId, filter);
@@ -71,5 +71,18 @@ public class MyTicketDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    
+    public static void main(String[] args) {
+        MyTicketDAO dao = new MyTicketDAO();
+
+        List<MyTicket> list = dao.getAllTicketsByUser(1);
+
+        for (MyTicket t : list) {
+            System.out.println(t.getTicketId());
+            System.out.println(t.getEventName());
+        }
+
     }
 }
