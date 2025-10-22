@@ -24,7 +24,10 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,10 +87,18 @@ public class EventFormController extends HttpServlet {
         EventCategoryDAO eventCateDAO = new EventCategoryDAO();
         PlaceDAO placeDAO = new PlaceDAO();
 
+        String stepStr = request.getParameter("step");
+        int currentStep = 1;
+
+        if (stepStr != null) {
+            currentStep = Integer.parseInt(stepStr);
+        }
+
         try {
             List<EventCategory> eventCateList = eventCateDAO.getAll();
             List<Place> placeList = placeDAO.getAll();
 
+            request.setAttribute("step", currentStep);
             request.setAttribute("eventCateList", eventCateList);
             request.setAttribute("placeList", placeList);
         } catch (Exception e) {
@@ -156,6 +167,69 @@ public class EventFormController extends HttpServlet {
                 errors.put("eventImage", "Event image is required.");
             }
 
+            // ================== STEP 2: GET AND VALIDATE OTHER FORM DATA ==================
+            String eventName = request.getParameter("eventName");
+            int categoryId = Integer.parseInt(request.getParameter("eventCategory"));
+            int placeId = Integer.parseInt(request.getParameter("place"));
+            String startDateStr = request.getParameter("startDate");
+            String endDateStr = request.getParameter("endDate");
+            String eventDescriptionHTML = request.getParameter("description"); // 'description' is the name of your textarea
+
+            // --- Basic Validation ---
+            if (eventName == null || eventName.trim().isEmpty()) {
+                errors.put("eventName", "Event name cannot be empty.");
+            }
+            if (startDateStr == null || startDateStr.trim().isEmpty()) {
+                errors.put("startDateStr", "Date start cannot be empty.");
+            }
+
+            if (endDateStr == null || endDateStr.trim().isEmpty()) {
+                errors.put("endDateStr", "Date end cannot be empty.");
+            }
+
+            if (eventDescriptionHTML == null || eventDescriptionHTML.trim().isEmpty()) {
+                errors.put("eventDescriptionHTML", "Description cannot be empty.");
+            }
+
+            // ================== STEP 3: IF ERRORS, FORWARD BACK TO FORM ==================
+            if (!errors.isEmpty()) {
+                // Repopulate form and show errors (implementation omitted for brevity)
+                request.setAttribute("errors", errors);
+                request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
+                return;
+            }
+
+            // ================== STEP 4: PREPARE DATA FOR DATABASE ==================
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime localStartDateTime = LocalDateTime.parse(startDateStr, formatter);
+            LocalDateTime localEndDateTime = LocalDateTime.parse(endDateStr, formatter);
+
+            Timestamp sqlStartDateTimestamp = Timestamp.valueOf(localStartDateTime);
+            Timestamp sqlEndDateTimestamp = Timestamp.valueOf(localEndDateTime);
+
+            Event newEvent = new Event();
+            newEvent.setEventName(eventName);
+            newEvent.setCategoryID(categoryId);
+            newEvent.setPlaceID(placeId);
+            newEvent.setImageURL(dbImagePath);
+            newEvent.setStartDate(sqlStartDateTimestamp);
+            newEvent.setEndDate(sqlEndDateTimestamp);
+            newEvent.setDescription(eventDescriptionHTML);
+
+            EventDAO edao = new EventDAO();
+            boolean success = edao.create(newEvent);
+
+            System.out.println("Success: " + success);
+
+            // ================== STEP 6: REDIRECT BASED ON RESULT (PRG Pattern) ==================
+            if (success) {
+                // Redirect to a success page or the event list to prevent form resubmission
+                response.sendRedirect(request.getContextPath() + "/event-form?step=2");
+            } else {
+                // If saving fails, forward back to the form with an error message
+                request.setAttribute("globalError", "Failed to save the event to the database.");
+                request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
+            }
         } catch (Exception e) {
             e.printStackTrace(); // Log the exception for debugging
             request.setAttribute("globalError", "An unexpected error occurred.");

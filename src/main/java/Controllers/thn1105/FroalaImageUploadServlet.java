@@ -86,53 +86,40 @@ public class FroalaImageUploadServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // --- 1. Get the uploaded file ---
-        Part filePart = request.getPart("file"); // Froala sends the file with the name "file"
-        String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
-        String jsonResponse;
-
-        if (originalFileName != null && !originalFileName.isEmpty()) {
-            try {
-                // --- 2. Create a unique filename ---
-                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
-                String uniqueFileName = timeStamp + "_" + originalFileName;
-
-                // --- 3. Save the file to the server ---
-                String applicationPath = getServletContext().getRealPath("");
-                String uploadFilePath = applicationPath + File.separator + UPLOAD_DIR;
-
-                File uploadDir = new File(uploadFilePath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-
-                filePart.write(uploadFilePath + File.separator + uniqueFileName);
-
-                // --- 4. Construct the public URL for the file ---
-                String contextPath = request.getContextPath();
-                String publicUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + contextPath + "/" + UPLOAD_DIR + "/" + uniqueFileName;
-
-                // --- 5. Create the JSON response that Froala expects ---
-                // Format: {"link": "http://your_url/image.jpg"}
-                jsonResponse = "{\"link\": \"" + publicUrl + "\"}";
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                jsonResponse = "{\"error\": \"File upload failed.\"}";
-            }
-        } else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            jsonResponse = "{\"error\": \"No file provided.\"}";
-        }
-
-        // --- 6. Send the JSON response back to Froala ---
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.print(jsonResponse);
-        out.flush();
+
+        Part filePart = request.getPart("file");
+        String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+        if (originalFileName == null || originalFileName.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().print("{\"error\": \"No file provided.\"}");
+            return;
+        }
+
+        try {
+            // Tạo tên file unique
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+            String uniqueFileName = timeStamp + "_" + originalFileName;
+
+            // Lưu vào đúng thư mục webapp
+            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            filePart.write(uploadPath + File.separator + uniqueFileName);
+
+            // Tạo URL truy cập công khai
+            String publicUrl = request.getContextPath() + "/" + UPLOAD_DIR + "/" + uniqueFileName;
+
+            response.getWriter().print("{\"link\": \"" + publicUrl + "\"}");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().print("{\"error\": \"File upload failed.\"}");
+        }
     }
 
     /**

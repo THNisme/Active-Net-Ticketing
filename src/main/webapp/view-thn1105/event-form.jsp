@@ -40,18 +40,18 @@
                 </li>
                 <span class="mx-3"><i class="bi bi-chevron-right"></i></span>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link disabled" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button">
-                        <span class="step-number">2</span> Cấu hình vé
-                    </button>
-                </li>
-            </ul>
+                    <button class="nav-link <c:if test='${step == 1}'>disabled</c:if>" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button">
+                            <span class="step-number">2</span> Cấu hình vé
+                        </button>
+                    </li>
+                </ul>
 
-            <!-- Tab contents -->
-            <div class="tab-content mt-3">
-                <!-- Step 1 -->
-                <div class="tab-pane fade show active" id="step1" role="tabpanel">
-                    <!-- FORM CREATE EVENT -->
-                    <form id="eventForm" action="event-form" method="POST" enctype="multipart/form-data">
+                <!-- Tab contents -->
+                <div class="tab-content mt-3">
+                    <!-- Step 1 -->
+                    <div class="tab-pane fade show active" id="step1" role="tabpanel">
+                        <!-- FORM CREATE EVENT -->
+                        <form id="eventForm" action="${pageContext.request.contextPath}/event-form" method="POST" enctype="multipart/form-data">
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="drag-wrap">
@@ -86,12 +86,10 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <c:if test="{not empty error"> 
-                                        <p class="text-danger"><c:out value="${error}" /></p>
-                                    </c:if>
+
                                     <label for="eventCategory" class="form-label"><strong style="color: red;">* </strong>Loại sự
                                         kiện</label>
-                                    <select class="form-select" aria-label="Default select example" id="eventCategory" required>
+                                    <select class="form-select" aria-label="Default select example" id="eventCategory" required name="eventCategory">
                                         <option selected>Open this select menu</option>
                                         <c:forEach var="category" items="${eventCateList}">
                                             <option value="${category.categoryID}">
@@ -104,9 +102,9 @@
                                 <div class="mb-3">
                                     <label for="eventPlace" class="form-label"><strong style="color: red;">* </strong>Nơi tổ chức</label>
                                     <a href="#" class="float-end">Thêm nơi tổ chức mới.</a>
-                                    <select class="form-select" aria-label="Default select example" id="eventPlace" required>
+                                    <select class="form-select" aria-label="Default select example" id="eventPlace" required name="place">
                                         <option selected>Open this select menu</option>
-                                         <c:forEach var="place" items="${placeList}">
+                                        <c:forEach var="place" items="${placeList}">
                                             <option value="${place.placeID}">
                                                 <c:out value="${place.placeName}"/>
                                             </option>
@@ -120,13 +118,13 @@
                                         <div class="col">
                                             <label for="eventDateStart" class="form-label"><strong style="color: red;">* </strong>Ngày diễn
                                                 ra</label>
-                                            <input type="datetime-local" class="form-control" id="eventDateStart" name="eventDateStart"
+                                            <input type="datetime-local" class="form-control" id="eventDateStart" name="startDate"
                                                    required>
                                         </div>
                                         <div class="col">
                                             <label for="eventDateEnd" class="form-label"><strong style="color: red;">* </strong>Ngày kết
                                                 thúc</label>
-                                            <input type="datetime-local" class="form-control" id="eventDateEnd" name="eventDateEnd" required>
+                                            <input type="datetime-local" class="form-control" id="eventDateEnd" name="endDate" required>
                                         </div>
                                     </div>
                                 </div>
@@ -136,7 +134,13 @@
                         <div class="mb-3">
                             <label for="eventDescription" class="form-label"><strong style="color: red;">* </strong>Thông tin sự
                                 kiện</label>
-                            <textarea id="eventDescription" required></textarea>
+                            <textarea id="eventDescription" required name="description"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <c:if test="{not empty error"> 
+                                <p class="text-danger"><c:out value="${error}" /></p>
+                            </c:if>
                         </div>
 
                         <button type="submit" class="btn btn-primary next-btn" data-next="step2-tab">Tiếp theo</button>
