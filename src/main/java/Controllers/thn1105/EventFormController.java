@@ -20,10 +20,10 @@ import java.util.List;
 import Models.thn1105.Event; // We will create this model class next
 import DAOs.thn1105.EventDAO; // We will create this DAO next
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.nio.file.Paths;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -86,30 +86,31 @@ public class EventFormController extends HttpServlet {
             throws ServletException, IOException {
         EventCategoryDAO eventCateDAO = new EventCategoryDAO();
         PlaceDAO placeDAO = new PlaceDAO();
+        EventDAO eDao = new EventDAO();
 
-        String stepStr = request.getParameter("step");
-        int currentStep = 1;
+        String action = request.getParameter("action");
 
-        if (stepStr != null) {
-            currentStep = Integer.parseInt(stepStr);
-        }
-
-        try {
+        if (action == null) {
             List<EventCategory> eventCateList = eventCateDAO.getAll();
             List<Place> placeList = placeDAO.getAll();
 
-            request.setAttribute("step", currentStep);
             request.setAttribute("eventCateList", eventCateList);
             request.setAttribute("placeList", placeList);
-        } catch (Exception e) {
-            // Log the error for debugging purposes
-            e.printStackTrace();
 
-            // Set an error message to display on the JSP for a better user experience
-            request.setAttribute("errorMessage", "Could not load required data. Please try again later.");
+            request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
+
+        } else if (action.equalsIgnoreCase("update")) {
+//            HttpSession session = request.getSession();
+//            int currentEID = (int) session.getAttribute("currentEventID");
+            Event e = eDao.getById(16);
+            List<EventCategory> eventCateList = eventCateDAO.getAll();
+            List<Place> placeList = placeDAO.getAll();
+
+            request.setAttribute("event", e);
+            request.setAttribute("categories", eventCateList);
+            request.setAttribute("places", placeList);
+            request.getRequestDispatcher("/view-thn1105/event-form-update.jsp").forward(request, response);
         }
-
-        request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
 
     }
 
@@ -224,7 +225,10 @@ public class EventFormController extends HttpServlet {
             // ================== STEP 6: REDIRECT BASED ON RESULT (PRG Pattern) ==================
             if (success) {
                 // Redirect to a success page or the event list to prevent form resubmission
-                response.sendRedirect(request.getContextPath() + "/event-form?step=2");
+                HttpSession session = request.getSession();
+                session.setAttribute("currentEventID", newEvent.getEventID());
+
+                response.sendRedirect(request.getContextPath() + "/event-form?action=update");
             } else {
                 // If saving fails, forward back to the form with an error message
                 request.setAttribute("globalError", "Failed to save the event to the database.");
