@@ -2,7 +2,7 @@ package Controllers.kietTT208;
 
 import DAOs.kietTT208.MyTicketDAO;
 import Models.kietTT208.MyTicket;
-//import Models.Account; // 🔹 Import model Account (class dùng để lưu thông tin user đăng nhập)
+//import Models.Account; // Import model Account
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -19,20 +19,20 @@ public class MyTicketServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-          // 🔹 Lấy thông tin tài khoản từ session (được set khi user login thành công)
+          // Lấy thông tin tài khoản từ session (được set khi user login thành công)
 //        Account acc = (Account) session.getAttribute("account");
 
-        // 🔹 Kiểm tra nếu người dùng chưa đăng nhập thì chuyển về trang login
+        // Kiểm tra nếu người dùng chưa đăng nhập thì chuyển về trang login
 //        if (acc == null) {
 //            response.sendRedirect("login.jsp"); // hoặc /auth/login nếu có cấu trúc thư mục riêng
 //            return; // dừng luôn, tránh NullPointerException
 //        }
 //
-//        // 🔹 Lấy userId từ tài khoản trong session
+//        //  Lấy userId từ tài khoản trong session
 //        int userId = acc.getUserId();
 //        
         
-        // 🔸 Tạm thời set cứng userId = 1 (bạn có thể lấy từ session sau)
+
         int userId = 1;
 
         String filter = request.getParameter("filter");

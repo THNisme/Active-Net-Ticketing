@@ -31,7 +31,7 @@
         </a>
 
         <!-- 🎟 Vé của tôi -->
-        <a href="<%= request.getContextPath()%>myticket.jsp" class="active-net-box">
+        <a href="<%= request.getContextPath()%>/myticket" class="active-net-box">
             Vé của tôi
         </a>
 
@@ -43,7 +43,7 @@
                 <i class="fa-solid fa-user"></i>Tài khoản 
             </button>
             <div class="dropdown-menu">
-                <a href="<%= request.getContextPath()%>/myticket.jsp">
+                <a href="<%= request.getContextPath()%>/myticket">
                     <i class="fa-solid fa-ticket"></i> Vé của tôi
                 </a>
                 <a href="<%= request.getContextPath()%>/myEvents.jsp">
