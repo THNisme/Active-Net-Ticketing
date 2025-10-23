@@ -9,84 +9,8 @@
 
         <!-- Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-        <style>
-            body {
-                background-color: #121212;
-                color: #f5f5f5;
-                font-family: "Inter", sans-serif;
-            }
-
-            h2 {
-                color: #ffb6b6;
-                font-weight: bold;
-                text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
-            }
-
-            .nav-tabs {
-                border-bottom: 1px solid #444;
-            }
-
-            .nav-tabs .nav-link {
-                color: #bbb;
-                border: none;
-                transition: all 0.3s ease;
-            }
-
-            .nav-tabs .nav-link:hover {
-                color: #ff6b6b;
-            }
-
-            .nav-tabs .nav-link.active {
-                color: #fff;
-                background-color: #ffb6b6;
-                border-radius: 8px 8px 0 0;
-            }
-
-            .card {
-                background-color: #1e1e1e;
-                border: 1px solid #333;
-                border-radius: 12px;
-            }
-
-            .table {
-                color: #e0e0e0;
-            }
-
-            .table thead {
-                background-color: #ffb6b6;
-                color: #fff;
-            }
-
-            .table-hover tbody tr:hover {
-                background-color: #2a2a2a;
-                transition: background-color 0.3s;
-            }
-
-            td:last-child {
-                color: #ffb6b6;
-                font-weight: bold;
-            }
-
-            td:nth-last-child(2),
-            td:nth-last-child(3) {
-                font-weight: 600;
-            }
-
-            .btn-ff6b6b {
-                background-color: #ffb6b6;
-                color: #fff;
-                border: none;
-                border-radius: 6px;
-                padding: 8px 14px;
-                transition: 0.3s;
-            }
-
-            .btn-ff6b6b:hover {
-                background-color: #ff8787;
-                transform: scale(1.03);
-            }
-        </style>
+        <link href="<%= request.getContextPath()%>/css/myticket.css" rel="stylesheet" type="text/css"/>
+ 
     </head>
     <%@include file="../view-hfs/header.jsp" %> 
     <body>
