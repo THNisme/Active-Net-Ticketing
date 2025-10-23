@@ -7,11 +7,7 @@ import java.util.*;
 
 public class MyTicketDAO {
 
-    private final Connection conn;
-
-    public MyTicketDAO() {
-        conn = DBContext.getInstance().getConnection();
-    }
+    private Connection conn = DBContext.getInstance().getConnection();
 
     private static final String BASE_SQL
             = "SELECT o.OrderID, t.TicketID, e.EventName, z.ZoneName, "
