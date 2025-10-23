@@ -15,8 +15,6 @@ public class MyTicket {
     private String seatLabel;
     private Date startDate;
     private Date endDate;
-    private String orderStatus;
-    private String ticketStatus;
     private double price;
 
     public MyTicket() {
