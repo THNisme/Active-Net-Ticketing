@@ -109,7 +109,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <i class="bi bi-calendar-event"></i>
-                    <span id="realTime"></span>
+                     <fmt:formatDate value="${currentTime}" pattern="dd/MM/yyyy - HH:mm:ss" />
                 </div>
             </div>
             <hr>
@@ -249,26 +249,26 @@
                 });
 
                 // ===== Hiển thị ngày giờ thực =====
-                function updateRealTime() {
-                    const now = new Date();
-                    const day = String(now.getDate()).padStart(2, '0');
-                    const month = String(now.getMonth() + 1).padStart(2, '0');
-                    const year = now.getFullYear();
-                    const hours = String(now.getHours()).padStart(2, '0');
-                    const minutes = String(now.getMinutes()).padStart(2, '0');
-                    const seconds = String(now.getSeconds()).padStart(2, '0');
-
-                    const formatted = `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
-                                const el = document.getElementById("realTime");
-                                if (el)
-                                    el.textContent = formatted;
-                                else
-                                    console.warn("⚠️ Không tìm thấy phần tử #realTime");
-                            }
-
-                            updateRealTime();
-                            setInterval(updateRealTime, 1000);
-                        });
+//                function updateRealTime() {
+//                    const now = new Date();
+//                    const day = String(now.getDate()).padStart(2, '0');
+//                    const month = String(now.getMonth() + 1).padStart(2, '0');
+//                    const year = now.getFullYear();
+//                    const hours = String(now.getHours()).padStart(2, '0');
+//                    const minutes = String(now.getMinutes()).padStart(2, '0');
+//                    const seconds = String(now.getSeconds()).padStart(2, '0');
+//
+//                    const formatted = `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
+//                                const el = document.getElementById("realTime");
+//                                if (el)
+//                                    el.textContent = formatted;
+//                                else
+//                                    console.warn("⚠️ Không tìm thấy phần tử #realTime");
+//                            }
+//
+//                            updateRealTime();
+//                            setInterval(updateRealTime, 1000);
+                                                                            });
         </script>
 
 
