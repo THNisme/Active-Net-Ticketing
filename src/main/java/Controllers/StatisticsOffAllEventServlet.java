@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author NGUYEN
  */
-@WebServlet(name = "ThongKeServlet", urlPatterns = {"/thongke"})
+@WebServlet(name = "StatisticsOffAllEventServlet", urlPatterns = {"/statisticsoffallevent"})
 public class StatisticsOffAllEventServlet extends HttpServlet {
 
     /**
