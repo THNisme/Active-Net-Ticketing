@@ -9,7 +9,7 @@ public class MyTicketDAO {
 
     private Connection conn = DBContext.getInstance().getConnection();
 
-    private static final String BASE_SQL
+    private static final String Myticket_SQL
             = "SELECT o.OrderID, t.TicketID, e.EventName, z.ZoneName, "
             + "       (s.RowLabel + CAST(s.SeatNumber AS NVARCHAR)) AS SeatLabel, "
             + "       e.StartDate, e.EndDate, "
@@ -34,7 +34,6 @@ public class MyTicketDAO {
         return getTickets(userId, filter);
     }
 
-    // Vé đã kết thúc (EndDate < hiện tại, chưa hủy)
     public List<MyTicket> getEndedTicketsByUser(int userId) {
         String filter = "AND e.EndDate < GETDATE() AND st.Code != 'DELETED' AND so.Code != 'DELETED' ";
         return getTickets(userId, filter);
@@ -47,7 +46,7 @@ public class MyTicketDAO {
 
     private List<MyTicket> getTickets(int userId, String extraCondition) {
         List<MyTicket> list = new ArrayList<>();
-        String sql = BASE_SQL + extraCondition + "ORDER BY e.StartDate DESC";
+        String sql = Myticket_SQL + extraCondition + "ORDER BY e.StartDate DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
