@@ -7,7 +7,7 @@
         <meta charset="UTF-8">
         <title>Vé của tôi</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="<%= request.getContextPath()%>/css/myticket.css" rel="stylesheet" type="text/css"/>
+        <link href="<%= request.getContextPath()%>/css/myticket-page/myticket.css" rel="stylesheet" type="text/css"/>
  
     </head>
     <%@include file="../view-hfs/header.jsp" %> 
