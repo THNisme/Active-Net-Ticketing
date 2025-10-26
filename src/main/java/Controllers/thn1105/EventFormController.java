@@ -99,10 +99,10 @@ public class EventFormController extends HttpServlet {
 
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
 
-        } else if (action.equalsIgnoreCase("update")) {
-//            HttpSession session = request.getSession();
-//            int currentEID = (int) session.getAttribute("currentEventID");
-            Event e = eDao.getById(17);
+        } else if (action.equalsIgnoreCase("updateNew")) {
+            HttpSession session = request.getSession();
+            int currentEID = (int) session.getAttribute("currentEventID");
+            Event e = eDao.getById(currentEID);
             List<EventCategory> eventCateList = eventCateDAO.getAll();
             List<Place> placeList = placeDAO.getAll();
 
