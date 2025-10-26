@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
-<%@ page import="Models.User" %>
+<%@ page import="Models.ltk1702.User" %>
 
 <%
     User user = (User) request.getAttribute("user");
@@ -84,12 +84,8 @@
                     </select>
                 </div>
 
-                <button type="submit" name="actionType" value="save" class="btn btn-pink">
-                    <%= isEdit ? "Cập nhật" : "Thêm mới"%>
-                </button>
-
                 <% if (!isEdit) { %>
-                <button type="submit" name="actionType" value="saveAndSend" class="btn btn-pink ms-2">
+                <button type="submit" name="actionType" value="saveAndSend" class="btn btn-pink">
                     Thêm và gửi mail
                 </button>
                 <% }%>

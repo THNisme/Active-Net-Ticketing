@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.ltk1702;
 
-import DAOs.UsersDAO;
-import Models.User;
-import Services.MailService;
+import DAOs.ltk1702.UsersDAO;
+import Models.ltk1702.User;
+import Services.ltk1702.MailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -72,13 +72,13 @@ public class UserServlet extends HttpServlet {
 
         switch (action) {
             case "new":
-                req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+                req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
                 break;
 
             case "edit":
                 int id = Integer.parseInt(req.getParameter("id"));
                 req.setAttribute("user", dao.getUserById(id));
-                req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+                req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
                 break;
 
             case "delete":
@@ -90,7 +90,7 @@ public class UserServlet extends HttpServlet {
             default:
                 List<User> list = dao.getAllUsers();
                 req.setAttribute("userList", list);
-                req.getRequestDispatcher("/ManageUsers/userList.jsp").forward(req, res);
+                req.getRequestDispatcher("/manage-user-view/userList.jsp").forward(req, res);
                 break;
         }
     }
@@ -121,19 +121,19 @@ public class UserServlet extends HttpServlet {
 
         if (id == 0 && dao.checkUsernameExists(username)) {
             req.setAttribute("error", "Tài khoản đã tồn tại!");
-            req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
             return;
         }
 
         if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
             req.setAttribute("error", "❌ Mật khẩu xác nhận không khớp!");
-            req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
             return;
         }
 
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
             req.setAttribute("error", "❌ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
-            req.getRequestDispatcher("/ManageUsers/userForm.jsp").forward(req, res);
+            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
             return;
         }
 

@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
-<%@ page import="java.util.*, Models.User" %>
+<%@ page import="java.util.*, Models.ltk1702.User" %>
 <link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
 <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
 
@@ -21,7 +21,7 @@
 
     <%@include file="../view-hfs/header.jsp" %>
     <body class="bg-dark text-white">
-        <div class="container-fluid p-4">
+        <div class="container p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="text-pink">Danh sách người dùng</h4>
                 <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
