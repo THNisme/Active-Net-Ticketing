@@ -1,9 +1,8 @@
 package Controllers.ttk2008;
 
 import DAOs.ttk2008.MyTicketDAO;
+import Models.nvd2306.User;
 import Models.ttk2008.MyTicket;
-//import Models.Account; // 🔹 Import model Account (class dùng để lưu thông tin user đăng nhập)
-
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,10 +17,18 @@ public class MyTicketServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
 
        
-        int userId = 1;
+         HttpSession session = request.getSession(false); 
+
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
+        int userId = user.getUserID(); 
+
 
         String filter = request.getParameter("filter");
         MyTicketDAO dao = new MyTicketDAO();
