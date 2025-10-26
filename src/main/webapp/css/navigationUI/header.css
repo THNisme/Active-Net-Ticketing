@@ -1,20 +1,13 @@
 /*Trần Kiệt đã ở đây hehehehe*/
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-}
-
 /* ===== Header ===== */
 .header {
+    font-family: "Inter", sans-serif;
     width: 100%;
     background-color: #ffb6b6;
     padding: 8px 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
 }
 
 .logo img {
@@ -45,7 +38,6 @@
     padding: 0 15px;
     cursor: pointer;
     color: #fff;
-    height: 100%;
 }
 
 .search-box button:active {
