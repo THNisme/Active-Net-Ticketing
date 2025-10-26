@@ -42,9 +42,9 @@ public class DBContext {
             System.out.println("❌ Không tìm thấy driver SQL Server!");
             ex.printStackTrace();
         }
-}
+    }
 
-public Connection getConnection() {
+    public Connection getConnection() {
         return conn;
     }
 }
