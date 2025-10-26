@@ -215,6 +215,14 @@
                 });
             });
         </script>
+        <!-- Hiển thị thông báo khi đăng ký thành công -->
+        <c:if test="${not empty message}">
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    alert("${message}");
+                });
+            </script>
+        </c:if>
     </body>
 
 </html>

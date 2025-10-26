@@ -1,11 +1,12 @@
 /*
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.nvd2306;
+package Controllers.nttn0902;
 
-import DAOs.nvd2306.EventDao;
-import Models.nvd2306.Event;
+import DAOs.nttn0902.StatisticsOffAllEventDAO;
+import Models.nttn0902.StatisticsOffAllEvent;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +14,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
  *
- * @author NguyenDuc
+ * @author NGUYEN
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "StatisticsOffAllEventServlet", urlPatterns = {"/statisticsoffallevent"})
+public class StatisticsOffAllEventServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +41,10 @@ public class SearchServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchServlet</title>");
+            out.println("<title>Servlet ThongKeServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ThongKeServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,17 +62,32 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String keyword = request.getParameter("keyword");
-        EventDao dao = new EventDao();
-        List<Event> events = dao.searchEvents(keyword);
+         StatisticsOffAllEventDAO dao = new StatisticsOffAllEventDAO ();
+
+        List<StatisticsOffAllEvent> ticketStats = dao.getThongKeTheoSuKien();
+        double tongDoanhThu = dao.getTongDoanhThu();
+        int tongVePhatHanh = dao.getTongVePhatHanh();
+        int tongVeDaBan = dao.getTongVeDaBan();
+
+        double phanTramDoanhThu = (tongVePhatHanh > 0)
+                ? (double) tongVeDaBan / tongVePhatHanh * 100
+                : 0;
+
+        double phanTramVeBan = (tongVePhatHanh > 0)
+                ? (double) tongVeDaBan / tongVePhatHanh * 100
+                : 0;
 
         // Gửi dữ liệu sang JSP
-        request.setAttribute("events", events);
-        request.setAttribute("keyword", keyword);
+        request.setAttribute("ticketStats", ticketStats);
+        request.setAttribute("tongDoanhThu", tongDoanhThu);
+        request.setAttribute("tongVePhatHanh", tongVePhatHanh);
+        request.setAttribute("tongVeDaBan", tongVeDaBan);
+        request.setAttribute("phanTramDoanhThu", phanTramDoanhThu);
+        request.setAttribute("phanTramVeBan", phanTramVeBan);
+        request.setAttribute("currentTime", new java.util.Date());
 
-        // ⚡ Thêm dòng này để JSP biết đây là trang kết quả tìm kiếm
-        request.setAttribute("isSearch", true);
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        RequestDispatcher rd = request.getRequestDispatcher("/StatisticsOffAllEvent.jsp");
+        rd.forward(request, response);
     }
 
     /**

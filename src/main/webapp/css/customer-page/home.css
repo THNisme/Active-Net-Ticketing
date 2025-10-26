@@ -1,4 +1,4 @@
-/*
+ F/*
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
 */
@@ -6,6 +6,40 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Created on : Oct 7, 2025, 6:42:08 PM
     Author     : NguyenDuc
 */
+:root{
+  --green: #00b14f;
+  --dark: #111111;
+}
+
+/* đảm bảo vùng header không bị wrap và tiêu đề co lại */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap; /* cho responsive: xuống dòng khi cần */
+}
+
+/* bắt buộc tiêu đề chiếm không gian còn lại, filters nằm cùng dòng */
+.page-title {
+  flex: 1 1 auto; /* sẽ co lại nếu không đủ chỗ */
+  margin: 0;
+}
+
+/* filters không giãn, luôn nằm về phía phải */
+.filters {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* đảm bảo nút và popup luôn nằm sát nút (không bị giãn) */
+.btn-wrap {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
 
 .event-card img {
     height: 180px;

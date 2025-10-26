@@ -112,4 +112,5 @@ public class Event {
     public void setStatusID(int statusID) {
         this.statusID = statusID;
     }
+    
 }

@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO extends DBContext {
-
+    
     public User login(String username, String password) {
         String sql = "SELECT * FROM [Users] WHERE username = ?";
         try {
