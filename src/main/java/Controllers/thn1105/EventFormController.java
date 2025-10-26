@@ -102,7 +102,7 @@ public class EventFormController extends HttpServlet {
         } else if (action.equalsIgnoreCase("update")) {
 //            HttpSession session = request.getSession();
 //            int currentEID = (int) session.getAttribute("currentEventID");
-            Event e = eDao.getById(16);
+            Event e = eDao.getById(17);
             List<EventCategory> eventCateList = eventCateDAO.getAll();
             List<Place> placeList = placeDAO.getAll();
 
