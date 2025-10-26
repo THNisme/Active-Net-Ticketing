@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.nttn0902;
 
-import DAOs.StatisticsOffAllEventDAO;
-import Models.StatisticsOffAllEvent;
+import DAOs.nttn0902.StatisticsOffAllEventDAO;
+import Models.nttn0902.StatisticsOffAllEvent;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;

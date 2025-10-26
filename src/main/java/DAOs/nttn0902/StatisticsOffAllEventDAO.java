@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DAOs;
+package DAOs.nttn0902;
 
-import Models.StatisticsOffAllEvent;
+import Models.nttn0902.StatisticsOffAllEvent;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
