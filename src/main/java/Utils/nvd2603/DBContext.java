@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Utils.nvd2603;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -23,9 +22,9 @@ public class DBContext {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=Active-Net-Ticketing;"
+                    + "databaseName=EventManagementV7;"
                     + "user=sa;"
-                    + "password=123456;"
+                    + "password=nd291005;"
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             if (conn != null) {

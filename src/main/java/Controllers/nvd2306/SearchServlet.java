@@ -70,7 +70,6 @@ public class SearchServlet extends HttpServlet {
 
         // ⚡ Thêm dòng này để JSP biết đây là trang kết quả tìm kiếm
         request.setAttribute("isSearch", true);
-
         request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 
