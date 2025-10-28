@@ -30,8 +30,7 @@
                 <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
             </div>
 
-            <!-- 🔹 Thông báo thành công hoặc lỗi -->
-            <%
+                        <%
                 String mailStatus = (String) session.getAttribute("mailStatus");
                 String error = (String) session.getAttribute("error");
                 if (mailStatus != null) {
