@@ -96,7 +96,7 @@
                                         kiện</label>
                                     <select class="form-select" aria-label="Default select example" id="eventCategory" required name="eventCategory">
                                         <c:forEach var="category" items="${categories}">
-                                            <option value="${category.categoryID} <c:if test="${category.categoryID == event.categoryID}">selected</c:if>">
+                                            <option value="${category.categoryID}" <c:if test="${category.categoryID == event.categoryID}">selected</c:if>>
                                                 <c:out value="${category.categoryName}"/>
                                             </option>
                                         </c:forEach>
@@ -108,7 +108,7 @@
                                     <a href="#" class="float-end">Thêm nơi tổ chức mới.</a>
                                     <select class="form-select" aria-label="Default select example" id="eventPlace" required name="place">
                                         <c:forEach var="place" items="${places}">
-                                            <option value="${place.placeID} <c:if test="${place.placeID == event.placeID}">selected</c:if>">
+                                            <option value="${place.placeID}" <c:if test="${place.placeID == event.placeID}">selected</c:if>>
                                                 <c:out value="${place.placeName}" />
                                             </option>
                                         </c:forEach>
