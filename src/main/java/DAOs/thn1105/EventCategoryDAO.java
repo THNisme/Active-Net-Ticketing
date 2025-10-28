@@ -109,12 +109,12 @@ public class EventCategoryDAO {
 
     public static void main(String[] args) {
         EventCategoryDAO dao = new EventCategoryDAO();
-        List<EventCategory> list = dao.getAll();
+//        List<EventCategory> list = dao.getAll();
 
-        for (EventCategory c : list) {
-            System.out.println("ID: " + c.getCategoryID());
-            System.out.println("CateName: " + c.getCategoryName());
-        }
+//        for (EventCategory c : list) {
+//            System.out.println("ID: " + c.getCategoryID());
+//            System.out.println("CateName: " + c.getCategoryName());
+//        }
 //        EventCategory c = dao.getById(3);
 //        System.out.println("ID: " + c.getCategoryID());
 //        System.out.println("CateName: " + c.getCategoryName());

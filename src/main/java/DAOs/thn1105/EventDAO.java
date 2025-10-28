@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class EventDAO {
 
     public boolean create(Event e) {
         String sql = "INSERT INTO Events (CategoryID, EventName, Description, ImageURL, StartDate, EndDate, PlaceID) VALUES (?,?,?,?,?,?,?)";
-        try (PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, e.getCategoryID());
             st.setString(2, e.getEventName());
             st.setString(3, e.getDescription());
@@ -84,16 +83,7 @@ public class EventDAO {
             st.setTimestamp(5, new Timestamp(e.getStartDate().getTime()));
             st.setTimestamp(6, new Timestamp(e.getEndDate().getTime()));
             st.setInt(7, e.getPlaceID());
-
-            int rows = st.executeUpdate();
-            if (rows > 0) {
-                try (ResultSet rs = st.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        e.setEventID(rs.getInt(1)); // Gán ID vừa tạo cho object
-                    }
-                }
-                return true;
-            }
+            return st.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -184,6 +174,8 @@ public class EventDAO {
 //        System.out.println("End: " + e.getEndDate());
 //        System.out.println("Place: " + e.getPlaceID());
 //        System.out.println("Status: " + e.getStatusID());
+        
+
 //          Event newEvent = new Event();
 //          
 //          newEvent.setEventName("Test");
@@ -195,19 +187,22 @@ public class EventDAO {
 //          newEvent.setDescription("desdasdasd");
 //          
 //          dao.create(newEvent);
-        Event updateEvent = new Event();
 
-        updateEvent.setEventID(5);
-        updateEvent.setEventName("Test-Update");
-        updateEvent.setCategoryID(1);
-        updateEvent.setPlaceID(2);
-        updateEvent.setImageURL("imgtest-Update");
-        updateEvent.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
-        updateEvent.setEndDate(Timestamp.valueOf(LocalDateTime.now()));
-        updateEvent.setDescription("desdasdasd");
-        updateEvent.setStatusID(1);
-
-        dao.update(updateEvent);
+          Event updateEvent = new Event();
+          
+          updateEvent.setEventID(5);
+          updateEvent.setEventName("Test-Update");
+          updateEvent.setCategoryID(1);
+          updateEvent.setPlaceID(2);
+          updateEvent.setImageURL("imgtest-Update");
+          updateEvent.setStartDate(Timestamp.valueOf(LocalDateTime.now()));
+          updateEvent.setEndDate(Timestamp.valueOf(LocalDateTime.now()));
+          updateEvent.setDescription("desdasdasd");
+          updateEvent.setStatusID(1);
+          
+          dao.update(updateEvent);
+          
+        
 
 //        dao.softDelete(4);
         List<Event> list = dao.getAll();
