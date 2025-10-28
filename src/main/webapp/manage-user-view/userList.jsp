@@ -19,7 +19,7 @@
         <link href="../css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
     </head>
 
-    <%@include file="../view-hfs/header.jsp" %>
+   
     <body class="bg-dark text-white">
         <div class="container p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -101,5 +101,5 @@
             </div>
         </div>
     </body>
-    <%@include file="../view-hfs/footer.jsp" %>
+    
 </html>

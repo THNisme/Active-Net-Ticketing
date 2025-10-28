@@ -23,7 +23,7 @@
         <link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
     </head>
 
-    <%@include file="../view-hfs/header.jsp" %>
+    
 
     <body class="bg-dark text-white">
         <div class="container py-4">
@@ -115,5 +115,5 @@
 
     </body>
 
-    <%@include file="../view-hfs/footer.jsp" %>
+    
 </html>
