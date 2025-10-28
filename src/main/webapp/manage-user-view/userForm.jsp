@@ -92,30 +92,16 @@
                 <button type="submit" name="actionType" value="saveAndSend" class="btn btn-pink">
                     Thêm và gửi mail
                 </button>
-                <% }%>
-
+                <% } else {%>
+                <button type="submit" name="actionType" value="editAndSend" class="btn btn-pink">
+                    Sửa và gửi mail
+                </button>
+                <% } %>
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>          
 
-        <script>
-            function validateForm() {
-                const pass = document.getElementById("password").value.trim();
-                const confirm = document.getElementById("confirmPassword").value.trim();
-                const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
-                if (!passwordRegex.test(pass)) {
-                    alert("️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt!");
-                    return false;
-                }
-
-                if (pass !== confirm) {
-                    alert("Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
-                    return false;
-                }
-
-                return true;
-            }
-        </script>
+        
 
     </body>
 

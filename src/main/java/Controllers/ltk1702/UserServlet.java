@@ -126,13 +126,13 @@ public class UserServlet extends HttpServlet {
         }
 
         if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
-            req.setAttribute("error", "❌ Mật khẩu xác nhận không khớp!");
+            req.setAttribute("error", " Mật khẩu xác nhận không khớp!");
             req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
             return;
         }
 
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
-            req.setAttribute("error", "❌ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
+            req.setAttribute("error", " Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
             req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
             return;
         }
