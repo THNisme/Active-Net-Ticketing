@@ -16,14 +16,18 @@
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
-        <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</title>
-        <base href="<%= request.getContextPath()%>/">
+        <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</title>        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
-        <link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
+        <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>  
+        <!--Inter font - Google Fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+            rel="stylesheet">
     </head>
 
-    
+
 
     <body class="bg-dark text-white">
         <div class="container py-4">
@@ -100,12 +104,12 @@
                 const confirm = document.getElementById("confirmPassword").value.trim();
                 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
                 if (!passwordRegex.test(pass)) {
-                    alert("⚠️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt!");
+                    alert("️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt!");
                     return false;
                 }
 
                 if (pass !== confirm) {
-                    alert("❌ Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
+                    alert("Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
                     return false;
                 }
 
@@ -115,5 +119,5 @@
 
     </body>
 
-    
+
 </html>
