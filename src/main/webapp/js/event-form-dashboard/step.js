@@ -104,5 +104,5 @@ document.getElementById('eventForm').addEventListener('submit', e => {
   }
 
   alert('Form submitted!');
-  // e.target.submit(); // mở lại nếu muốn submit thật
+   e.target.submit(); // mở lại nếu muốn submit thật
 });

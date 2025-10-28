@@ -62,5 +62,3 @@ fileInput.addEventListener('change', e => {
 clearBtn.addEventListener('click', e => {
   e.preventDefault(); clearAll();
 });
-
-clearAll();
