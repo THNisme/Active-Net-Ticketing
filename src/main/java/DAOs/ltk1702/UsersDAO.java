@@ -120,15 +120,4 @@ public class UsersDAO {
             e.printStackTrace();
         }
     }
-
-    public void restoreUser(int id) {
-        String sql = "UPDATE Users SET StatusID = ? WHERE UserID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, STATUS_ACTIVE);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

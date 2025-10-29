@@ -10,6 +10,17 @@
 <%
     User user = (User) request.getAttribute("user");
     boolean isEdit = (user != null);
+    String username = request.getParameter("username") != null ? request.getParameter("username") : (isEdit ? user.getUsername() : "");
+    String password = request.getParameter("passwordHash") != null ? request.getParameter("passwordHash") : (isEdit ? user.getPassword() : "");
+    String confirmPassword = request.getParameter("confirmPassword") != null ? request.getParameter("confirmPassword") : (isEdit ? user.getPassword() : "");
+    String email = request.getParameter("email") != null ? request.getParameter("email") : "";
+    String roleParam = request.getParameter("role");
+    int role = 0;
+    if (roleParam != null && !roleParam.isEmpty()) {
+        role = Integer.parseInt(roleParam);
+    } else if (isEdit) {
+        role = user.getRole();
+    }
 %>
 
 <!DOCTYPE html>
@@ -96,12 +107,12 @@
                 <button type="submit" name="actionType" value="editAndSend" class="btn btn-pink">
                     Sửa và gửi mail
                 </button>
-                <% } %>
+                <% }%>
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>          
 
-        
+
 
     </body>
 
