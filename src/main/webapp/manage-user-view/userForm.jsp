@@ -42,7 +42,7 @@
 
 
     <body class="bg-dark text-white">
-        <div class="container py-5">
+        <div class="col-md-6 mx-auto mt-5">
             <h3 class="text-pink mb-3">
                 <%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng
             </h3>
@@ -70,14 +70,16 @@
 
                 </div>
 
-                <% if (!isEdit) {%>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
+                    <% if (!isEdit) {%>
                     <input type="email" name="email" class="form-control" value="<%= email%>" 
-
                            placeholder="Nhập email để gửi thông tin đăng nhập cho người dùng" required>
+                    <% } else {%>
+                    <input type="email" name="email" class="form-control" value="<%= email%>" 
+                           placeholder="Nhập email để gửi thông báo tài khoản cập nhật" required>
+                    <% }%>
                 </div>
-                <% }%>
 
                 <div class="mb-3">
                     <label class="form-label">Mật khẩu</label><small class="text-warning">
@@ -135,24 +137,7 @@
                     icon.classList.remove("bi-eye-slash");
                     icon.classList.add("bi-eye");
                 }
-            }
-
-            function validateForm() {
-                const pass = document.getElementById("password").value.trim();
-                const confirm = document.getElementById("confirmPassword").value.trim();
-                const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
-
-                if (!regex.test(pass)) {
-                    alert("️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ in hoa, chữ thường, số và ký tự đặc biệt!");
-                    return false;
-                }
-
-                if (pass !== confirm) {
-                    alert("Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
-                    return false;
-                }
-                return true;
-            }
+            }          
         </script>
 
     </body>

@@ -35,7 +35,7 @@
                 String error = (String) session.getAttribute("error");
                 if (mailStatus != null) {
             %>
-            <div class="alert alert-success"><%= mailStatus%></div>
+            <div class="alert alert-custom"><%= mailStatus%></div>
             <%
                     session.removeAttribute("mailStatus");
                 }

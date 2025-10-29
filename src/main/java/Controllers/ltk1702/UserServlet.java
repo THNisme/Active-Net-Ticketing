@@ -117,10 +117,10 @@ public class UserServlet extends HttpServlet {
         String confirmPassword = req.getParameter("confirmPassword");
         int role = Integer.parseInt(req.getParameter("role"));
         String email = req.getParameter("email");
-        String actionType = req.getParameter("actionType");
+        String actionType = req.getParameter("actionType");        
 
         if (id == 0 && dao.checkUsernameExists(username)) {
-            req.setAttribute("error", "Tài khoản đã tồn tại!");
+            req.setAttribute("error", "Tài khoản đã tồn tại!");            
             req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
             return;
         }
