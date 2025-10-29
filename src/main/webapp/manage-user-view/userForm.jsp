@@ -65,14 +65,15 @@
                     <label class="form-label">Tên đăng nhập</label>
                     <input type="text" name="username" class="form-control" 
                            placeholder="Nhập tên đăng nhập người dùng" 
-                           value="<%= isEdit ? user.getUsername() : ""%>" required>
+                           value="<%= username%>" required>                 
 
                 </div>
 
-                <% if (!isEdit) { %>
+                <% if (!isEdit) {%>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control"
+                    <input type="email" name="email" class="form-control" value="<%= email%>" 
+
                            placeholder="Nhập email để gửi thông tin đăng nhập cho người dùng" required>
                 </div>
                 <% }%>
@@ -82,20 +83,21 @@
                         (có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt)
                     </small>
                     <input type="password" id="password" name="passwordHash" class="form-control"
-                           value="<%= isEdit ? user.getPassword() : ""%>" required>                    
+                           value="<%= password%>" required>                    
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Xác nhận mật khẩu</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                           value="<%= isEdit ? user.getPassword() : ""%>" required>
+                           value="<%= confirmPassword%>" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Vai trò</label>
                     <select name="role" class="form-select">
-                        <option value="0" <%= isEdit && user.getRole() == 0 ? "selected" : ""%>>User</option>
-                        <option value="1" <%= isEdit && user.getRole() == 1 ? "selected" : ""%>>Admin</option>
+                        <option value="0" <%= role == 0 ? "selected" : ""%>>User</option>
+                        <option value="1" <%= role == 1 ? "selected" : ""%>>Admin</option>
+
                     </select>
                 </div>
 
@@ -111,10 +113,5 @@
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>          
-
-
-
     </body>
-
-
 </html>
