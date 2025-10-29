@@ -150,23 +150,22 @@ public class UserServlet extends HttpServlet {
                 try {
                     MailService.sendAccountEmail(email, username, password);
                     req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
-                    dao.addUser(user);
                 } catch (Exception e) {
                     req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
                 }
             }
-
+            dao.addUser(user);
         } else {
 
             if ("editAndSend".equals(actionType)) {
                 try {
                     MailService.sendAccountEmail(email, username, password);
                     req.setAttribute("mailStatus", "Đã gửi mail cập nhật cho " + email);
-                    dao.updateUser(user);
                 } catch (Exception e) {
                     req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
                 }
             }
+            dao.updateUser(user);
         }
 
         res.sendRedirect("UserServlet?action=list");

@@ -29,6 +29,7 @@
         <meta charset="UTF-8">
         <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> người dùng</title>        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
         <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>  
         <!--Inter font - Google Fonts-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,15 +82,23 @@
                 <div class="mb-3">
                     <label class="form-label">Mật khẩu</label><small class="text-warning">
                         (có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt)
-                    </small>
-                    <input type="password" id="password" name="passwordHash" class="form-control"
-                           value="<%= password%>" required>                    
+                    </small>                    
+                    <div class="input-group">
+                        <input type="password" id="password" name="passwordHash" class="form-control"
+                               value="<%= password%>" required>
+                        <button type="button" class="btn btn-light" onclick="togglePassword('password')"><i class="bi bi-eye"></i></button>
+                    </div>
+
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Xác nhận mật khẩu</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                           value="<%= confirmPassword%>" required>
+                    <label class="form-label">Xác nhận mật khẩu</label>                   
+                    <div class="input-group">
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                               value="<%= confirmPassword%>" required>
+                        <button type="button" class="btn btn-light" onclick="togglePassword('confirmPassword')"><i class="bi bi-eye"></i></button>
+                    </div>
+
                 </div>
 
                 <div class="mb-3">
@@ -112,6 +121,39 @@
                 <% }%>
                 <a href="UserServlet?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
-        </div>          
+        </div>      
+        <script>
+            function togglePassword(id) {
+                const input = document.getElementById(id);
+                const icon = event.currentTarget.querySelector('i');
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("bi-eye");
+                    icon.classList.add("bi-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("bi-eye-slash");
+                    icon.classList.add("bi-eye");
+                }
+            }
+
+            function validateForm() {
+                const pass = document.getElementById("password").value.trim();
+                const confirm = document.getElementById("confirmPassword").value.trim();
+                const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
+
+                if (!regex.test(pass)) {
+                    alert("️ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ in hoa, chữ thường, số và ký tự đặc biệt!");
+                    return false;
+                }
+
+                if (pass !== confirm) {
+                    alert("Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
+                    return false;
+                }
+                return true;
+            }
+        </script>
+
     </body>
 </html>
