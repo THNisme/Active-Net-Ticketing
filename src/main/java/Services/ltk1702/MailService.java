@@ -14,11 +14,10 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
-
 public class MailService {
 
-    private static final String FROM_EMAIL = "letkiet714@gmail.com"; 
-    private static final String FROM_PASSWORD = "yxeykgqmxiuanptr"; 
+    private static final String FROM_EMAIL = "letkiet714@gmail.com";
+    private static final String FROM_PASSWORD = "yxeykgqmxiuanptr";
 
     public static void sendAccountEmail(String toEmail, String username, String password) {
         String subject = "Tài khoản Active Net Ticketing";
@@ -27,6 +26,16 @@ public class MailService {
                 + "Tên đăng nhập: " + username + "\n"
                 + "Mật khẩu: " + password + "\n\n"
                 + "Vui lòng đăng nhập và đổi mật khẩu sau khi sử dụng lần đầu.\n\n"
+                + "Trân trọng,\nActive Net Ticketing";
+
+        sendMail(toEmail, subject, body);
+    }
+
+    public static void sendAccountUpdateEmail(String toEmail, String username, String password) {
+        String subject = "Tài khoản Active Net Ticketing";
+        String body = "Xin chào " + username + ",\n\n"
+                + "Mật khẩu của Tài khoản: " + username + "đã được đổi.\n"
+                + "Mật khẩu mới: " + password + "\n\n"
                 + "Trân trọng,\nActive Net Ticketing";
 
         sendMail(toEmail, subject, body);

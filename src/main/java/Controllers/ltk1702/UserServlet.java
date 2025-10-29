@@ -159,7 +159,7 @@ public class UserServlet extends HttpServlet {
 
             if ("editAndSend".equals(actionType)) {
                 try {
-                    MailService.sendAccountEmail(email, username, password);
+                    MailService.sendAccountUpdateEmail(email, username, password);
                     req.setAttribute("mailStatus", "Đã gửi mail cập nhật cho " + email);
                 } catch (Exception e) {
                     req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
