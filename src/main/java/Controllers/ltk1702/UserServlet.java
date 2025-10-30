@@ -119,39 +119,42 @@ public class UserServlet extends HttpServlet {
         String email = req.getParameter("email");
         String actionType = req.getParameter("actionType");
 
-        if (id == 0 && dao.checkUsernameExists(username)) {
-            req.getSession().setAttribute("error", "Tài khoản đã tồn tại!");
-            res.sendRedirect("UserServlet?action=new");
-            return;
-        }
-
-        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
-            req.getSession().setAttribute("error", " Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
-            if (id != 0) {
-                res.sendRedirect("UserServlet?action=edit&id=" + id);
-            } else {
-                res.sendRedirect("UserServlet?action=new");
-            }
-            return;
-        }
-        
-        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
-            req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
-            if (id != 0) {
-                res.sendRedirect("UserServlet?action=edit&id=" + id);
-            } else {
-                res.sendRedirect("UserServlet?action=new");
-            }
-
-            return;
-        }
-
         User user = new User();
         user.setUserID(id);
         user.setUsername(username);
         user.setPassword(HashPassword.hashMD5(password));
         user.setRole(role);
         user.setStatusID(1);
+
+        if (id == 0 && dao.checkUsernameExists(username)) {
+            req.getSession().setAttribute("error", "Tài khoản đã tồn tại!");
+            req.getSession().setAttribute("user", user);
+            res.sendRedirect("UserServlet?action=new");
+            return;
+        }
+
+        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
+            req.getSession().setAttribute("error", " Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
+            req.getSession().setAttribute("user", user);
+            if (id != 0) {
+                res.sendRedirect("UserServlet?action=edit&id=" + id);
+            } else {
+                res.sendRedirect("UserServlet?action=new");
+            }
+            return;
+        }
+
+        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
+            req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
+            req.getSession().setAttribute("user", user);
+            if (id != 0) {
+                res.sendRedirect("UserServlet?action=edit&id=" + id);
+            } else {
+                res.sendRedirect("UserServlet?action=new");
+            }
+
+            return;
+        }
 
         if (id == 0) {
 

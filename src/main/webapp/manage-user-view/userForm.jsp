@@ -27,6 +27,20 @@
     } else if (isEdit) {
         role = user.getRole();
     }
+    
+    if (session.getAttribute("error") != null) {
+        request.setAttribute("error", session.getAttribute("error"));
+        session.removeAttribute("error");
+    }
+    if (session.getAttribute("mailStatus") != null) {
+        request.setAttribute("mailStatus", session.getAttribute("mailStatus"));
+        session.removeAttribute("mailStatus");
+    }
+    
+    if (session.getAttribute("user") != null) {
+        request.setAttribute("user", session.getAttribute("user"));
+        session.removeAttribute("user");
+    }
 %>
 
 <!DOCTYPE html>
