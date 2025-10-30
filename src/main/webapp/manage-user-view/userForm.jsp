@@ -93,7 +93,7 @@
                     </small>                    
                     <div class="input-group">
                         <input type="password" id="password" name="passwordHash" class="form-control"
-                               value="<%= password%>" required>
+                               value="" required>
                         <button type="button" class="btn btn-light" onclick="togglePassword('password')"><i class="bi bi-eye"></i></button>
                     </div>
 
@@ -103,7 +103,7 @@
                     <label class="form-label">Xác nhận mật khẩu</label>                   
                     <div class="input-group">
                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                               value="<%= confirmPassword%>" required>
+                               value="" required>
                         <button type="button" class="btn btn-light" onclick="togglePassword('confirmPassword')"><i class="bi bi-eye"></i></button>
                     </div>
 
