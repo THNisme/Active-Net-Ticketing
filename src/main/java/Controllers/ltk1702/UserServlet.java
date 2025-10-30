@@ -62,31 +62,31 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-
+        
         String action = req.getParameter("action");
         if (action == null) {
             action = "list";
         }
-
+        
         UsersDAO dao = new UsersDAO();
-
+        
         switch (action) {
             case "new":
                 req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
                 break;
-
+            
             case "edit":
                 int id = Integer.parseInt(req.getParameter("id"));
                 req.setAttribute("user", dao.getUserById(id));
                 req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
                 break;
-
+            
             case "delete":
                 int deleteId = Integer.parseInt(req.getParameter("id"));
                 dao.softDeleteUser(deleteId);
                 res.sendRedirect("UserServlet?action=list");
                 break;
-
+            
             default:
                 List<User> list = dao.getAllUsers();
                 req.setAttribute("userList", list);
@@ -108,44 +108,44 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         UsersDAO dao = new UsersDAO();
-
+        
         int id = req.getParameter("userID") != null && !req.getParameter("userID").isEmpty()
                 ? Integer.parseInt(req.getParameter("userID")) : 0;
-
+        
         String username = req.getParameter("username");
         String password = req.getParameter("passwordHash");
         String confirmPassword = req.getParameter("confirmPassword");
         int role = Integer.parseInt(req.getParameter("role"));
         String email = req.getParameter("email");
-        String actionType = req.getParameter("actionType");        
-
+        String actionType = req.getParameter("actionType");
+        
         if (id == 0 && dao.checkUsernameExists(username)) {
-            req.setAttribute("error", "Tài khoản đã tồn tại!");            
-            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
+            req.getSession().setAttribute("error", "Tài khoản đã tồn tại!");
+            res.sendRedirect("UserServlet?action=edit&id=" + id);
             return;
         }
-
+        
         if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
-            req.setAttribute("error", " Mật khẩu xác nhận không khớp!");
-            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
+            req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
+            res.sendRedirect("UserServlet?action=edit&id=" + id);
             return;
         }
-
+        
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
-            req.setAttribute("error", " Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
-            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
+            req.getSession().setAttribute("error", " Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
+            res.sendRedirect("UserServlet?action=edit&id=" + id);
             return;
         }
-
+        
         User user = new User();
         user.setUserID(id);
         user.setUsername(username);
         user.setPassword(HashPassword.hashMD5(password));
         user.setRole(role);
         user.setStatusID(1);
-
+        
         if (id == 0) {
-
+            
             if ("saveAndSend".equals(actionType)) {
                 try {
                     MailService.sendAccountEmail(email, username, password);
@@ -156,7 +156,7 @@ public class UserServlet extends HttpServlet {
             }
             dao.addUser(user);
         } else {
-
+            
             if ("editAndSend".equals(actionType)) {
                 try {
                     MailService.sendAccountUpdateEmail(email, username, password);
@@ -167,7 +167,7 @@ public class UserServlet extends HttpServlet {
             }
             dao.updateUser(user);
         }
-
+        
         res.sendRedirect("UserServlet?action=list");
     }
 

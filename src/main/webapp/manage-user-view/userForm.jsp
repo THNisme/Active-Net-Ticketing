@@ -10,6 +10,12 @@
 <%
     User user = (User) request.getAttribute("user");
     boolean isEdit = (user != null);
+    int userId = 0;
+    if (isEdit) {
+        userId = user.getUserID();
+    } else if (request.getParameter("userID") != null && !request.getParameter("userID").isEmpty()) {
+        userId = Integer.parseInt(request.getParameter("userID"));
+    }
     String username = request.getParameter("username") != null ? request.getParameter("username") : (isEdit ? user.getUsername() : "");
     String password = request.getParameter("passwordHash") != null ? request.getParameter("passwordHash") : (isEdit ? user.getPassword() : "");
     String confirmPassword = request.getParameter("confirmPassword") != null ? request.getParameter("confirmPassword") : (isEdit ? user.getPassword() : "");
@@ -60,7 +66,7 @@
             <% }%>
 
             <form id="userForm" action="UserServlet" method="post" onsubmit="return validateForm();">
-                <input type="hidden" name="userID" value="<%= isEdit ? user.getUserID() : ""%>">
+                <input type="hidden" name="userID" value="<%= isEdit ? userId : ""%>">
 
                 <div class="mb-3">
                     <label class="form-label">Tên đăng nhập</label>
