@@ -25,7 +25,7 @@
             <i class="fa-solid fa-plus"></i>Tạo sự kiện
         </a>
 
-        <a href="<%= request.getContextPath()%>/myticket.jsp" class="active-net-box">
+        <a href="<%= request.getContextPath()%>/myticket" class="active-net-box">
             Vé của tôi
         </a>
 
