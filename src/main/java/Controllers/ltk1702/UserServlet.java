@@ -161,9 +161,9 @@ public class UserServlet extends HttpServlet {
             if ("saveAndSend".equals(actionType)) {
                 try {
                     MailService.sendAccountEmail(email, username, password);
-                    req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
+                    req.getSession().setAttribute("mailStatus", "Đã gửi mail cho " + email);
                 } catch (Exception e) {
-                    req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
+                    req.getSession().setAttribute("error", "Không thể gửi mail: " + e.getMessage());
                 }
             }
             dao.addUser(user);

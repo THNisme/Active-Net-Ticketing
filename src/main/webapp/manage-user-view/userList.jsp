@@ -29,7 +29,8 @@
                 <h4 class="text-pink">Danh sách người dùng</h4>                
                 <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
             </div>   
-            <div style="max-width: 600px; width: fit-content;">
+            <div class="mx-auto"  
+                style="max-width: 600px; width: fit-content;">
                 <%
                     String mailStatus = (String) session.getAttribute("mailStatus");
                     String error = (String) session.getAttribute("error");
