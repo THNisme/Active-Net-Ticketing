@@ -86,8 +86,7 @@
                     <label class="form-label">Tên đăng nhập</label>
                     <input type="text" name="username" class="form-control" 
                            placeholder="Nhập tên đăng nhập người dùng" 
-                           value="<%= username%>" required>                 
-
+                           value="<%= username%>" required>              
                 </div>
 
                 <div class="mb-3">

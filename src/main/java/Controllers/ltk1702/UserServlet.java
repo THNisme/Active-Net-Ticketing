@@ -133,6 +133,17 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
+        if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+            req.getSession().setAttribute("error", "Vui lòng nhập mail đúng định dạng. Ví dụ:'abc124@gmai.com'...");
+            req.getSession().setAttribute("user", user);
+            if (id != 0) {
+                res.sendRedirect("UserServlet?action=edit&id=" + id);
+            } else {
+                res.sendRedirect("UserServlet?action=new");
+            }
+            return;
+        }
+
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
             req.getSession().setAttribute("error", " Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
             req.getSession().setAttribute("user", user);
