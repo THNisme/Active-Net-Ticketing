@@ -26,32 +26,31 @@
     <body class="bg-dark text-white">
         <div class="container p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-pink">Danh sách người dùng</h4>
+                <h4 class="text-pink">Danh sách người dùng</h4>                
+                <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
+            </div>   
+            <div style="max-width: 600px; width: fit-content;">
                 <%
                     String mailStatus = (String) session.getAttribute("mailStatus");
                     String error = (String) session.getAttribute("error");
                     if (mailStatus != null) {
                 %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                     <%= mailStatus%>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <%
                         session.removeAttribute("mailStatus");
                     }
                     if (error != null) {
                 %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <%= error%>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                    <%= error%>                   
                 </div>
                 <%
                         session.removeAttribute("error");
                     }
                 %>
-                <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
-            </div>                 
-
+            </div>
             <div class="table-responsive bg-dark border rounded">
                 <table id="users-table" class="table table-dark table-bordered align-middle mb-0">
                     <thead class="table-secondary text-dark">

@@ -43,9 +43,15 @@ public class MailService {
 
     public static void sendRoleChangedEmail(String toEmail, String username, int role) {
         String subject = "Tài khoản Active Net Ticketing";
+        String roleName = "user";
+
+        if (role != 0) {
+            roleName = "admin";
+        }
+        
         String body = "Xin chào " + username + ",\n\n"
                 + "Tài khoản: " + username + "đã được đổi quyền truy cập.\n"
-                + "Giờ bạn là: " + role + "\n\n"
+                + "Giờ bạn là: " + roleName + "\n\n"
                 + "Trân trọng,\nActive Net Ticketing";
         sendMail(toEmail, subject, body);
     }
