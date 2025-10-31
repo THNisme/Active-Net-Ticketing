@@ -21,12 +21,34 @@
             href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
             rel="stylesheet">
     </head>
-   
-    
+
+
     <body class="bg-dark text-white">
         <div class="container p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="text-pink">Danh sách người dùng</h4>
+                <%
+                    String mailStatus = (String) session.getAttribute("mailStatus");
+                    String error = (String) session.getAttribute("error");
+                    if (mailStatus != null) {
+                %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <%= mailStatus%>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <%
+                        session.removeAttribute("mailStatus");
+                    }
+                    if (error != null) {
+                %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= error%>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <%
+                        session.removeAttribute("error");
+                    }
+                %>
                 <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
             </div>                 
 
