@@ -31,13 +31,22 @@ public class MailService {
         sendMail(toEmail, subject, body);
     }
 
-    public static void sendAccountUpdateEmail(String toEmail, String username, String password) {
+    public static void sendPasswordChangedEmail(String toEmail, String username, String password) {
         String subject = "Tài khoản Active Net Ticketing";
         String body = "Xin chào " + username + ",\n\n"
                 + "Mật khẩu của Tài khoản: " + username + "đã được đổi.\n"
                 + "Mật khẩu mới: " + password + "\n\n"
                 + "Trân trọng,\nActive Net Ticketing";
 
+        sendMail(toEmail, subject, body);
+    }
+
+    public static void sendRoleChangedEmail(String toEmail, String username, int role) {
+        String subject = "Tài khoản Active Net Ticketing";
+        String body = "Xin chào " + username + ",\n\n"
+                + "Tài khoản: " + username + "đã được đổi quyền truy cập.\n"
+                + "Giờ bạn là: " + role + "\n\n"
+                + "Trân trọng,\nActive Net Ticketing";
         sendMail(toEmail, subject, body);
     }
 
@@ -68,4 +77,5 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
 }

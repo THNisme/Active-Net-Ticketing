@@ -170,14 +170,28 @@ public class UserServlet extends HttpServlet {
         } else {
 
             if ("editAndSend".equals(actionType)) {
-                try {
-                    MailService.sendAccountUpdateEmail(email, username, password);
-                    req.setAttribute("mailStatus", "Đã gửi mail cập nhật cho " + email);
+                try {                    
+                    User oldUser = dao.getUserById(id);
+                    boolean passwordChanged = !oldUser.getPassword().equals(HashPassword.hashMD5(password));
+                    boolean roleChanged = oldUser.getRole() != role;
+                   
+                    if (passwordChanged) {
+                        MailService.sendPasswordChangedEmail(email, username,password);
+                        req.setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi mật khẩu cho " + email);
+                    } else if (roleChanged) {
+                        MailService.sendRoleChangedEmail(email, username, role);
+                        req.setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi vai trò cho " + email);
+                    } else {                        
+                        req.setAttribute("mailStatus", "Không có thay đổi cho " + username);
+                    }
+
+                    dao.updateUser(user);
+
                 } catch (Exception e) {
                     req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
                 }
             }
-            dao.updateUser(user);
+
         }
 
         res.sendRedirect("UserServlet?action=list");
