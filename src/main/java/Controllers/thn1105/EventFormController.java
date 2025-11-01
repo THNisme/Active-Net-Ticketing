@@ -19,6 +19,10 @@ import java.util.List;
 
 import Models.thn1105.Event; // We will create this model class next
 import DAOs.thn1105.EventDAO; // We will create this DAO next
+import DAOs.thn1105.TicketTypeDAO;
+import DAOs.thn1105.ZoneDAO;
+import Models.thn1105.TicketType;
+import Models.thn1105.Zone;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
@@ -86,7 +90,9 @@ public class EventFormController extends HttpServlet {
             throws ServletException, IOException {
         EventCategoryDAO eventCateDAO = new EventCategoryDAO();
         PlaceDAO placeDAO = new PlaceDAO();
+        ZoneDAO zDao = new ZoneDAO();
         EventDAO eDao = new EventDAO();
+        TicketTypeDAO ticketTypeDao = new TicketTypeDAO();
 
         String action = request.getParameter("action");
 
@@ -99,17 +105,32 @@ public class EventFormController extends HttpServlet {
 
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
 
-        } else if (action.equalsIgnoreCase("updateNew")) {
+        } else if (action.equalsIgnoreCase("config-ticket")) {
             HttpSession session = request.getSession();
             int currentEID = (int) session.getAttribute("currentEventID");
+            System.out.println("currentEID: " + currentEID);
             Event e = eDao.getById(currentEID);
-            List<EventCategory> eventCateList = eventCateDAO.getAll();
             List<Place> placeList = placeDAO.getAll();
+            List<TicketType> ticketTypeList = ticketTypeDao.getAllByEventID(currentEID);
+            List<Zone> zoneList = zDao.getAllZoneOfPlace(e.getPlaceID());
 
             request.setAttribute("event", e);
-            request.setAttribute("categories", eventCateList);
-            request.setAttribute("places", placeList);
-            request.getRequestDispatcher("/view-thn1105/event-form-update.jsp").forward(request, response);
+            request.setAttribute("ticketTypes", ticketTypeList);
+            request.setAttribute("zones", zoneList);
+            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+        } else if (action.equalsIgnoreCase("update")) {
+            try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet EventFormController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Đã vào Update Event" + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
         }
 
     }
@@ -125,122 +146,120 @@ public class EventFormController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        EventDAO edao = new EventDAO();
+        String action = request.getParameter("action");
+
+        if (action == null) {
+            action = "create";
+        }
+
+        if (action.equalsIgnoreCase("create")) {
+            handleCreateEvent(request, response, edao);
+
+        } else if (action.equalsIgnoreCase("update")) {
+            // TODO: thêm handleUpdateEvent() sau
+//            handleUpdateEvent(request, response, edao);
+
+        } else if (action.equalsIgnoreCase("delete")) {
+            // TODO: thêm handleDeleteEvent() sau
+//            handleDeleteEvent(request, response, edao);
+        }
+    }
+
+    private void handleCreateEvent(HttpServletRequest request, HttpServletResponse response, EventDAO edao)
+            throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         Map<String, String> errors = new HashMap<>();
         String dbImagePath = null;
 
         try {
-            // ================== STEP 1: HANDLE FILE UPLOAD ==================
-            Part filePart = request.getPart("eventImage"); // 'eventImage' is the name="" of your file input
+            // ===== STEP 1: FILE UPLOAD =====
+            Part filePart = request.getPart("eventImage");
             String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            System.out.println("--- STEP 1: FILE UPLOAD DEBUG ---");
-            System.out.println("Original Filename: " + originalFileName);
-            // Check if a file was actually uploaded
             if (originalFileName != null && !originalFileName.isEmpty()) {
-                // Generate a timestamp (e.g., 20251022013005)
                 String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
-
-                // Create a unique filename to avoid collisions
                 String uniqueFileName = timeStamp + "_" + originalFileName;
-
-                // Get the absolute path of the web application
                 String applicationPath = getServletContext().getRealPath("");
                 String uploadFilePath = applicationPath + File.separator + UPLOAD_DIR;
 
-                // Create the upload directory if it does not exist
                 File uploadDir = new File(uploadFilePath);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();
                 }
 
-                // Save the file to the server
                 filePart.write(uploadFilePath + File.separator + uniqueFileName);
-
-                // Prepare the relative path to be stored in the database
                 dbImagePath = UPLOAD_DIR + "/" + uniqueFileName;
-
-                System.out.println("Unique Filename: " + uniqueFileName);
-                System.out.println("Full Server Path to Save: " + uploadFilePath + File.separator + uniqueFileName);
-                System.out.println("Path for DB: " + dbImagePath);
-                System.out.println("------------------------------------");
             } else {
-                // If the file is mandatory, add an error
                 errors.put("eventImage", "Event image is required.");
             }
 
-            // ================== STEP 2: GET AND VALIDATE OTHER FORM DATA ==================
+            // ===== STEP 2: FORM DATA =====
             String eventName = request.getParameter("eventName");
             int categoryId = Integer.parseInt(request.getParameter("eventCategory"));
             int placeId = Integer.parseInt(request.getParameter("place"));
             String startDateStr = request.getParameter("startDate");
             String endDateStr = request.getParameter("endDate");
-            String eventDescriptionHTML = request.getParameter("description"); // 'description' is the name of your textarea
+            String eventDescriptionHTML = request.getParameter("description");
 
-            // --- Basic Validation ---
             if (eventName == null || eventName.trim().isEmpty()) {
                 errors.put("eventName", "Event name cannot be empty.");
             }
             if (startDateStr == null || startDateStr.trim().isEmpty()) {
                 errors.put("startDateStr", "Date start cannot be empty.");
             }
-
             if (endDateStr == null || endDateStr.trim().isEmpty()) {
                 errors.put("endDateStr", "Date end cannot be empty.");
             }
-
             if (eventDescriptionHTML == null || eventDescriptionHTML.trim().isEmpty()) {
                 errors.put("eventDescriptionHTML", "Description cannot be empty.");
             }
 
-            // ================== STEP 3: IF ERRORS, FORWARD BACK TO FORM ==================
             if (!errors.isEmpty()) {
-                // Repopulate form and show errors (implementation omitted for brevity)
                 request.setAttribute("errors", errors);
                 request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
                 return;
             }
 
-            // ================== STEP 4: PREPARE DATA FOR DATABASE ==================
+            // ===== STEP 3: CONVERT DATE & SAVE =====
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             LocalDateTime localStartDateTime = LocalDateTime.parse(startDateStr, formatter);
             LocalDateTime localEndDateTime = LocalDateTime.parse(endDateStr, formatter);
-
-            Timestamp sqlStartDateTimestamp = Timestamp.valueOf(localStartDateTime);
-            Timestamp sqlEndDateTimestamp = Timestamp.valueOf(localEndDateTime);
 
             Event newEvent = new Event();
             newEvent.setEventName(eventName);
             newEvent.setCategoryID(categoryId);
             newEvent.setPlaceID(placeId);
             newEvent.setImageURL(dbImagePath);
-            newEvent.setStartDate(sqlStartDateTimestamp);
-            newEvent.setEndDate(sqlEndDateTimestamp);
+            newEvent.setStartDate(Timestamp.valueOf(localStartDateTime));
+            newEvent.setEndDate(Timestamp.valueOf(localEndDateTime));
             newEvent.setDescription(eventDescriptionHTML);
 
-            EventDAO edao = new EventDAO();
             boolean success = edao.create(newEvent);
 
-            System.out.println("Success: " + success);
-
-            // ================== STEP 6: REDIRECT BASED ON RESULT (PRG Pattern) ==================
             if (success) {
-                // Redirect to a success page or the event list to prevent form resubmission
                 HttpSession session = request.getSession();
                 session.setAttribute("currentEventID", newEvent.getEventID());
-
-                response.sendRedirect(request.getContextPath() + "/event-form?action=update");
+                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
             } else {
-                // If saving fails, forward back to the form with an error message
                 request.setAttribute("globalError", "Failed to save the event to the database.");
                 request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Log the exception for debugging
+            e.printStackTrace();
             request.setAttribute("globalError", "An unexpected error occurred.");
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
         }
     }
 
+//    private void handleUpdateEvent(HttpServletRequest request, HttpServletResponse response, EventDAO edao)
+//            throws ServletException, IOException {
+//        // TODO: xử lý update
+//    }
+//
+//    private void handleDeleteEvent(HttpServletRequest request, HttpServletResponse response, EventDAO edao)
+//            throws ServletException, IOException {
+//        // TODO: xử lý delete
+//    }
     /**
      * Returns a short description of the servlet.
      *

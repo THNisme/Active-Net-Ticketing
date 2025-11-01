@@ -143,7 +143,7 @@
                             </c:if>
                         </div>
 
-                        <button type="submit" class="btn btn-primary next-btn" data-next="step2-tab">Tiếp theo</button>
+                        <button type="submit" class="btn btn-primary next-btn">Tạo sự kiện</button>
                     </form>
                 </div>
 

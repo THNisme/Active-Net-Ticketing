@@ -12,7 +12,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Create-Edit Event Form</title>
+        <title>Cấu hình vé</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
@@ -34,13 +34,13 @@
             <!-- Nav tabs -->
             <ul class="nav nav-underline" id="stepTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a  class="nav-link active">
+                    <a href="event-form?action=update&eid=${event.eventID}" class="nav-link">
                         <span class="step-number">1</span> Thông tin sự kiện
                     </a>
                 </li>
                 <span class="mx-3"><i class="bi bi-chevron-right"></i></span>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button">
+                    <button class="nav-link active" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button">
                         <span class="step-number">2</span> Cấu hình vé
                     </button>
                 </li>
@@ -48,112 +48,6 @@
 
             <!-- Tab contents -->
             <div class="tab-content mt-3">
-                <!-- Step 1 -->
-                <div class="tab-pane fade show active" id="step1" role="tabpanel">
-                    <!-- FORM CREATE EVENT -->
-                    <form id="eventForm" action="${pageContext.request.contextPath}/event-form?action=update" method="POST" enctype="multipart/form-data">
-                        <div class="row mb-3">
-                            <div class="col">
-                                <div class="drag-wrap">
-                                    <label class="dropzone" id="dropzone">
-                                        <input id="fileInput" type="file" accept="image/* " <c:if test="${empty event.imageURL}">required</c:if> name="eventImage">
-                                            <div class="dz-content" id="dzContent">
-                                                <i class="bi bi-upload"></i>
-                                                <div>
-                                                    <strong>Nhấp nút để chọn ảnh</strong>
-                                                    <p class="dz-hint">Kích thước yêu cầu: <b>1280 × 720</b></p>
-                                                </div>
-                                                <div class="preview" id="preview" style="<c:if test='${not empty event.imageURL}'>display:block;</c:if><c:if test='${empty event.imageURL}'>display:none;</c:if>">
-                                                <img id="previewImg" src="${pageContext.request.contextPath}/${event.imageURL}" alt="preview" />
-                                            </div>
-                                        </div>
-                                        <div class="meta" id="meta" style="display:none;">1280 × 720</div>
-                                    </label>
-
-                                    <div class="controls">
-                                        <button class="btn" id="chooseBtn" style="display:none;">Chọn ảnh</button>
-                                        <button class="btn ghost" id="clearBtn" style="display:none;">Xóa</button>
-                                        <div class="small" id="status" style="margin: auto; color: red; font-size: 0.9em;">
-                                            <c:choose>
-                                                <c:when test="${not empty event.imageURL}">Đã có ảnh</c:when>
-                                                <c:otherwise>Chưa có ảnh</c:otherwise>
-                                            </c:choose>
-                                        </div>
-                                    </div>
-
-                                    <div id="errorMsg" class="error" style="display:none; text-align: center;"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label for="eventName" class="form-label"><strong style="color: red;">* </strong>Tên sự kiện</label>
-                                    <input type="text" class="form-control" id="eventName" name="eventName" value="${event.eventName}" required>
-                                </div>
-
-                                <div class="mb-3">
-
-                                    <label for="eventCategory" class="form-label"><strong style="color: red;">* </strong>Loại sự
-                                        kiện</label>
-                                    <select class="form-select" aria-label="Default select example" id="eventCategory" required name="eventCategory">
-                                        <c:forEach var="category" items="${categories}">
-                                            <option value="${category.categoryID} <c:if test="${category.categoryID == event.categoryID}">selected</c:if>">
-                                                <c:out value="${category.categoryName}"/>
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="eventPlace" class="form-label"><strong style="color: red;">* </strong>Nơi tổ chức</label>
-                                    <a href="#" class="float-end">Thêm nơi tổ chức mới.</a>
-                                    <select class="form-select" aria-label="Default select example" id="eventPlace" required name="place">
-                                        <c:forEach var="place" items="${places}">
-                                            <option value="${place.placeID} <c:if test="${place.placeID == event.placeID}">selected</c:if>">
-                                                <c:out value="${place.placeName}" />
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-
-                                <div class="mb-3">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="eventDateStart" class="form-label"><strong style="color: red;">* </strong>Ngày diễn
-                                                ra</label>
-                                            <input type="datetime-local" class="form-control" id="eventDateStart" name="startDate"
-                                                   required value="${event.startDate}">
-                                        </div>
-                                        <div class="col">
-                                            <label for="eventDateEnd" class="form-label"><strong style="color: red;">* </strong>Ngày kết
-                                                thúc</label>
-                                            <input type="datetime-local" class="form-control" id="eventDateEnd" name="endDate" value="${event.endDate}" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="eventDescription" class="form-label"><strong style="color: red;">* </strong>Thông tin sự
-                                kiện</label>
-                            <textarea id="eventDescription" required name="description" >
-                                ${event.description}
-                            </textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <c:if test="{not empty error"> 
-                                <p class="text-danger"><c:out value="${error}" /></p>
-                            </c:if>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary next-btn">Cập nhật</button>
-                    </form>
-                </div>
-
-
-
                 <!-- Step 2 -->
                 <div class="tab-pane fade show active" id="step2" role="tabpanel">
                     <div class="mb-3">
@@ -179,10 +73,9 @@
                             Tạo loại vé mới
                         </button>
                     </div>
-                    <button type="button" class="btn prev-btn" data-prev="step1-tab">Quay lại</button>
-                    <button type="submit" class="btn">Hoàn tất</button>
+                    <a href="event-form?action=update&eid=${event.eventID}" type="button" class="btn prev-btn">Quay lại</a>
+                    <a href="#" type="submit" class="btn">Hoàn tất</a>
                 </div>
-
             </div>
         </div>
 
@@ -217,11 +110,11 @@
             </div>
         </div>
 
-        <!-- Modal Create/Edit Ticket Type -->
+        <!-- Modal Create Ticket Type -->
         <div class="modal fade" id="modalCreateTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="modalCreateTicketTypeLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
-                <form action="">
+                <form action="event-form?action=config-ticket" method="POST">
                     <div class="modal-content modal-theme">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Tạo loại vé</h1>
@@ -230,8 +123,8 @@
 
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="eventName" class="form-label"><strong style="color: red;">* </strong>Tên loại vé</label>
-                                <input type="text" class="form-control" id="eventName" name="eventName" required>
+                                <label for="ticketTypeName" class="form-label"><strong style="color: red;">* </strong>Tên loại vé</label>
+                                <input type="text" class="form-control" id="ticketTypeName" name="ticketTypeName" required>
                             </div>
 
                             <div class="mb-3">
@@ -255,20 +148,29 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <label for="ticketTypeTotal" class="form-label"><strong style="color: red;">* </strong>Tổng số
+                                        <label for="ticketTotal" class="form-label"><strong style="color: red;">* </strong>Tổng số
                                             vé</label>
-                                        <input type="number" class="form-control" id="ticketTypeTotal" name="ticketTypeTotal" min="1"
+                                        <input type="number" class="form-control" id="ticketTotal" name="ticketTotal" min="1"
                                                required>
                                     </div>
                                     <div class="col">
-                                        <label for="eventPlace" class="form-label"><strong style="color: red;">* </strong>Chọn zone vé</label>
+                                        <label for="ticketTypeZone" class="form-label"><strong style="color: red;">* </strong>Chọn zone vé</label>
                                         <a href="#" class="float-end">Tạo zone</a>
 
-                                        <select class="form-select" aria-label="Default select example" id="eventPlace" required>
-                                            <option selected>Open this select menu</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                        
+                                        <c:forEach var="place" items="${placeList}">
+                                            <option value="${place.placeID} " 
+                                                <c:out value="${place.placeName}"/>
+                                            </option>
+                                        </c:forEach>
+                                        
+                                        <select class="form-select" aria-label="Default select example" id="ticketTypeZone" required>
+                                            <c:forEach var="z" items="${zones}">
+                                                <option value="${z.zoneID} <c:if test="${z.statusID == 2}">disabled</c:if>">
+                                                <c:out value="${z.zoneName}"/>
+                                            </option>
+                                            </c:forEach>
+                                            <option selected>Chọn zone</option>
                                         </select>
                                     </div>
                                 </div>
