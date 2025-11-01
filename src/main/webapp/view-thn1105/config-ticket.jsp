@@ -157,110 +157,109 @@
                                         <label for="ticketTypeZone" class="form-label"><strong style="color: red;">* </strong>Chọn zone vé</label>
                                         <a href="#" class="float-end">Tạo zone</a>
 
-                                        
+
                                         <c:forEach var="place" items="${placeList}">
                                             <option value="${place.placeID} " 
-                                                <c:out value="${place.placeName}"/>
-                                            </option>
-                                        </c:forEach>
-                                        
-                                        <select class="form-select" aria-label="Default select example" id="ticketTypeZone" required>
-                                            <c:forEach var="z" items="${zones}">
-                                                <option value="${z.zoneID} <c:if test="${z.statusID == 2}">disabled</c:if>">
+                                                    <c:out value="${place.placeName}"/>
+                                        </option>
+                                    </c:forEach>
+
+                                    <select class="form-select" aria-label="Default select example" id="ticketTypeZone" required>
+                                        <c:forEach var="z" items="${zones}">
+                                            <option value="${z.zoneID} <c:if test="${z.statusID == 2}">disabled</c:if>">
                                                 <c:out value="${z.zoneName}"/>
                                             </option>
-                                            </c:forEach>
-                                            <option selected>Chọn zone</option>
-                                        </select>
-                                    </div>
+                                        </c:forEach>
+                                    </select>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="mb-3">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="checkIdentityTicket">
-                                            <label class="form-check-label" for="checkIdentityTicket" data-bs-toggle="tooltip"
-                                                   data-bs-placement="right" data-bs-title="Chọn để tạo loại vé có vị trí chỗ ngồi cụ thể.">
-                                                Khởi tạo vé có định danh <span style="opacity: 0.8;">(tùy chọn)</span>
-                                            </label>
-                                        </div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="checkIdentityTicket">
+                                        <label class="form-check-label" for="checkIdentityTicket" data-bs-toggle="tooltip"
+                                               data-bs-placement="right" data-bs-title="Chọn để tạo loại vé có vị trí chỗ ngồi cụ thể.">
+                                            Khởi tạo vé có định danh <span style="opacity: 0.8;">(tùy chọn)</span>
+                                        </label>
                                     </div>
-                                    <div class="col">
-                                        <a class="float-end" data-bs-toggle="collapse" href="#collapseExample" role="button"
-                                           aria-expanded="false" aria-controls="collapseExample">
-                                            Xem sơ đồ nơi tổ chức</a>
-                                    </div>
-                                    <div class="collapse mt-3" id="collapseExample">
-                                        <div class="card card-body">
-                                            <div id="modalZoneMapImageWrapper">
-                                                <img src="${pageContext.request.contextPath}/img/event-form-dashboard/sample-zonemap.jpg" alt="" id="modalZoneMapImage"
-                                                     width="600px">
-                                                <div class="zoom-control-btn-group">
-                                                    <button type="button" class="btn" onclick="zoomIn()">Zoom In</button>
-                                                    <button type="button" class="btn" onclick="zoomOut()">Zoom Out</button>
-                                                </div>
+                                </div>
+                                <div class="col">
+                                    <a class="float-end" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                                       aria-expanded="false" aria-controls="collapseExample">
+                                        Xem sơ đồ nơi tổ chức</a>
+                                </div>
+                                <div class="collapse mt-3" id="collapseExample">
+                                    <div class="card card-body">
+                                        <div id="modalZoneMapImageWrapper">
+                                            <img src="${place.seatMapURL}" alt="" id="modalZoneMapImage"
+                                                 width="600px">
+                                            <div class="zoom-control-btn-group">
+                                                <button type="button" class="btn" onclick="zoomIn()">Zoom In</button>
+                                                <button type="button" class="btn" onclick="zoomOut()">Zoom Out</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="mb-3 seat-init disable" id="init-seat-container">
-                                <div class="row controls-init-seat">
-
-                                    <div class="col">
-                                        <label for="rowsSeatInput" class="form-label"><strong style="color: red;">* </strong> Dãy ghế:</label>
-                                        <input type="text" class="form-control" id="rowsSeatInput" placeholder="Ví dụ: A-D hoặc ABCD"
-                                               name="rowsSeatInput" required>
-                                    </div>
-
-                                    <!-- <div class="col">
-                                      <label for="rowsSeatInput" class="form-label"><strong style="color: red;">* </strong> Số ghế mỗi
-                                        dãy:</label>
-                                      <input type="number" class="form-control" id="colsSeatInput" placeholder="Ví dụ: 10"
-                                        name="colsSeatInput" min="1" required disabled>
-                                    </div> -->
-
-                                    <div class="col d-flex flex-column justify-content-end">
-                                        <div class="d-flex">
-                                            <button type="button" class="btn mx-2" onclick="generateSeatInputs()" style="width: fit-content;">
-                                                Tạo dãy ghế
-                                            </button>
-                                            <button type="button" class="btn mx-2" onclick="generateSeatGrid()" data-bs-toggle="tooltip"
-                                                    data-bs-placement="right"
-                                                    data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực"
-                                                    style="width: fit-content;">
-                                                Tạo mô hình ghế
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 mt-4">
-                                        <div id="seatInputs"></div>
-                                    </div>
-                                </div>
-
-
-                                <div id="seatModelGridContainer"></div>
-                            </div>
                         </div>
 
-                        <div class="modal-footer ticketType-modal-footer">
-                            <div class="row">
+                        <div class="mb-3 seat-init disable" id="init-seat-container">
+                            <div class="row controls-init-seat">
+
                                 <div class="col">
-                                    <p id="message" style="color: #f85c51; font-weight: bold;"></p>
+                                    <label for="rowsSeatInput" class="form-label"><strong style="color: red;">* </strong> Dãy ghế:</label>
+                                    <input type="text" class="form-control" id="rowsSeatInput" placeholder="Ví dụ: A-D hoặc ABCD"
+                                           name="rowsSeatInput" required>
                                 </div>
-                                <div class="col">
-                                    <button type="submit" class="btn btn-primary float-end">Lưu</button>
+
+                                <!-- <div class="col">
+                                  <label for="rowsSeatInput" class="form-label"><strong style="color: red;">* </strong> Số ghế mỗi
+                                    dãy:</label>
+                                  <input type="number" class="form-control" id="colsSeatInput" placeholder="Ví dụ: 10"
+                                    name="colsSeatInput" min="1" required disabled>
+                                </div> -->
+
+                                <div class="col d-flex flex-column justify-content-end">
+                                    <div class="d-flex">
+                                        <button type="button" class="btn mx-2" onclick="generateSeatInputs()" style="width: fit-content;">
+                                            Tạo dãy ghế
+                                        </button>
+                                        <button type="button" class="btn mx-2" onclick="generateSeatGrid()" data-bs-toggle="tooltip"
+                                                data-bs-placement="right"
+                                                data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực"
+                                                style="width: fit-content;">
+                                            Tạo mô hình ghế
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 mt-4">
+                                    <div id="seatInputs"></div>
                                 </div>
                             </div>
+
+
+                            <div id="seatModelGridContainer"></div>
                         </div>
-                </form>
-            </div>
+                    </div>
+
+                    <div class="modal-footer ticketType-modal-footer">
+                        <div class="row">
+                            <div class="col">
+                                <p id="message" style="color: #f85c51; font-weight: bold;"></p>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+            </form>
         </div>
     </div>
+</div>
 
 
 
@@ -270,27 +269,27 @@
 
 
 
-    <!-- Elfsight Website Translator | Untitled Website Translator -->
-    <!-- <script src="https://elfsightcdn.com/platform.js" async></script>
-    <div class="elfsight-app-fbb67af7-dc8c-4557-90c3-fc51f6edee01" data-elfsight-app-lazy></div> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-image-input.js"></script>
-    <c:if test="${empty event.imageURL}">
-        <script>
-                                            clearAll();
-        </script>
-    </c:if>
-
-    <script src="${pageContext.request.contextPath}/js/event-form-dashboard/step.js"></script>
-    <script type='text/javascript'
-    src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
-    <script src="${pageContext.request.contextPath}/js/event-form-dashboard/custom-wysiwyg.js"></script>
-    <script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-seat-model.js"></script>
-    <script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-zoom-image.js"></script>
-    <script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-input-tickettype-modal.js"></script>
-
-    <!--DATA FILLING-->
+<!-- Elfsight Website Translator | Untitled Website Translator -->
+<!-- <script src="https://elfsightcdn.com/platform.js" async></script>
+<div class="elfsight-app-fbb67af7-dc8c-4557-90c3-fc51f6edee01" data-elfsight-app-lazy></div> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-image-input.js"></script>
+<c:if test="${empty event.imageURL}">
     <script>
+                                            clearAll();
+    </script>
+</c:if>
+
+<script src="${pageContext.request.contextPath}/js/event-form-dashboard/step.js"></script>
+<script type='text/javascript'
+src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
+<script src="${pageContext.request.contextPath}/js/event-form-dashboard/custom-wysiwyg.js"></script>
+<script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-seat-model.js"></script>
+<script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-zoom-image.js"></script>
+<script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-input-tickettype-modal.js"></script>
+
+<!--DATA FILLING-->
+<script>
                                             function fnEditTicketType(id, eventID, zoneID, typeName, price, status) {
 //                document.getElementById("idDelete").value = id;
 //                document.getElementById("accountDelete").value = account;
@@ -299,7 +298,7 @@
                                             }
 
 
-    </script>
+</script>
 </body>
 
 </html>

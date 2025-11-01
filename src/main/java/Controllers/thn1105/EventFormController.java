@@ -110,11 +110,12 @@ public class EventFormController extends HttpServlet {
             int currentEID = (int) session.getAttribute("currentEventID");
             System.out.println("currentEID: " + currentEID);
             Event e = eDao.getById(currentEID);
-            List<Place> placeList = placeDAO.getAll();
+            Place p = placeDAO.getById(e.getPlaceID());
             List<TicketType> ticketTypeList = ticketTypeDao.getAllByEventID(currentEID);
             List<Zone> zoneList = zDao.getAllZoneOfPlace(e.getPlaceID());
 
             request.setAttribute("event", e);
+            request.setAttribute("place", p);
             request.setAttribute("ticketTypes", ticketTypeList);
             request.setAttribute("zones", zoneList);
             request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
