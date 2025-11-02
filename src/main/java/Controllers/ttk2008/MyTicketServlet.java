@@ -19,14 +19,8 @@ public class MyTicketServlet extends HttpServlet {
 
 
        
-         HttpSession session = request.getSession(false); 
-
+        HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendRedirect("login");
-            return;
-        }
-
         int userId = user.getUserID(); 
 
 
