@@ -70,87 +70,33 @@ public class TicketTypeDAO {
 
     // CREATE A NEW TICKET TYPE
     public boolean create(TicketType t) {
-        String insertSql = "INSERT INTO TicketTypes (EventID, ZoneID, TypeName, Price) VALUES (?, ?, ?, ?)";
-        String updateZoneSql = "UPDATE Zones SET StatusID = 2 WHERE ZoneID = ?";
-
-        try {
-            conn.setAutoCommit(false); // bắt đầu transaction
-
-            try (PreparedStatement psInsert = conn.prepareStatement(insertSql)) {
-                psInsert.setInt(1, t.getEventID());
-                psInsert.setInt(2, t.getZoneID());
-                psInsert.setString(3, t.getTypeName());
-                psInsert.setBigDecimal(4, t.getPrice());
-                psInsert.executeUpdate();
-            }
-
-            try (PreparedStatement psUpdate = conn.prepareStatement(updateZoneSql)) {
-                psUpdate.setInt(1, t.getZoneID());
-                psUpdate.executeUpdate();
-            }
-
-            conn.commit(); // commit cả hai câu lệnh
-            return true;
+        String sql = "INSERT INTO TicketTypes (EventID, ZoneID, TypeName, Price) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, t.getEventID());
+            ps.setInt(2, t.getZoneID());
+            ps.setString(3, t.getTypeName());
+            ps.setBigDecimal(4, t.getPrice());
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            try {
-                conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
             e.printStackTrace();
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return false;
     }
 
     // UPDATE A TICKET TYPE
     public boolean update(TicketType t) {
-        String updateTicketSql = "UPDATE TicketTypes SET EventID=?, ZoneID=?, TypeName=?, Price=?, StatusID=? WHERE TicketTypeID=?";
-        String updateZoneSql = "UPDATE Zones SET StatusID = 2 WHERE ZoneID = ?";
-
-        try {
-            conn.setAutoCommit(false); // bắt đầu transaction
-
-            // ===== Cập nhật TicketType =====
-            try (PreparedStatement ps = conn.prepareStatement(updateTicketSql)) {
-                ps.setInt(1, t.getEventID());
-                ps.setInt(2, t.getZoneID());
-                ps.setString(3, t.getTypeName());
-                ps.setBigDecimal(4, t.getPrice());
-                ps.setInt(5, t.getStatusID());
-                ps.setInt(6, t.getTicketTypeID());
-                ps.executeUpdate();
-            }
-
-            // ===== Sau khi update ticket, cập nhật Zone.statusID =====
-            try (PreparedStatement ps2 = conn.prepareStatement(updateZoneSql)) {
-                ps2.setInt(1, t.getZoneID());
-                ps2.executeUpdate();
-            }
-
-            conn.commit();
-            return true;
-
+        String sql = "UPDATE TicketTypes SET EventID=?, ZoneID=?, TypeName=?, Price=?, StatusID=? WHERE TicketTypeID=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, t.getEventID());
+            ps.setInt(2, t.getZoneID());
+            ps.setString(3, t.getTypeName());
+            ps.setBigDecimal(4, t.getPrice());
+            ps.setInt(5, t.getStatusID());
+            ps.setInt(6, t.getTicketTypeID());
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            try {
-                conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
             e.printStackTrace();
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
         return false;
     }
 

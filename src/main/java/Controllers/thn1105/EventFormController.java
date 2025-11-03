@@ -27,6 +27,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -106,8 +107,11 @@ public class EventFormController extends HttpServlet {
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
 
         } else if (action.equalsIgnoreCase("config-ticket")) {
-            HttpSession session = request.getSession();
-            int currentEID = (int) session.getAttribute("currentEventID");
+//            HttpSession session = request.getSession();
+//            int currentEID = (int) session.getAttribute("currentEventID");
+
+//            TEST EID
+            int currentEID = 1030;
             System.out.println("currentEID: " + currentEID);
             Event e = eDao.getById(currentEID);
             Place p = placeDAO.getById(e.getPlaceID());
@@ -121,17 +125,17 @@ public class EventFormController extends HttpServlet {
             request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
         } else if (action.equalsIgnoreCase("update")) {
             try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EventFormController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Đã vào Update Event" + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Servlet EventFormController</title>");
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Đã vào Update Event" + request.getContextPath() + "</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            }
         }
 
     }
@@ -148,6 +152,7 @@ public class EventFormController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         EventDAO edao = new EventDAO();
+        TicketTypeDAO ticketTypeDao = new TicketTypeDAO();
         String action = request.getParameter("action");
 
         if (action == null) {
@@ -164,6 +169,10 @@ public class EventFormController extends HttpServlet {
         } else if (action.equalsIgnoreCase("delete")) {
             // TODO: thêm handleDeleteEvent() sau
 //            handleDeleteEvent(request, response, edao);
+        } else if (action.equalsIgnoreCase("config-ticket")) {
+            handleConfigTicketType(request, response, ticketTypeDao);
+        } else if (action.equalsIgnoreCase("config-ticket-update")) {
+            handleUpdateTicketType(request, response, ticketTypeDao);
         }
     }
 
@@ -261,6 +270,95 @@ public class EventFormController extends HttpServlet {
 //            throws ServletException, IOException {
 //        // TODO: xử lý delete
 //    }
+    private void handleConfigTicketType(HttpServletRequest request, HttpServletResponse response, TicketTypeDAO tickTypeDao)
+            throws ServletException, IOException {
+        try {
+            String eidStr = request.getParameter("eventID");
+            String ticketTypeName = request.getParameter("ticketTypeName");
+            String ticketTypePriceStr = request.getParameter("ticketTypePrice");
+            String zoneIDStr = request.getParameter("zoneID");
+
+            int eID = Integer.parseInt(eidStr.trim());
+            int zID = Integer.parseInt(zoneIDStr.trim());
+
+            BigDecimal tickPrice = null;
+            if (ticketTypePriceStr != null && !ticketTypePriceStr.isEmpty()) {
+                tickPrice = new BigDecimal(ticketTypePriceStr);
+            }
+
+            TicketType newTicketType = new TicketType();
+            newTicketType.setEventID(eID);
+            newTicketType.setTypeName(ticketTypeName);
+            newTicketType.setPrice(tickPrice);
+            newTicketType.setZoneID(zID);
+
+            boolean success = tickTypeDao.create(newTicketType);
+            System.out.println("Tạo thành công: " + success);
+
+            if (success) {
+                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
+            } else {
+                request.setAttribute("globalError", "Failed to save the ticket type to the database.");
+                request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("globalError", "An unexpected error occurred.");
+            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+        }
+    }
+
+    private void handleUpdateTicketType(HttpServletRequest request, HttpServletResponse response, TicketTypeDAO tickTypeDao)
+            throws ServletException, IOException {
+        try {
+            String eidStr = request.getParameter("eventID-U");
+            String ticketTypeIdStr = request.getParameter("ticketTypeID-U");
+            String ticketTypeName = request.getParameter("ticketTypeName-U");
+            String ticketTypePriceStr = request.getParameter("ticketTypePrice-U");
+            String zoneIDStr = request.getParameter("zoneID-U");
+            String statusStr = request.getParameter("statusID-U");
+
+            int eID = Integer.parseInt(eidStr.trim());
+            int zID = Integer.parseInt(zoneIDStr.trim());
+            int tpID = Integer.parseInt(ticketTypeIdStr.trim());
+            int statusID = Integer.parseInt(statusStr.trim());
+
+            BigDecimal tickPrice = null;
+            if (ticketTypePriceStr != null && !ticketTypePriceStr.isEmpty()) {
+                tickPrice = new BigDecimal(ticketTypePriceStr);
+            }
+
+            System.out.println("TTID: " + tpID);
+            System.out.println("EID: " + eID);
+            System.out.println("TName: " + ticketTypeName);
+            System.out.println("TPrice: " + tickPrice);
+            System.out.println("ZID: " + zID);
+            System.out.println("SID: " + statusID);
+
+            TicketType updateTicketType = new TicketType();
+            updateTicketType.setTicketTypeID(tpID);
+            updateTicketType.setEventID(eID);
+            updateTicketType.setTypeName(ticketTypeName);
+            updateTicketType.setPrice(tickPrice);
+            updateTicketType.setZoneID(zID);
+            updateTicketType.setStatusID(statusID);
+
+            boolean success = tickTypeDao.update(updateTicketType);
+            System.out.println("Cập nhật thành công: " + success);
+
+            if (success) {
+                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
+            } else {
+                request.setAttribute("globalError", "Failed to save the ticket type to the database.");
+                request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("globalError", "An unexpected error occurred.");
+            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+        }
+    }
+
     /**
      * Returns a short description of the servlet.
      *
