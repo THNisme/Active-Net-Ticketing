@@ -46,6 +46,31 @@ public class TicketDAO {
         return list;
     }
 
+    // GET ALL BY TICKET TYPE ID
+    public List<Ticket> getAllByTicketTypeID(int ticketTypeID) {
+        List<Ticket> list = new ArrayList<>();
+        String sql = "SELECT * FROM Tickets WHERE TicketTypeID = ?";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, ticketTypeID); // ✅ Set giá trị cho tham số
+            try (ResultSet rs = st.executeQuery()) { // ✅ Thực thi truy vấn sau khi set parameter
+                while (rs.next()) {
+                    Ticket t = new Ticket(
+                            rs.getInt("TicketID"),
+                            rs.getInt("TicketTypeID"),
+                            rs.getObject("SeatID") != null ? rs.getInt("SeatID") : null,
+                            rs.getString("SerialNumber"),
+                            rs.getInt("StatusID"),
+                            rs.getTimestamp("IssuedAt")
+                    );
+                    list.add(t);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
     // GET BY ID
     public Ticket getById(int id) {
         String sql = "SELECT * FROM Tickets WHERE TicketID = ?";
@@ -121,6 +146,20 @@ public class TicketDAO {
         return false;
     }
 
+    // CHECK IF TICKETS EXIST BY TICKET TYPE ID
+    public boolean existsByTicketTypeID(int ticketTypeID) {
+        String sql = "SELECT 1 FROM Tickets WHERE TicketTypeID = ? LIMIT 1";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, ticketTypeID);
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next(); // Nếu có kết quả => true
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
     public TicketDAO() {
     }
 
@@ -140,9 +179,8 @@ public class TicketDAO {
 //        updateTicket.setStatusID(1);
 //
 //        dao.update(updateTicket);
-        dao.softDelete(10);
-
-        List<Ticket> list = dao.getAll();
+//        dao.softDelete(10);
+        List<Ticket> list = dao.getAllByTicketTypeID(1);
 
         for (Ticket t : list) {
             int typeID = t.getTicketTypeID();

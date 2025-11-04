@@ -7,13 +7,19 @@ package Controllers.thn1105;
 import DAOs.thn1105.EventCategoryDAO;
 import DAOs.thn1105.EventDAO;
 import DAOs.thn1105.PlaceDAO;
+import DAOs.thn1105.SeatDAO;
+import DAOs.thn1105.StatusDAO;
+import DAOs.thn1105.TicketDAO;
 import DAOs.thn1105.TicketTypeDAO;
 import DAOs.thn1105.ZoneDAO;
 import Models.thn1105.Event;
 import Models.thn1105.EventCategory;
 import Models.thn1105.Place;
+import Models.thn1105.Seat;
+import Models.thn1105.Ticket;
 import Models.thn1105.TicketType;
 import Models.thn1105.Zone;
+import Utils.TicketUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -23,6 +29,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -109,6 +116,8 @@ public class ConfigTicketServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         TicketTypeDAO ticketTypeDao = new TicketTypeDAO();
+        TicketDAO tDao = new TicketDAO();
+        SeatDAO seatDao = new SeatDAO();
         String action = request.getParameter("action");
 
         if (action == null) {
@@ -117,12 +126,12 @@ public class ConfigTicketServlet extends HttpServlet {
 
         if (action.equalsIgnoreCase("create")) {
             handleCreateTicketType(request, response, ticketTypeDao);
-
         } else if (action.equalsIgnoreCase("update")) {
             handleUpdateTicketType(request, response, ticketTypeDao);
-
         } else if (action.equalsIgnoreCase("delete")) {
             handleDeleteTicketType(request, response, ticketTypeDao);
+        } else if (action.equalsIgnoreCase("generate-ticket")) {
+            handleGenerateTicket(request, response, seatDao, tDao, ticketTypeDao);
         }
     }
 
@@ -228,6 +237,97 @@ public class ConfigTicketServlet extends HttpServlet {
             System.out.println("Cập nhật thành công: " + success);
 
             if (success) {
+                response.sendRedirect(request.getContextPath() + "/config-ticket");
+            } else {
+                request.setAttribute("globalError", "Failed to save the ticket type to the database.");
+                request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("globalError", "An unexpected error occurred.");
+            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+        }
+    }
+
+    private void handleGenerateTicket(HttpServletRequest request, HttpServletResponse response, SeatDAO seatDao, TicketDAO ticketDao, TicketTypeDAO tpDao)
+            throws ServletException, IOException {
+        StatusDAO sDao = new StatusDAO();
+
+        try {
+            int ticketTypeId = Integer.parseInt(request.getParameter("ticketTypeID-GenTicket"));
+            int totalTickets = Integer.parseInt(request.getParameter("ticketQuantity"));
+            boolean hasSeat = request.getParameter("hasSeat") != null;
+            TicketType ticketTypeObj = tpDao.getByID(ticketTypeId);
+            int zID = ticketTypeObj.getZoneID();
+            boolean success = true;
+
+            if (hasSeat) {
+                String[] rowLabels = request.getParameterValues("rowLabels[]");
+                String[] seatCounts = request.getParameterValues("seatCounts[]");
+
+                for (int i = 0; i < rowLabels.length; i++) {
+                    String row = rowLabels[i].toUpperCase();
+                    int count = Integer.parseInt(seatCounts[i]);
+
+                    for (int seatNum = 1; seatNum <= count; seatNum++) {
+                        Seat newSeat = new Seat();
+                        newSeat.setZoneID(zID);
+                        newSeat.setRowLabel(row);
+                        newSeat.setSeatNumber(seatNum);
+
+                        boolean seatCreated = seatDao.create(newSeat);
+                        if (seatCreated) {
+                            int seatId = newSeat.getSeatID();
+
+                            String serial = TicketUtils.generateSerialNumber();
+                            Timestamp issuedAt = new Timestamp(System.currentTimeMillis());
+
+                            Ticket newTicket = new Ticket();
+                            newTicket.setTicketTypeID(ticketTypeId);
+                            newTicket.setSeatID(seatId);
+                            newTicket.setSerialNumber(serial);
+                            newTicket.setIssuedAt(issuedAt);
+
+                            boolean ticketCreated = ticketDao.create(newTicket);
+                            if (!ticketCreated) {
+                                success = false;
+                                break;
+                            }
+                        } else {
+                            success = false;
+                            break;
+                        }
+                    }
+                    if (!success) {
+                        break;
+                    }
+                }
+            } else {
+                for (int i = 0; i < totalTickets; i++) {
+                    String serial = TicketUtils.generateSerialNumber();
+                    Timestamp issuedAt = new Timestamp(System.currentTimeMillis());
+
+                    Ticket newTicket = new Ticket();
+                    newTicket.setTicketTypeID(ticketTypeId);
+                    newTicket.setSeatID(null);
+                    newTicket.setSerialNumber(serial);
+                    newTicket.setIssuedAt(issuedAt);
+
+                    boolean ticketCreated = ticketDao.create(newTicket);
+                    if (!ticketCreated) {
+                        success = false;
+                        break;
+                    }
+                }
+            }
+
+            System.out.println("Tạo vé thành công: " + success);
+
+            if (success) {
+                int activeStatusId = sDao.getStatusIdByCode("hasTicket");
+                boolean updated = tpDao.setStatus(ticketTypeId, activeStatusId);
+                System.out.println("Cập nhật status thành công: " + updated);
+
                 response.sendRedirect(request.getContextPath() + "/config-ticket");
             } else {
                 request.setAttribute("globalError", "Failed to save the ticket type to the database.");

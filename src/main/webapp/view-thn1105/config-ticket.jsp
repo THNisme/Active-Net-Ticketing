@@ -32,7 +32,27 @@
 
     <body>
         <div class="container mt-5">
-            <h3 class="mb-4">Sự kiện <c:out value="${event.eventName}"/></h3>
+            <div class="row mb-3">
+                <div class="col">
+                    <h3 class="mb-4">Sự kiện <c:out value="${event.eventName}"/></h3>
+                </div>
+                <div class="col">
+                    <div class="d-flex justify-content-end">
+                        <!-- Button trigger modal create ticket type -->
+                        <button type="button" class="btn create-tickettypes-btn" data-bs-toggle="modal"
+                                data-bs-target="#modalCreateTicketType">
+                            <i class="bi bi-plus-circle"></i>
+                            Cấu hình loại vé mới
+                        </button>
+                        <!-- Button go to mange ticket-->
+                        <button type="button" class="btn create-tickettypes-btn" data-bs-toggle="modal"
+                                data-bs-target="#modalGenerateTicketType">
+                            <i class="bi bi-plus-circle"></i>
+                            Tạo vé
+                        </button>    
+                    </div>
+                </div>
+            </div>
             <!-- Nav tabs -->
             <ul class="nav nav-underline" id="stepTabs" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -62,6 +82,15 @@
                                         <p>${tp.typeName}</p>
                                     </div>
                                     <div class="manipulate-btn-group">
+                                        <c:choose>
+                                            <c:when test="${tp.statusID == 10}">
+                                                <span class="text-success">Đã có vé</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a type="button" class="text-warning" data-bs-toggle="modal"
+                                                   data-bs-target="#modalGenerateTicketType">⚠️ Chưa được tạo vé</a>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <button type="button" class="btn mx-2"
                                                 onclick="fnUpdateTicketType(
                                                 ${tp.ticketTypeID},
@@ -86,12 +115,6 @@
                                 </li>
                             </c:forEach> 
                         </ul>
-                        <!-- Button trigger modal create ticket type -->
-                        <button type="button" class="btn create-tickettypes-btn" data-bs-toggle="modal"
-                                data-bs-target="#modalCreateTicketType">
-                            <i class="bi bi-plus-circle"></i>
-                            Tạo loại vé mới
-                        </button>
                     </div>
                     <a href="event-form?action=update&eid=${event.eventID}" type="button" class="btn prev-btn">Quay lại</a>
                     <a href="#" type="submit" class="btn">Hoàn tất</a>
@@ -136,7 +159,7 @@
             <div class="modal-dialog">
                 <div class="modal-content modal-theme">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Tạo loại vé</h1>
+                        <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Cấu hình loại vé mới</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -306,120 +329,78 @@
 
         </div>
 
+        <!-- Modal Generate Ticket -->
+        <div class="modal fade" id="modalGenerateTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="modalGenerateTicketTypeLable" aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="config-ticket?action=generate-ticket" method="POST">
+                    <div class="modal-content modal-theme">
 
-
-
-        <!--<div class="modal fade" id="modalCreateTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby="modalCreateTicketTypeLabel" aria-hidden="true">
-        
-            <form action="event-form?action=config-ticket" method="POST">
-                <div class="modal-content modal-theme">
-        
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalCreateTicketTypeLabel">Tạo loại vé</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-        
-        
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="ticketTypeName" class="form-label"><strong style="color: red;">* </strong>Tên loại vé</label>
-                            <input type="text" class="form-control" id="ticketTypeName" name="ticketTypeName" required>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modalDeleteTicketTypeLable">Tạo vé</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-        
-                        <div class="mb-3">
-                            <div class="row">
-                                <div class="col">
-        
-                                    <label for="ticketTypePrice" class="form-label"><strong style="color: red;">* </strong>Giá
-                                        vé</label>
-                                    <div class="modal-price-input-wrapper">
-                                        <div>
-                                            <input type="number" class="form-control" id="ticketTypePrice" name="ticketTypePrice" min="1"
-                                                   required>
+                        <form action="config-ticket?action=generate-ticket">
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="ticketTypeID-GenTicket" class="form-label">Loại vé</label>
+                                            <select id="ticketTypeID-GenTicket" name="ticketTypeID-GenTicket" class="form-select" required>
+                                                <c:forEach var="tp" items="${ticketTypes}">
+                                                    <option value="${tp.ticketTypeID}" ${tp.statusID == 10 ? 'disabled' : ''}>${tp.typeName}</option>
+                                                </c:forEach>
+                                            </select>
                                         </div>
-        
-                                        <div class="form-check mx-2">
-                                            <input class="form-check-input" type="checkbox" value="" id="checkFreeTicket">
-                                            <label class="form-check-label" for="checkFreeTicket">
-                                                Miễn phí
-                                            </label>
+                                        <div class="col">
+                                            <label for="ticketQuantity" class="form-label">Tổng số vé</label>
+                                            <input type="number" id="ticketQuantity" name="ticketQuantity" class="form-control" min="1" required>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <label for="ticketTotal" class="form-label"><strong style="color: red;">* </strong>Tổng số
-                                        vé</label>
-                                    <input type="number" class="form-control" id="ticketTotal" name="ticketTotal" min="1"
-                                           required>
+
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="hasSeat" name="hasSeat">
+                                    <label class="form-check-label" for="hasSeat">
+                                        Tạo vé có định danh (có chỗ ngồi)
+                                    </label>
                                 </div>
-                                <div class="col">
-                                    <label for="ticketTypeZone" class="form-label"><strong style="color: red;">* </strong>Chọn zone vé</label>
-                                    <a href="#" class="float-end">Tạo zone</a>
-        
-        
-   
-        
-        <div class="mb-3 seat-init disable" id="init-seat-container">
-        <div class="row controls-init-seat">
-        
-        <div class="col">
-        <label for="rowsSeatInput" class="form-label"><strong style="color: red;">* </strong> Dãy ghế:</label>
-        <input type="text" class="form-control" id="rowsSeatInput" placeholder="Ví dụ: A-D hoặc ABCD"
-           name="rowsSeatInput" required disabled>
-        </div>
-        
-        <div class="col">
-        <label for="rowsSeatInput" class="form-label"><strong style="color: red;">* </strong> Số ghế mỗi
-        dãy:</label>
-        <input type="number" class="form-control" id="colsSeatInput" placeholder="Ví dụ: 10"
-        name="colsSeatInput" min="1" required disabled>
-        </div> 
-        
-        <div class="col d-flex flex-column justify-content-end">
-        <div class="d-flex">
-        <button type="button" class="btn mx-2" onclick="generateSeatInputs()" style="width: fit-content;">
-            Tạo dãy ghế
-        </button>
-        <button type="button" class="btn mx-2" onclick="generateSeatGrid()" data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-title="Mô hình vé mang tính chất minh họa cho lượng vé được tạo ra, không phải vị trí thực"
-                style="width: fit-content;">
-            Tạo mô hình ghế
-        </button>
-        </div>
-        </div>
-        
-        <div class="mb-4 mt-4">
-        <div id="seatInputs"></div>
-        </div>
-        </div>
-        
-        
-        <div id="seatModelGridContainer"></div>
-        </div>
-        </div>
-        
-        <div class="modal-footer ticketType-modal-footer">
-        <div class="row">
-        <div class="col">
-        <p id="message" style="color: #f85c51; font-weight: bold;"></p>
-        </div>
-        <div class="col">
-        <button type="submit" class="btn btn-primary float-end">Lưu</button>
-        </div>
-        </div>
-        </div>
-        </form>
-        </div>
-        </div>-->
+                                <div id="seatConfigSection" style="display: none;">
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="rowInput" class="form-label">Hàng ghế (VD: A-D hoặc ABCD)</label>
+                                                <input type="text" id="rowInput" class="form-control" placeholder="A-D hoặc ABCD">
+                                            </div>
+                                            <div class="col d-flex flex-column-reverse">
+                                                <button type="button" id="generateSeatRows" class="btn">Sinh hàng ghế</button>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div id="seatRowsContainer"></div>
 
+                                    <div id="seatTotalCheck" class="text-danger fw-bold mt-3 mb-3"></div>
+                                </div>
+                            </div>
 
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <p id="message" style="color: #f85c51; font-weight: bold;"></p>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" class="btn float-end" id="generateTicketBtn">Tạo vé</button>
+                                    </div>
+                                </div>
+                            </div>
 
-
-
-
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>                                             
 
 
         <!-- Elfsight Website Translator | Untitled Website Translator -->
@@ -440,6 +421,7 @@
         <script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-seat-model.js"></script>
         <script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-zoom-image.js"></script>
         <script src="${pageContext.request.contextPath}/js/event-form-dashboard/handle-input-tickettype-modal.js"></script>
+        <script src="${pageContext.request.contextPath}/js/config-ticket/handle-generate-ticket.js"></script>
 
         <!--DATA FILLING-->
         <script>

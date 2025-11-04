@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,13 +68,22 @@ public class SeatDAO {
     // CREATE A NEW SEAT
     public boolean create(Seat seat) {
         String sql = "INSERT INTO Seats (ZoneID, RowLabel, SeatNumber) VALUES (?, ?, ?)";
-        try (PreparedStatement st = conn.prepareStatement(sql)) {
+        try (PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, seat.getZoneID());
             st.setString(2, seat.getRowLabel());
             st.setInt(3, seat.getSeatNumber());
-            return st.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+            int rows = st.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = st.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        seat.setSeatID(rs.getInt(1)); // Gán ID vừa tạo cho object
+                    }
+                }
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return false;
     }

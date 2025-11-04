@@ -27,7 +27,7 @@ public class TicketTypeDAO {
     // GET ALL TICKET TYPE
     public List<TicketType> getAll() {
         List<TicketType> list = new ArrayList<>();
-        String sql = "SELECT * FROM TicketTypes WHERE StatusID = 1";
+        String sql = "SELECT * FROM TicketTypes WHERE StatusID != 3";
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 TicketType t = new TicketType(
@@ -48,7 +48,7 @@ public class TicketTypeDAO {
 
     // GET BY ID
     public TicketType getByID(int id) {
-        String sql = "SELECT * FROM TicketTypes WHERE TicketTypeID = ? AND StatusID = 1";
+        String sql = "SELECT * FROM TicketTypes WHERE TicketTypeID = ? AND StatusID != 3";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -112,10 +112,22 @@ public class TicketTypeDAO {
         return false;
     }
 
+    public boolean setStatus(int ticketTypeID, int statusID) {
+        String sql = "UPDATE TicketTypes SET StatusID=? WHERE TicketTypeID=?";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, statusID);
+            st.setInt(2, ticketTypeID);
+            return st.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
     // thêm optional: lấy tất cả loại vé của 1 event
     public List<TicketType> getAllByEventID(int eventID) {
         List<TicketType> list = new ArrayList<>();
-        String sql = "SELECT * FROM TicketTypes WHERE EventID = ? AND StatusID = 1";
+        String sql = "SELECT * FROM TicketTypes WHERE EventID = ? AND StatusID != 3";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, eventID);
             ResultSet rs = ps.executeQuery();
@@ -164,15 +176,17 @@ public class TicketTypeDAO {
 //          
 //          dao.update(updateTicketType);
 //        dao.softDelete(6);
-        List<TicketType> list = dao.getAllByEventID(1);
+//        List<TicketType> list = dao.getAllByEventID(1);
 //        System.out.println("Cac loai ve cua su kien co ID = 11");
-        for (TicketType t : list) {
-            System.out.println("ID: " + t.getTicketTypeID());
-            System.out.println("Loai ve thuoc su kien: " + eDAO.getById(t.getEventID()).getEventName());
-            System.out.println("Loai ve thuoc zone: " + zDao.getById(t.getZoneID()).getZoneName());
-            System.out.println("Ten loai ve: " + t.getTypeName());
-            System.out.println("Gia cua ve loai " + t.getTypeName() + " la " + t.getPrice());
-            System.out.println("StatusID: " + t.getStatusID());
-        }
+//        for (TicketType t : list) {
+//            System.out.println("ID: " + t.getTicketTypeID());
+//            System.out.println("Loai ve thuoc su kien: " + eDAO.getById(t.getEventID()).getEventName());
+//            System.out.println("Loai ve thuoc zone: " + zDao.getById(t.getZoneID()).getZoneName());
+//            System.out.println("Ten loai ve: " + t.getTypeName());
+//            System.out.println("Gia cua ve loai " + t.getTypeName() + " la " + t.getPrice());
+//            System.out.println("StatusID: " + t.getStatusID());
+//        }
+
+        dao.setStatus(17, 10);
     }
 }
