@@ -74,7 +74,14 @@
                                                 data-bs-target="#modalUpdateTicketType">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <button type="button" class="btn mx-2 delete-btn"><i class="bi bi-x-circle"></i></button>
+                                        <button type="button" class="btn mx-2 delete-btn"
+                                                onclick="fnDeleteTicketType(
+                                                ${tp.ticketTypeID},
+                                                                '${fn:escapeXml(tp.typeName)}')"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalDeleteTicketType">
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
                                     </div>
                                 </li>
                             </c:forEach> 
@@ -97,20 +104,20 @@
         <div class="modal fade" id="modalDeleteTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="modalDeleteTicketTypeLable" aria-hidden="true">
             <div class="modal-dialog">
-                <form action="">
+                <form action="event-form?action=config-ticket-delete" method="POST">
                     <div class="modal-content modal-theme delete">
 
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="modalDeleteTicketTypeLable">Xác nhận xóa loại vé</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-
+                        <form action="event"></form>
                         <div class="modal-body">
                             <div class="mb-3 row">
-                                <label for="staticEmail" class="col-sm-5 col-form-label">Bạn có chắc muốn xóa hạng vé </label>
+                                <label for="staticEmail" class="col-sm-5 col-form-label">Bạn có chắc muốn xóa </label>
                                 <div class="col-sm-4">
-                                    <input type="text" readonly class="form-control-plaintext fw-bolder text-danger" id="staticEmail"
-                                           value="VIP">
+                                    <input type="text" readonly class="form-control-plaintext fw-bolder text-danger" id="typeName-D">
+                                    <input type="hidden" id="ticketTypeID-D" name="ticketTypeID-D">
                                 </div>
                             </div>
                         </div>
@@ -444,6 +451,11 @@
                                                             document.getElementById("ticketTypeZone-U").value = zoneID;
                                                             document.getElementById("tickUpdateSID-U").value = statusID;
                                                             document.getElementById("tickUpdateTID-U").value = ticketTypeid;
+                                                        }
+
+                                                        function fnDeleteTicketType(ticketTypeId, typeName) {
+                                                            document.getElementById("ticketTypeID-D").value = ticketTypeId;
+                                                            document.getElementById("typeName-D").value = typeName;
                                                         }
 
         </script>

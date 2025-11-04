@@ -27,7 +27,7 @@ public class EventDAO {
     // GET ALL EVENT - DONT CARE ABOUT STATUS
     public List<Event> getAll() {
         List<Event> list = new ArrayList<>();
-        String sql = "SELECT * FROM Events";
+        String sql = "SELECT * FROM Events AND StatusID = 1";
         try (PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 Event e = new Event(
@@ -50,7 +50,7 @@ public class EventDAO {
     }
 
     public Event getById(int id) {
-        String sql = "SELECT * FROM Events WHERE EventID = ?";
+        String sql = "SELECT * FROM Events WHERE EventID = ? AND StatusID = 1";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {

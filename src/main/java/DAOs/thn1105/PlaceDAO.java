@@ -22,7 +22,7 @@ public class PlaceDAO {
     // GET ALL PLACE
     public List<Place> getAll() {
         List<Place> list = new ArrayList<>();
-        String sql = "SELECT * FROM Places";
+        String sql = "SELECT * FROM Places WHERE StatusID = 1";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -44,7 +44,7 @@ public class PlaceDAO {
 
     //GET BY ID
     public Place getById(int id) {
-        String sql = "SELECT * FROM Places WHERE PlaceID = ?";
+        String sql = "SELECT * FROM Places WHERE PlaceID = ? AND StatusID = 1";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);

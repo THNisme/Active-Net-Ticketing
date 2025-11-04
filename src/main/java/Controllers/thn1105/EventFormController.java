@@ -173,6 +173,8 @@ public class EventFormController extends HttpServlet {
             handleConfigTicketType(request, response, ticketTypeDao);
         } else if (action.equalsIgnoreCase("config-ticket-update")) {
             handleUpdateTicketType(request, response, ticketTypeDao);
+        } else if (action.equalsIgnoreCase("config-ticket-delete")) {
+            handleDeleteTicketType(request, response, ticketTypeDao);
         }
     }
 
@@ -344,6 +346,31 @@ public class EventFormController extends HttpServlet {
             updateTicketType.setStatusID(statusID);
 
             boolean success = tickTypeDao.update(updateTicketType);
+            System.out.println("Cập nhật thành công: " + success);
+
+            if (success) {
+                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
+            } else {
+                request.setAttribute("globalError", "Failed to save the ticket type to the database.");
+                request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("globalError", "An unexpected error occurred.");
+            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+        }
+    }
+    
+    private void handleDeleteTicketType(HttpServletRequest request, HttpServletResponse response, TicketTypeDAO tickTypeDao)
+            throws ServletException, IOException {
+        try {
+            String ticketTypeIdStr = request.getParameter("ticketTypeID-D");
+
+            int tpID = Integer.parseInt(ticketTypeIdStr.trim());
+
+            System.out.println("TTID: " + tpID);
+
+            boolean success = tickTypeDao.softDelete(tpID);
             System.out.println("Cập nhật thành công: " + success);
 
             if (success) {

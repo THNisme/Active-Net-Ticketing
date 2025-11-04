@@ -27,7 +27,7 @@ public class TicketTypeDAO {
     // GET ALL TICKET TYPE
     public List<TicketType> getAll() {
         List<TicketType> list = new ArrayList<>();
-        String sql = "SELECT * FROM TicketTypes";
+        String sql = "SELECT * FROM TicketTypes WHERE StatusID = 1";
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 TicketType t = new TicketType(
@@ -48,7 +48,7 @@ public class TicketTypeDAO {
 
     // GET BY ID
     public TicketType getByID(int id) {
-        String sql = "SELECT * FROM TicketTypes WHERE TicketTypeID = ?";
+        String sql = "SELECT * FROM TicketTypes WHERE TicketTypeID = ? AND StatusID = 1";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -115,7 +115,7 @@ public class TicketTypeDAO {
     // thêm optional: lấy tất cả loại vé của 1 event
     public List<TicketType> getAllByEventID(int eventID) {
         List<TicketType> list = new ArrayList<>();
-        String sql = "SELECT * FROM TicketTypes WHERE EventID = ?";
+        String sql = "SELECT * FROM TicketTypes WHERE EventID = ? AND StatusID = 1";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, eventID);
             ResultSet rs = ps.executeQuery();
