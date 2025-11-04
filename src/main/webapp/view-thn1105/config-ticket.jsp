@@ -104,7 +104,7 @@
         <div class="modal fade" id="modalDeleteTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="modalDeleteTicketTypeLable" aria-hidden="true">
             <div class="modal-dialog">
-                <form action="event-form?action=config-ticket-delete" method="POST">
+                <form action="config-ticket?action=delete" method="POST">
                     <div class="modal-content modal-theme delete">
 
                         <div class="modal-header">
@@ -140,7 +140,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <form action="event-form?action=config-ticket" method="POST">
+                    <form action="config-ticket?action=create" method="POST">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="ticketTypeName" class="form-label"><strong style="color: red;">* </strong>Tên loại vé</label>
@@ -227,7 +227,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <form action="event-form?action=config-ticket-update" method="POST">
+                    <form action="config-ticket?action=update" method="POST">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="ticketTypeName-U" class="form-label"><strong style="color: red;">* </strong>Tên loại vé</label>

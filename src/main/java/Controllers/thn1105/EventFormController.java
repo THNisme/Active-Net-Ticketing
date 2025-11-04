@@ -91,9 +91,6 @@ public class EventFormController extends HttpServlet {
             throws ServletException, IOException {
         EventCategoryDAO eventCateDAO = new EventCategoryDAO();
         PlaceDAO placeDAO = new PlaceDAO();
-        ZoneDAO zDao = new ZoneDAO();
-        EventDAO eDao = new EventDAO();
-        TicketTypeDAO ticketTypeDao = new TicketTypeDAO();
 
         String action = request.getParameter("action");
 
@@ -105,24 +102,6 @@ public class EventFormController extends HttpServlet {
             request.setAttribute("placeList", placeList);
 
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
-
-        } else if (action.equalsIgnoreCase("config-ticket")) {
-//            HttpSession session = request.getSession();
-//            int currentEID = (int) session.getAttribute("currentEventID");
-
-//            TEST EID
-            int currentEID = 1030;
-            System.out.println("currentEID: " + currentEID);
-            Event e = eDao.getById(currentEID);
-            Place p = placeDAO.getById(e.getPlaceID());
-            List<TicketType> ticketTypeList = ticketTypeDao.getAllByEventID(currentEID);
-            List<Zone> zoneList = zDao.getAllZoneOfPlace(e.getPlaceID());
-
-            request.setAttribute("event", e);
-            request.setAttribute("place", p);
-            request.setAttribute("ticketTypes", ticketTypeList);
-            request.setAttribute("zones", zoneList);
-            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
         } else if (action.equalsIgnoreCase("update")) {
             try (PrintWriter out = response.getWriter()) {
                 /* TODO output your page here. You may use following sample code. */
@@ -152,7 +131,6 @@ public class EventFormController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         EventDAO edao = new EventDAO();
-        TicketTypeDAO ticketTypeDao = new TicketTypeDAO();
         String action = request.getParameter("action");
 
         if (action == null) {
@@ -169,12 +147,6 @@ public class EventFormController extends HttpServlet {
         } else if (action.equalsIgnoreCase("delete")) {
             // TODO: thêm handleDeleteEvent() sau
 //            handleDeleteEvent(request, response, edao);
-        } else if (action.equalsIgnoreCase("config-ticket")) {
-            handleConfigTicketType(request, response, ticketTypeDao);
-        } else if (action.equalsIgnoreCase("config-ticket-update")) {
-            handleUpdateTicketType(request, response, ticketTypeDao);
-        } else if (action.equalsIgnoreCase("config-ticket-delete")) {
-            handleDeleteTicketType(request, response, ticketTypeDao);
         }
     }
 
@@ -251,7 +223,7 @@ public class EventFormController extends HttpServlet {
             if (success) {
                 HttpSession session = request.getSession();
                 session.setAttribute("currentEventID", newEvent.getEventID());
-                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
+                response.sendRedirect(request.getContextPath() + "/config-ticket");
             } else {
                 request.setAttribute("globalError", "Failed to save the event to the database.");
                 request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
@@ -260,129 +232,6 @@ public class EventFormController extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("globalError", "An unexpected error occurred.");
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
-        }
-    }
-
-//    private void handleUpdateEvent(HttpServletRequest request, HttpServletResponse response, EventDAO edao)
-//            throws ServletException, IOException {
-//        // TODO: xử lý update
-//    }
-//
-//    private void handleDeleteEvent(HttpServletRequest request, HttpServletResponse response, EventDAO edao)
-//            throws ServletException, IOException {
-//        // TODO: xử lý delete
-//    }
-    private void handleConfigTicketType(HttpServletRequest request, HttpServletResponse response, TicketTypeDAO tickTypeDao)
-            throws ServletException, IOException {
-        try {
-            String eidStr = request.getParameter("eventID");
-            String ticketTypeName = request.getParameter("ticketTypeName");
-            String ticketTypePriceStr = request.getParameter("ticketTypePrice");
-            String zoneIDStr = request.getParameter("zoneID");
-
-            int eID = Integer.parseInt(eidStr.trim());
-            int zID = Integer.parseInt(zoneIDStr.trim());
-
-            BigDecimal tickPrice = null;
-            if (ticketTypePriceStr != null && !ticketTypePriceStr.isEmpty()) {
-                tickPrice = new BigDecimal(ticketTypePriceStr);
-            }
-
-            TicketType newTicketType = new TicketType();
-            newTicketType.setEventID(eID);
-            newTicketType.setTypeName(ticketTypeName);
-            newTicketType.setPrice(tickPrice);
-            newTicketType.setZoneID(zID);
-
-            boolean success = tickTypeDao.create(newTicketType);
-            System.out.println("Tạo thành công: " + success);
-
-            if (success) {
-                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
-            } else {
-                request.setAttribute("globalError", "Failed to save the ticket type to the database.");
-                request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("globalError", "An unexpected error occurred.");
-            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
-        }
-    }
-
-    private void handleUpdateTicketType(HttpServletRequest request, HttpServletResponse response, TicketTypeDAO tickTypeDao)
-            throws ServletException, IOException {
-        try {
-            String eidStr = request.getParameter("eventID-U");
-            String ticketTypeIdStr = request.getParameter("ticketTypeID-U");
-            String ticketTypeName = request.getParameter("ticketTypeName-U");
-            String ticketTypePriceStr = request.getParameter("ticketTypePrice-U");
-            String zoneIDStr = request.getParameter("zoneID-U");
-            String statusStr = request.getParameter("statusID-U");
-
-            int eID = Integer.parseInt(eidStr.trim());
-            int zID = Integer.parseInt(zoneIDStr.trim());
-            int tpID = Integer.parseInt(ticketTypeIdStr.trim());
-            int statusID = Integer.parseInt(statusStr.trim());
-
-            BigDecimal tickPrice = null;
-            if (ticketTypePriceStr != null && !ticketTypePriceStr.isEmpty()) {
-                tickPrice = new BigDecimal(ticketTypePriceStr);
-            }
-
-            System.out.println("TTID: " + tpID);
-            System.out.println("EID: " + eID);
-            System.out.println("TName: " + ticketTypeName);
-            System.out.println("TPrice: " + tickPrice);
-            System.out.println("ZID: " + zID);
-            System.out.println("SID: " + statusID);
-
-            TicketType updateTicketType = new TicketType();
-            updateTicketType.setTicketTypeID(tpID);
-            updateTicketType.setEventID(eID);
-            updateTicketType.setTypeName(ticketTypeName);
-            updateTicketType.setPrice(tickPrice);
-            updateTicketType.setZoneID(zID);
-            updateTicketType.setStatusID(statusID);
-
-            boolean success = tickTypeDao.update(updateTicketType);
-            System.out.println("Cập nhật thành công: " + success);
-
-            if (success) {
-                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
-            } else {
-                request.setAttribute("globalError", "Failed to save the ticket type to the database.");
-                request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("globalError", "An unexpected error occurred.");
-            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
-        }
-    }
-    
-    private void handleDeleteTicketType(HttpServletRequest request, HttpServletResponse response, TicketTypeDAO tickTypeDao)
-            throws ServletException, IOException {
-        try {
-            String ticketTypeIdStr = request.getParameter("ticketTypeID-D");
-
-            int tpID = Integer.parseInt(ticketTypeIdStr.trim());
-
-            System.out.println("TTID: " + tpID);
-
-            boolean success = tickTypeDao.softDelete(tpID);
-            System.out.println("Cập nhật thành công: " + success);
-
-            if (success) {
-                response.sendRedirect(request.getContextPath() + "/event-form?action=config-ticket");
-            } else {
-                request.setAttribute("globalError", "Failed to save the ticket type to the database.");
-                request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("globalError", "An unexpected error occurred.");
-            request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
         }
     }
 
