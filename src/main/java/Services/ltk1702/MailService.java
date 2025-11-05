@@ -16,8 +16,8 @@ import java.util.Properties;
 
 public class MailService {
 
-    private static final String FROM_EMAIL = "letkiet714@gmail.com";
-    private static final String FROM_PASSWORD = "yxeykgqmxiuanptr";
+    private static final String FROM_EMAIL = "clbfactive8386@gmail.com";
+    private static final String FROM_PASSWORD = "zefhnzdprcwslttc";
 
     public static void sendAccountEmail(String toEmail, String username, String password) {
         String subject = "Tài khoản Active Net Ticketing";
@@ -31,29 +31,29 @@ public class MailService {
         sendMail(toEmail, subject, body);
     }
 
-    public static void sendPasswordChangedEmail(String toEmail, String username, String password) {
-        String subject = "Tài khoản Active Net Ticketing";
-        String body = "Xin chào " + username + ",\n\n"
-                + "Mật khẩu của Tài khoản: " + username + "đã được đổi.\n"
-                + "Mật khẩu mới: " + password + "\n\n"
-                + "Trân trọng,\nActive Net Ticketing";
+    public static void sendUpdateNotificationEmail(String toEmail, String oldUsername, String newUsername,
+            boolean passwordChanged, boolean roleChanged, int newRole, String password) {
+        String subject = "Thông báo cập nhật tài khoản";
 
-        sendMail(toEmail, subject, body);
-    }
+        StringBuilder body = new StringBuilder();
+        body.append("Xin chào ").append(oldUsername).append(",\n\n");
+        body.append("Tài khoản của bạn đã được cập nhật với các thay đổi sau:\n\n");
 
-    public static void sendRoleChangedEmail(String toEmail, String username, int role) {
-        String subject = "Tài khoản Active Net Ticketing";
-        String roleName = "user";
-
-        if (role != 0) {
-            roleName = "admin";
+        if (!oldUsername.equals(newUsername)) {
+            body.append("- Tên đăng nhập mới: ").append(newUsername).append("\n");
         }
-        
-        String body = "Xin chào " + username + ",\n\n"
-                + "Tài khoản: " + username + "đã được đổi quyền truy cập.\n"
-                + "Giờ bạn là: " + roleName + "\n\n"
-                + "Trân trọng,\nActive Net Ticketing";
-        sendMail(toEmail, subject, body);
+        if (passwordChanged) {
+            body.append("- Mật khẩu đã được thay đổi.\n");
+            body.append("- Mật khẩu mới: ").append(password).append("\n");
+        }
+        if (roleChanged) {
+            body.append("- Quyền hệ thống mới: ").append(newRole == 1 ? "Admin" : "User").append("\n");
+        }
+
+        body.append("\nNếu bạn không thực hiện thay đổi này, vui lòng liên hệ hỗ trợ ngay.\n\n");
+        body.append("Trân trọng,\nActive Net Ticketing");
+
+        sendMail(toEmail, subject, body.toString());
     }
 
     private static void sendMail(String to, String subject, String body) {

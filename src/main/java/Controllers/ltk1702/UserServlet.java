@@ -183,20 +183,24 @@ public class UserServlet extends HttpServlet {
             if ("editAndSend".equals(actionType)) {
                 try {
                     User oldUser = dao.getUserById(id);
-                    boolean passwordChanged = true;
-                    if (!oldUser.getPassword().equals(HashPassword.hashMD5(password))) {
-                        passwordChanged = false;
-                    }
-                    boolean roleChanged = oldUser.getRole() != role;
 
-                    if (passwordChanged) {
-                        MailService.sendPasswordChangedEmail(email, username, password);
-                        req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi mật khẩu cho " + email);
-                    } else if (roleChanged) {
-                        MailService.sendRoleChangedEmail(email, username, role);
-                        req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi vai trò cho " + email);
+                    boolean usernameChanged = !oldUser.getUsername().equals(username);
+                    boolean passwordChanged = !oldUser.getPassword().equals(HashPassword.hashMD5(password));
+                    boolean roleChanged = oldUser.getRole() != role;
+                    
+                    if (usernameChanged || passwordChanged || roleChanged) {
+                        MailService.sendUpdateNotificationEmail(
+                                email,
+                                oldUser.getUsername(),
+                                username,
+                                passwordChanged,
+                                roleChanged,
+                                role,
+                                password
+                        );
+                        req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo cập nhật cho " + email);
                     } else {
-                        req.getSession().setAttribute("mailStatus", "Không có thay đổi cho " + username);
+                        req.getSession().setAttribute("mailStatus", "Không có thay đổi nào để gửi mail.");
                     }
 
                     dao.updateUser(user);
