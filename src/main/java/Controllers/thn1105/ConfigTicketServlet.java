@@ -90,7 +90,7 @@ public class ConfigTicketServlet extends HttpServlet {
 
 //            TEST EID
 //            int currentEID = 1030;
-            System.out.println("currentEID: " + currentEID);
+            System.out.println("In cofig-ticket/view - currentEID: " + currentEID);
             Event e = eDao.getById(currentEID);
             Place p = placeDAO.getById(e.getPlaceID());
             List<TicketType> ticketTypeList = ticketTypeDao.getAllByEventID(currentEID);
@@ -102,7 +102,7 @@ public class ConfigTicketServlet extends HttpServlet {
             request.setAttribute("zones", zoneList);
             request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
         } else if (action.equalsIgnoreCase("update")) {
-           // KHÔNG CÓ UPDATE CHO TICK TYPE, (XÓA TẠO LẠI - RESET)
+            // KHÔNG CÓ UPDATE CHO TICK TYPE, (XÓA TẠO LẠI - RESET)
         }
     }
 
@@ -160,9 +160,9 @@ public class ConfigTicketServlet extends HttpServlet {
             newTicketType.setZoneID(zID);
 
             boolean success = tickTypeDao.create(newTicketType);
-            System.out.println("Tạo thành công: " + success);
 
             if (success) {
+                System.out.println("Create TicketType: " + success);
                 response.sendRedirect(request.getContextPath() + "/config-ticket");
             } else {
                 request.setAttribute("globalError", "Failed to save the ticket type to the database.");
@@ -233,10 +233,8 @@ public class ConfigTicketServlet extends HttpServlet {
 
             int tpID = Integer.parseInt(ticketTypeIdStr.trim());
 
-            System.out.println("TTID: " + tpID);
-
             boolean success = tickTypeDao.delete(tpID);
-            System.out.println("Xóa thành công: " + success);
+            System.out.println("Delete(hard) TicketType: " + success);
 
             if (success) {
                 response.sendRedirect(request.getContextPath() + "/config-ticket");
@@ -323,13 +321,10 @@ public class ConfigTicketServlet extends HttpServlet {
                 }
             }
 
-            System.out.println("Tạo vé thành công: " + success);
-
             if (success) {
                 int activeStatusId = sDao.getStatusIdByCode("hasTicket");
                 boolean updated = tpDao.setStatus(ticketTypeId, activeStatusId);
-                System.out.println("Cập nhật status thành công: " + updated);
-
+                System.out.println("Generate Tickets: " + success + " And Set status hasTicket: " + updated);
                 response.sendRedirect(request.getContextPath() + "/config-ticket");
             } else {
                 request.setAttribute("globalError", "Failed to save the ticket type to the database.");

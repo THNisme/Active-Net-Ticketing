@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
               type='text/css' />
-
+  
         <!--Inter font - Google Fonts-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +31,7 @@
     </head>
 
     <body>
-        <div class="container mt-5">
+        <div id="CONFIG-TICKET" class="container mt-5">
             <div class="row mb-3" style="border-bottom: solid 1px rgba(255, 255, 255, 0.3)">
                 <div class="col">
                     <h3 class="mb-4">Sự kiện <c:out value="${event.eventName}"/></h3>

@@ -112,12 +112,12 @@ public class EventFormController extends HttpServlet {
                 Event e = eDao.getById(eid);
                 List<EventCategory> eventCateList = eventCateDAO.getAll();
                 List<Place> placeList = placeDAO.getAll();
-
+                
+                System.out.println("In event-form/update, current EID " + eid);
+                
                 request.setAttribute("event", e);
-
                 request.setAttribute("eventCateList", eventCateList);
                 request.setAttribute("placeList", placeList);
-
                 request.getRequestDispatcher("/view-thn1105/event-form-update.jsp").forward(request, response);
             }
         }
@@ -146,7 +146,6 @@ public class EventFormController extends HttpServlet {
             handleCreateEvent(request, response, edao);
 
         } else if (action.equalsIgnoreCase("update")) {
-            // TODO: thêm handleUpdateEvent() sau
             handleUpdateEvent(request, response, edao);
 
         } else if (action.equalsIgnoreCase("delete")) {
@@ -235,6 +234,7 @@ public class EventFormController extends HttpServlet {
             boolean success = edao.create(newEvent);
 
             if (success) {
+                System.out.println("Create event: " + success);
                 HttpSession session = request.getSession();
                 session.setAttribute("currentEventID", newEvent.getEventID());
                 response.sendRedirect(request.getContextPath() + "/config-ticket");
@@ -340,7 +340,7 @@ public class EventFormController extends HttpServlet {
             boolean success = eDao.update(existingEvent);
 
             if (success) {
-                System.out.println("Cập nhật sự kiện: " + success);
+                System.out.println("Update event: " + success);
                 
                 HttpSession session = request.getSession();
                 session.setAttribute("toastMessage", "Cập nhật sự kiện thành công!");
