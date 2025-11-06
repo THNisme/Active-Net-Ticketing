@@ -31,17 +31,17 @@
           </li>
           <li class="nav-item">
               <a class="nav-link <%= currentPage.contains("#") ? "active" : "" %>" href="#">
-              <i class="fa-solid fa-list me-2"></i> Danh sách đơn hàng
+              <i class="fa-solid fa-list me-2 mt-3"></i> Danh sách đơn hàng
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link <%= currentPage.contains("#") ? "active" : "" %>" href="#">
-              <i class="fa-solid fa-pen me-2"></i> Chỉnh sửa
+              <i class="fa-solid fa-pen me-2 mt-3"></i> Chỉnh sửa
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link <%= currentPage.contains("#") ? "active" : "" %>" href="#">
-              <i class="fa-solid fa-trash me-2"></i> Xóa
+              <i class="fa-solid fa-trash me-2 mt-3"></i> Xóa
             </a>
           </li>
         </ul>
