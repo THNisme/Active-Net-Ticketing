@@ -89,6 +89,7 @@ public class EventFormController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        EventDAO eDao = new EventDAO();
         EventCategoryDAO eventCateDAO = new EventCategoryDAO();
         PlaceDAO placeDAO = new PlaceDAO();
 
@@ -104,16 +105,20 @@ public class EventFormController extends HttpServlet {
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
         } else if (action.equalsIgnoreCase("update")) {
             try (PrintWriter out = response.getWriter()) {
-                /* TODO output your page here. You may use following sample code. */
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title>Servlet EventFormController</title>");
-                out.println("</head>");
-                out.println("<body>");
-                out.println("<h1>Đã vào Update Event" + request.getContextPath() + "</h1>");
-                out.println("</body>");
-                out.println("</html>");
+
+                String eIDstr = request.getParameter("eid");
+                int eid = Integer.parseInt(eIDstr);
+
+                Event e = eDao.getById(eid);
+                List<EventCategory> eventCateList = eventCateDAO.getAll();
+                List<Place> placeList = placeDAO.getAll();
+
+                request.setAttribute("event", e);
+
+                request.setAttribute("eventCateList", eventCateList);
+                request.setAttribute("placeList", placeList);
+
+                request.getRequestDispatcher("/view-thn1105/event-form-update.jsp").forward(request, response);
             }
         }
 
@@ -142,7 +147,7 @@ public class EventFormController extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("update")) {
             // TODO: thêm handleUpdateEvent() sau
-//            handleUpdateEvent(request, response, edao);
+            handleUpdateEvent(request, response, edao);
 
         } else if (action.equalsIgnoreCase("delete")) {
             // TODO: thêm handleDeleteEvent() sau
@@ -185,22 +190,31 @@ public class EventFormController extends HttpServlet {
             String endDateStr = request.getParameter("endDate");
             String eventDescriptionHTML = request.getParameter("description");
 
+            if (categoryId == 0) {
+                errors.put("categoryID", "Vui lòng chọn category cho sự kiện.");
+            }
+
+            if (placeId == 0) {
+                errors.put("categoryID", "Vui lòng chọn nơi tổ chức cho sự kiện.");
+            }
+
             if (eventName == null || eventName.trim().isEmpty()) {
-                errors.put("eventName", "Event name cannot be empty.");
+                errors.put("eventName", "Tên sự kiện không bỏ trống.");
             }
             if (startDateStr == null || startDateStr.trim().isEmpty()) {
-                errors.put("startDateStr", "Date start cannot be empty.");
+                errors.put("startDateStr", "Ngày bắt đầu không bỏ trống.");
             }
             if (endDateStr == null || endDateStr.trim().isEmpty()) {
-                errors.put("endDateStr", "Date end cannot be empty.");
+                errors.put("endDateStr", "ngày kết thúc không bỏ trống.");
             }
             if (eventDescriptionHTML == null || eventDescriptionHTML.trim().isEmpty()) {
-                errors.put("eventDescriptionHTML", "Description cannot be empty.");
+                errors.put("eventDescriptionHTML", "Mô tả sự kiện không bỏ trống.");
             }
 
             if (!errors.isEmpty()) {
-                request.setAttribute("errors", errors);
-                request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
+                HttpSession session = request.getSession();
+                session.setAttribute("errors", errors);
+                response.sendRedirect("event-form");
                 return;
             }
 
@@ -232,6 +246,115 @@ public class EventFormController extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("globalError", "An unexpected error occurred.");
             request.getRequestDispatcher("/view-thn1105/event-form.jsp").forward(request, response);
+        }
+    }
+
+    private void handleUpdateEvent(HttpServletRequest request, HttpServletResponse response, EventDAO eDao)
+            throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        Map<String, String> errors = new HashMap<>();
+        String dbImagePath = null;
+
+        try {
+            // ===== STEP 1: LẤY EVENT HIỆN TẠI =====
+            int eventID = Integer.parseInt(request.getParameter("eventID"));
+            Event existingEvent = eDao.getById(eventID);
+            if (existingEvent == null) {
+                request.setAttribute("globalError", "Sự kiện không tồn tại hoặc đã bị xóa.");
+
+                // CÓ LỖI THÌ NHẢY VỀ TỔNG QUAN SỰ KIỆN
+                request.getRequestDispatcher("/view-thn1105/event-list.jsp").forward(request, response);
+                return;
+            }
+
+            // ===== STEP 2: XỬ LÝ FILE ẢNH (NẾU CÓ CHỌN MỚI) =====
+            Part filePart = request.getPart("eventImage");
+            String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+            if (originalFileName != null && !originalFileName.isEmpty()) {
+                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+                String uniqueFileName = timeStamp + "_" + originalFileName;
+                String applicationPath = getServletContext().getRealPath("");
+                String uploadFilePath = applicationPath + File.separator + UPLOAD_DIR;
+
+                File uploadDir = new File(uploadFilePath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                filePart.write(uploadFilePath + File.separator + uniqueFileName);
+                dbImagePath = UPLOAD_DIR + "/" + uniqueFileName;
+            } else {
+                // Giữ nguyên ảnh cũ nếu không chọn ảnh mới
+                dbImagePath = existingEvent.getImageURL();
+            }
+
+            // ===== STEP 3: LẤY DỮ LIỆU FORM =====
+            String eventName = request.getParameter("eventName");
+            int categoryId = Integer.parseInt(request.getParameter("eventCategory"));
+            int placeId = Integer.parseInt(request.getParameter("place"));
+            String startDateStr = request.getParameter("startDate");
+            String endDateStr = request.getParameter("endDate");
+            String eventDescriptionHTML = request.getParameter("description");
+
+            // ===== STEP 4: VALIDATE =====
+            if (categoryId == 0) {
+                errors.put("categoryID", "Vui lòng chọn loại sự kiện.");
+            }
+            if (placeId == 0) {
+                errors.put("placeID", "Vui lòng chọn nơi tổ chức.");
+            }
+            if (eventName == null || eventName.trim().isEmpty()) {
+                errors.put("eventName", "Tên sự kiện không bỏ trống.");
+            }
+            if (startDateStr == null || startDateStr.trim().isEmpty()) {
+                errors.put("startDateStr", "Ngày bắt đầu không bỏ trống.");
+            }
+            if (endDateStr == null || endDateStr.trim().isEmpty()) {
+                errors.put("endDateStr", "Ngày kết thúc không bỏ trống.");
+            }
+            if (eventDescriptionHTML == null || eventDescriptionHTML.trim().isEmpty()) {
+                errors.put("eventDescriptionHTML", "Mô tả sự kiện không bỏ trống.");
+            }
+
+            if (!errors.isEmpty()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("errors", errors);
+                response.sendRedirect("event-form?action=update&eid=" + eventID);
+                return;
+            }
+
+            // ===== STEP 5: CHUYỂN ĐỔI NGÀY & UPDATE DB =====
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime localStartDateTime = LocalDateTime.parse(startDateStr, formatter);
+            LocalDateTime localEndDateTime = LocalDateTime.parse(endDateStr, formatter);
+
+            existingEvent.setEventName(eventName);
+            existingEvent.setCategoryID(categoryId);
+            existingEvent.setPlaceID(placeId);
+            existingEvent.setImageURL(dbImagePath);
+            existingEvent.setStartDate(Timestamp.valueOf(localStartDateTime));
+            existingEvent.setEndDate(Timestamp.valueOf(localEndDateTime));
+            existingEvent.setDescription(eventDescriptionHTML);
+
+            boolean success = eDao.update(existingEvent);
+
+            if (success) {
+                System.out.println("Cập nhật sự kiện: " + success);
+                
+                HttpSession session = request.getSession();
+                session.setAttribute("toastMessage", "Cập nhật sự kiện thành công!");
+                session.setAttribute("currentEventID", eventID);
+                response.sendRedirect(request.getContextPath() + "/config-ticket");
+            } else {
+                request.setAttribute("globalError", "Không thể cập nhật sự kiện vào cơ sở dữ liệu.");
+                request.getRequestDispatcher("/view-thn1105/event-list.jsp").forward(request, response);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("globalError", "Đã xảy ra lỗi không mong muốn khi cập nhật sự kiện.");
+            request.getRequestDispatcher("/view-thn1105/event-form-update.jsp").forward(request, response);
         }
     }
 

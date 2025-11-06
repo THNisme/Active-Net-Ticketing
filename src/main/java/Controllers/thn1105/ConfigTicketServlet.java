@@ -86,10 +86,10 @@ public class ConfigTicketServlet extends HttpServlet {
 
         if (action == null) {
             HttpSession session = request.getSession();
-//            int currentEID = (int) session.getAttribute("currentEventID");
+            int currentEID = (int) session.getAttribute("currentEventID");
 
 //            TEST EID
-            int currentEID = 1030;
+//            int currentEID = 1030;
             System.out.println("currentEID: " + currentEID);
             Event e = eDao.getById(currentEID);
             Place p = placeDAO.getById(e.getPlaceID());
@@ -101,6 +101,8 @@ public class ConfigTicketServlet extends HttpServlet {
             request.setAttribute("ticketTypes", ticketTypeList);
             request.setAttribute("zones", zoneList);
             request.getRequestDispatcher("/view-thn1105/config-ticket.jsp").forward(request, response);
+        } else if (action.equalsIgnoreCase("update")) {
+           // KHÔNG CÓ UPDATE CHO TICK TYPE, (XÓA TẠO LẠI - RESET)
         }
     }
 
@@ -233,8 +235,8 @@ public class ConfigTicketServlet extends HttpServlet {
 
             System.out.println("TTID: " + tpID);
 
-            boolean success = tickTypeDao.softDelete(tpID);
-            System.out.println("Cập nhật thành công: " + success);
+            boolean success = tickTypeDao.delete(tpID);
+            System.out.println("Xóa thành công: " + success);
 
             if (success) {
                 response.sendRedirect(request.getContextPath() + "/config-ticket");

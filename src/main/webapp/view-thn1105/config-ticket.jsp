@@ -32,7 +32,7 @@
 
     <body>
         <div class="container mt-5">
-            <div class="row mb-3">
+            <div class="row mb-3" style="border-bottom: solid 1px rgba(255, 255, 255, 0.3)">
                 <div class="col">
                     <h3 class="mb-4">Sự kiện <c:out value="${event.eventName}"/></h3>
                 </div>
@@ -116,8 +116,13 @@
                             </c:forEach> 
                         </ul>
                     </div>
-                    <a href="event-form?action=update&eid=${event.eventID}" type="button" class="btn prev-btn">Quay lại</a>
-                    <a href="#" type="submit" class="btn">Hoàn tất</a>
+                    <c:if test="${not empty globalError}">
+                        <p class="text-danger"><c:out value="${globalError}"/></p>
+                    </c:if>
+                    <div class="mb-3">
+                        <a href="event-form?action=update&eid=${event.eventID}" type="button" class="btn prev-btn">Quay lại</a>
+                        <a href="#" type="submit" class="btn">Hoàn tất</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,6 +132,7 @@
         <div class="modal fade" id="modalDeleteTicketType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="modalDeleteTicketTypeLable" aria-hidden="true">
             <div class="modal-dialog">
+
                 <form action="config-ticket?action=delete" method="POST">
                     <div class="modal-content modal-theme delete">
 
@@ -134,14 +140,17 @@
                             <h1 class="modal-title fs-5" id="modalDeleteTicketTypeLable">Xác nhận xóa loại vé</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="event"></form>
+
                         <div class="modal-body">
-                            <div class="mb-3 row">
-                                <label for="staticEmail" class="col-sm-5 col-form-label">Bạn có chắc muốn xóa </label>
-                                <div class="col-sm-4">
-                                    <input type="text" readonly class="form-control-plaintext fw-bolder text-danger" id="typeName-D">
-                                    <input type="hidden" id="ticketTypeID-D" name="ticketTypeID-D">
-                                </div>
+                            <div class="mb-3">
+                                <p class="text-center">
+                                    Bạn có chắc muốn xóa <span class="fw-bolder text-danger" id="typeName-D"></span>
+                                <p>
+                            </div>
+
+                            <div class="mb-3">
+                                <p class="text-center text-warning">Lưu ý: hành động sẽ xóa <strong class="text-danger">tất cả các vé</strong> của loại vé này !</p>
+                                <input type="hidden" id="ticketTypeID-D" name="ticketTypeID-D">
                             </div>
                         </div>
 
@@ -400,7 +409,22 @@
                     </div>
                 </form>
             </div>
-        </div>                                             
+        </div>  
+
+        <c:if test="${not empty sessionScope.toastMessage}">
+            <div class="toast-container p-3 top-0 start-50 translate-middle-x" id="toastPlacement">
+                <div class="toast fade show align-items-center text-bg-primary border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <c:out value="${sessionScope.toastMessage}" />
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            </div>
+
+            <c:remove var="toastMessage" scope="session" />
+        </c:if>
 
 
         <!-- Elfsight Website Translator | Untitled Website Translator -->
@@ -413,7 +437,16 @@
                                                         clearAll();
             </script>
         </c:if>
-
+        <!--Load toast Mess-->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const toastEl = document.querySelector(".toast");
+                if (toastEl) {
+                    const toast = new bootstrap.Toast(toastEl, {delay: 3000});
+                    toast.show();
+                }
+            });
+        </script>
         <script src="${pageContext.request.contextPath}/js/event-form-dashboard/step.js"></script>
         <script type='text/javascript'
         src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
@@ -425,20 +458,20 @@
 
         <!--DATA FILLING-->
         <script>
-                                                        function fnUpdateTicketType(ticketTypeid, eventID, zoneID, typeName, price, statusID) {
-                                                            document.getElementById("modalUpdateTicketTypeLabel").textContent = "Cập nhật loại vé: " + typeName;
-                                                            document.getElementById("ticketTypeName-U").value = typeName;
-                                                            document.getElementById("tickUpdateEID-U").value = eventID;
-                                                            document.getElementById("ticketTypePrice-U").value = price;
-                                                            document.getElementById("ticketTypeZone-U").value = zoneID;
-                                                            document.getElementById("tickUpdateSID-U").value = statusID;
-                                                            document.getElementById("tickUpdateTID-U").value = ticketTypeid;
-                                                        }
+            function fnUpdateTicketType(ticketTypeid, eventID, zoneID, typeName, price, statusID) {
+                document.getElementById("modalUpdateTicketTypeLabel").textContent = "Cập nhật loại vé: " + typeName;
+                document.getElementById("ticketTypeName-U").value = typeName;
+                document.getElementById("tickUpdateEID-U").value = eventID;
+                document.getElementById("ticketTypePrice-U").value = price;
+                document.getElementById("ticketTypeZone-U").value = zoneID;
+                document.getElementById("tickUpdateSID-U").value = statusID;
+                document.getElementById("tickUpdateTID-U").value = ticketTypeid;
+            }
 
-                                                        function fnDeleteTicketType(ticketTypeId, typeName) {
-                                                            document.getElementById("ticketTypeID-D").value = ticketTypeId;
-                                                            document.getElementById("typeName-D").value = typeName;
-                                                        }
+            function fnDeleteTicketType(ticketTypeId, typeName) {
+                document.getElementById("ticketTypeID-D").value = ticketTypeId;
+                document.getElementById("typeName-D").textContent = typeName;
+            }
 
         </script>
     </body>

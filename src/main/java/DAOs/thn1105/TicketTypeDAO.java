@@ -112,6 +112,46 @@ public class TicketTypeDAO {
         return false;
     }
 
+    public boolean delete(int ticketTypeID) {
+        String deleteOrderDetails = "DELETE FROM OrderDetails WHERE TicketID IN (SELECT TicketID FROM Tickets WHERE TicketTypeID = ?)";
+        String deleteTickets = "DELETE FROM Tickets WHERE TicketTypeID = ?";
+        String deleteTicketType = "DELETE FROM TicketTypes WHERE TicketTypeID = ?";
+
+        try (
+                PreparedStatement ps1 = conn.prepareStatement(deleteOrderDetails); PreparedStatement ps2 = conn.prepareStatement(deleteTickets); PreparedStatement ps3 = conn.prepareStatement(deleteTicketType);) {
+            conn.setAutoCommit(false);
+
+            // Xóa OrderDetails
+            ps1.setInt(1, ticketTypeID);
+            ps1.executeUpdate();
+
+            // Xóa Tickets
+            ps2.setInt(1, ticketTypeID);
+            ps2.executeUpdate();
+
+            // Xóa TicketType
+            ps3.setInt(1, ticketTypeID);
+            int rows = ps3.executeUpdate();
+
+            conn.commit();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public boolean setStatus(int ticketTypeID, int statusID) {
         String sql = "UPDATE TicketTypes SET StatusID=? WHERE TicketTypeID=?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
@@ -186,7 +226,7 @@ public class TicketTypeDAO {
 //            System.out.println("Gia cua ve loai " + t.getTypeName() + " la " + t.getPrice());
 //            System.out.println("StatusID: " + t.getStatusID());
 //        }
-
-        dao.setStatus(17, 10);
+//        dao.setStatus(17, 10);
+          dao.delete(26);
     }
 }
