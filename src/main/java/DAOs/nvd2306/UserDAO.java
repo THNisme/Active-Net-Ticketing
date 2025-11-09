@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO extends DBContext {
-    
+
     public User login(String username, String password) {
         String sql = "SELECT * FROM [Users] WHERE username = ?";
         try {
@@ -42,15 +42,17 @@ public class UserDAO extends DBContext {
     }
 
     public boolean register(User user) {
-        String sql = "INSERT INTO [Users](username, passwordHash, role, createdAt) VALUES (?, ?, ?, GETDATE())";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
+                + "VALUES (?, ?, ?, GETDATE(), 1, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPasswordHash());
             ps.setInt(3, user.getRole());
+            ps.setString(4, user.getContactEmail()); // <-- NEW
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
+            System.out.println("Lỗi register: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -65,6 +67,20 @@ public class UserDAO extends DBContext {
             return rs.next();
         } catch (SQLException e) {
             System.out.println("Lỗi checkUsernameExists: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkEmailExists(String email) {
+        String sql = "SELECT 1 FROM Users WHERE ContactEmail = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi checkEmailExists: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
