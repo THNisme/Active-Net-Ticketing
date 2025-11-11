@@ -16,8 +16,12 @@
     </div>
 
     <div class="search-box">
-        <input type="text" placeholder="Bạn tìm gì hôm nay?">
-        <button>Tìm kiếm</button>
+        <form action="<%= request.getContextPath()%>/search" method="get" class="search-form">
+            <input type="text" name="keyword" placeholder="Bạn tìm gì hôm nay?" required>
+            <button type="submit" class="search-btn">
+                <i class="fa fa-search"></i> Tìm kiếm
+            </button>
+        </form>
     </div>
 
     <div class="header-right">

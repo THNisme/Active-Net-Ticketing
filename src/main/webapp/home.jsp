@@ -363,11 +363,11 @@
 
                                 <div class="calendar-navigation">
                                     <button class="nav-btn" onclick="previousMonths()">‹</button>
-                                     <div class="months-container" id="monthsContainer"></div>
+                                    <div class="months-container" id="monthsContainer"></div>
                                     <button class="nav-btn" onclick="nextMonths()">›</button>
                                 </div>
 
-                             
+
 
                                 <div class="calendar-actions">
                                     <button class="action-btn reset-btn" onclick="resetSelection()">Thiết lập lại</button>
@@ -387,22 +387,25 @@
                     <% } else {
                         for (Event e : events) {%>
                     <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="h-100 border-0 event-card">
-                            <img src="<%= e.getImageURL() != null ? e.getImageURL() : "https://via.placeholder.com/400x250?text=No+Image"%>"
-                                 alt="<%= e.getEventName()%>"
-                                 loading="lazy"
-                                 style="width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px;">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= e.getEventName()%></h5>
-                                <p class="price mb-2" style="color:#ffb6b6">Từ 
-                                    <%= (e.getStatusID() == 1) ? "Miễn phí" : "Liên hệ"%>
-                                </p>
-                                <p class="date mb-0">
-                                    <i class="bi bi-calendar3"></i>
-                                    <%= e.getStartDate() != null ? e.getStartDate().toLocalDateTime().toLocalDate() : "Chưa có ngày"%>
-                                </p>
+                        <a href="event-detail?id=<%= e.getEventID()%>" 
+                           style="text-decoration:none; color:inherit; display:block;">
+                            <div class="h-100 border-0 event-card">
+                                <img src="<%= e.getImageURL() != null ? e.getImageURL() : "https://via.placeholder.com/400x250?text=No+Image"%>"
+                                     alt="<%= e.getEventName()%>"
+                                     loading="lazy"
+                                     style="width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= e.getEventName()%></h5>
+                                    <p class="price mb-2" style="color:#ffb6b6">Từ 
+                                        <%= (e.getStatusID() == 1) ? "Miễn phí" : "Liên hệ"%>
+                                    </p>
+                                    <p class="date mb-0">
+                                        <i class="bi bi-calendar3"></i>
+                                        <%= e.getStartDate() != null ? e.getStartDate().toLocalDateTime().toLocalDate() : "Chưa có ngày"%>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <% }
                         }%>
