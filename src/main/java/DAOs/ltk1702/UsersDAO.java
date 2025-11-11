@@ -155,9 +155,9 @@ public class UsersDAO {
             System.out.println("Role          : " + (u.getRole() == 1 ? "Admin" : "User"));
             System.out.println("Created At    : " + u.getCreatedAt());
             System.out.println("Status ID     : " + u.getStatusID());
-            // System.out.println("Full Name     : " + u.getContactFullname());
+            System.out.println("Full Name     : " + u.getContactFullname());
             System.out.println("Email         : " + u.getContactEmail());
-            // System.out.println("Phone         : " + u.getContactPhone());
+            System.out.println("Phone         : " + u.getContactPhone());
         }
         System.out.println("=======================================");
     }

@@ -103,117 +103,117 @@ public class UserServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        UsersDAO dao = new UsersDAO();
+@Override
+protected void doPost(HttpServletRequest req, HttpServletResponse res)
+        throws ServletException, IOException {
+    req.setCharacterEncoding("UTF-8");
+    UsersDAO dao = new UsersDAO();
 
-        int id = req.getParameter("userID") != null && !req.getParameter("userID").isEmpty()
-                ? Integer.parseInt(req.getParameter("userID")) : 0;
+    int id = req.getParameter("userID") != null && !req.getParameter("userID").isEmpty()
+            ? Integer.parseInt(req.getParameter("userID")) : 0;
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("passwordHash");
-        String confirmPassword = req.getParameter("confirmPassword");
-        int role = Integer.parseInt(req.getParameter("role"));
-        String email = req.getParameter("email");
-        String actionType = req.getParameter("actionType");
+    String username = req.getParameter("username");
+    String password = req.getParameter("passwordHash");
+    String confirmPassword = req.getParameter("confirmPassword");
+    int role = Integer.parseInt(req.getParameter("role"));
+    String fullname = req.getParameter("fullname");
+    String email = req.getParameter("email");
+    String phone = req.getParameter("phone");
+    String actionType = req.getParameter("actionType");
 
-        User user = new User();
-        user.setUserID(id);
-        user.setUsername(username);
-        user.setPassword(HashPassword.hashMD5(password));
-        user.setRole(role);
-        user.setStatusID(1);
+    User user = new User();
+    user.setUserID(id);
+    user.setUsername(username);
+    user.setPassword(HashPassword.hashMD5(password));
+    user.setRole(role);
+    user.setStatusID(1);
+    user.setContactFullname(fullname);
+    user.setContactEmail(email);
+    user.setContactPhone(phone);
 
-        if (id == 0 && dao.checkUsernameExists(username)) {
-            req.getSession().setAttribute("error", "Tài khoản" + username + "đã tồn tại!");
-            req.getSession().setAttribute("user", user);
-            res.sendRedirect("UserServlet?action=new");
-            return;
-        }
-
-        if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
-            req.getSession().setAttribute("error", "Vui lòng nhập mail đúng định dạng. Ví dụ:'abc124@gmai.com'...");
-            req.getSession().setAttribute("user", user);
-            if (id != 0) {
-                res.sendRedirect("UserServlet?action=edit&id=" + id);
-            } else {
-                res.sendRedirect("UserServlet?action=new");
-            }
-            return;
-        }
-
-        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
-            req.getSession().setAttribute("error", " Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
-            req.getSession().setAttribute("user", user);
-            if (id != 0) {
-                res.sendRedirect("UserServlet?action=edit&id=" + id);
-            } else {
-                res.sendRedirect("UserServlet?action=new");
-            }
-            return;
-        }
-
-        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
-            req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
-            req.getSession().setAttribute("user", user);
-            if (id != 0) {
-                res.sendRedirect("UserServlet?action=edit&id=" + id);
-            } else {
-                res.sendRedirect("UserServlet?action=new");
-            }
-
-            return;
-        }
-
-        if (id == 0) {
-
-            if ("saveAndSend".equals(actionType)) {
-                try {
-                    MailService.sendAccountEmail(email, username, password);
-                    req.getSession().setAttribute("mailStatus", "Đã gửi mail cho " + email);
-                } catch (Exception e) {
-                    req.getSession().setAttribute("error", "Không thể gửi mail: " + e.getMessage());
-                }
-            }
-            dao.addUser(user);
-        } else {
-
-            if ("editAndSend".equals(actionType)) {
-                try {
-                    User oldUser = dao.getUserById(id);
-
-                    boolean usernameChanged = !oldUser.getUsername().equals(username);
-                    boolean passwordChanged = !oldUser.getPassword().equals(HashPassword.hashMD5(password));
-                    boolean roleChanged = oldUser.getRole() != role;
-                    
-                    if (usernameChanged || passwordChanged || roleChanged) {
-                        MailService.sendUpdateNotificationEmail(
-                                email,
-                                oldUser.getUsername(),
-                                username,
-                                passwordChanged,
-                                roleChanged,
-                                role,
-                                password
-                        );
-                        req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo cập nhật cho " + email);
-                    } else {
-                        req.getSession().setAttribute("mailStatus", "Không có thay đổi nào để gửi mail.");
-                    }
-
-                    dao.updateUser(user);
-
-                } catch (Exception e) {
-                    req.getSession().setAttribute("error", "Không thể gửi mail: " + e.getMessage());
-                }
-            }
-
-        }
-
-        res.sendRedirect("UserServlet?action=list");
+    // Check username exists only when creating new
+    if (id == 0 && dao.checkUsernameExists(username)) {
+        req.getSession().setAttribute("error", "Tài khoản '" + username + "' đã tồn tại!");
+        req.getSession().setAttribute("user", user);
+        res.sendRedirect("UserServlet?action=new");
+        return;
     }
+
+    // Validate email format
+    if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+        req.getSession().setAttribute("error", "Vui lòng nhập mail đúng định dạng. Ví dụ: abc124@gmail.com");
+        req.getSession().setAttribute("user", user);
+        res.sendRedirect(id != 0 ? "UserServlet?action=edit&id=" + id : "UserServlet?action=new");
+        return;
+    }
+
+    // Password rule
+    if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
+        req.getSession().setAttribute("error", "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
+        req.getSession().setAttribute("user", user);
+        res.sendRedirect(id != 0 ? "UserServlet?action=edit&id=" + id : "UserServlet?action=new");
+        return;
+    }
+
+    // Confirm password
+    if (!password.equals(confirmPassword)) {
+        req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
+        req.getSession().setAttribute("user", user);
+        res.sendRedirect(id != 0 ? "UserServlet?action=edit&id=" + id : "UserServlet?action=new");
+        return;
+    }
+
+    // CREATE USER
+    if (id == 0) {
+
+        if ("saveAndSend".equals(actionType)) {
+            try {
+                MailService.sendAccountEmail(email, username, password);
+                req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo tài khoản mới đến " + email);
+            } catch (Exception e) {
+                req.getSession().setAttribute("error", "Không thể gửi mail: " + e.getMessage());
+            }
+        }
+        dao.addUser(user);
+
+    } else { // UPDATE USER
+
+        user.setPassword(HashPassword.hashMD5(password));
+
+        if ("editAndSend".equals(actionType)) {
+            try {
+                User oldUser = dao.getUserById(id);
+
+                boolean usernameChanged = !oldUser.getUsername().equals(username);
+                boolean passwordChanged = !oldUser.getPassword().equals(HashPassword.hashMD5(password));
+                boolean roleChanged = oldUser.getRole() != role;
+                boolean fullnameChanged = !String.valueOf(oldUser.getContactFullname()).equals(fullname);
+                boolean phoneChanged = !String.valueOf(oldUser.getContactPhone()).equals(phone);
+
+                if (usernameChanged || passwordChanged || roleChanged || fullnameChanged || phoneChanged) {
+                    MailService.sendUpdateNotificationEmail(
+                            email,
+                            oldUser.getUsername(),
+                            username,
+                            passwordChanged,
+                            roleChanged,
+                            role,
+                            password
+                    );
+                    req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi tài khoản đến " + email);
+                }
+
+            } catch (Exception e) {
+                req.getSession().setAttribute("error", "Không thể gửi mail: " + e.getMessage());
+            }
+        }
+
+        dao.updateUser(user);
+    }
+
+    res.sendRedirect("UserServlet?action=list");
+}
+
 
     /**
      * Returns a short description of the servlet.
