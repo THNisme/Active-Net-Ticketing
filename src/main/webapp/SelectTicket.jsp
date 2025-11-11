@@ -196,15 +196,28 @@
                     <p><i class="fa-solid fa-location-dot"></i> ${event.placeName}</p>
                 </div>
 
-                <div class="summary-list"></div>
+                <div class="summary-list" id="summaryList"></div>
 
                 <div class="total">
                     <span>Tổng cộng</span>
                     <span id="total">0 đ</span>
                 </div>
 
-                <button class="btn-continue" type="button">Tiếp tục</button>
-            </div>
+                <!-- BỌC TRONG FORM -->
+                <form id="checkoutForm" method="post" action="${pageContext.request.contextPath}/checkout">
+                    <!-- Gửi thông tin sự kiện -->
+                    <input type="hidden" name="eventId" value="${event.eventID}">
+                    <input type="hidden" name="eventName" value="${event.eventName}">
+                    <input type="hidden" name="placeName" value="${event.placeName}">
+                    <input type="hidden" name="startStr"
+                           value="<fmt:formatDate value='${event.startDate}' pattern='HH:mm, dd/MM/yyyy'/>">
+
+                    <!-- Gửi dữ liệu vé -->
+                    <input type="hidden" name="selectionsJson" id="selectionsJson">
+                    <input type="hidden" name="totalAmount" id="totalAmount">
+                    <button id="btnContinue" class="btn-continue" type="submit">Tiếp tục</button>
+                </form>
+            </div> 
         </div>
 
         <script>
@@ -220,32 +233,33 @@
                     const minusBtn = ticket.querySelector(".btn-minus");
                     const plusBtn = ticket.querySelector(".btn-plus");
                     const input = ticket.querySelector(".qty-input");
-                    
-                    // Lấy dữ liệu từ các element con
+
                     const nameElement = ticket.querySelector(".ticket-name");
                     const priceElement = ticket.querySelector(".ticket-price");
-                    
-                    if (!nameElement || !priceElement || !input) return;
-                    
+
+                    if (!nameElement || !priceElement || !input)
+                        return;
+
                     const name = nameElement.textContent.trim();
                     const price = parseFloat(priceElement.getAttribute('data-raw-price'));
                     const available = parseInt(input.getAttribute('data-available'));
 
-                    if (!plusBtn || !minusBtn) return;
+                    if (!plusBtn || !minusBtn)
+                        return;
 
-                    plusBtn.addEventListener("click", function() {
+                    plusBtn.addEventListener("click", function () {
                         let value = parseInt(input.value, 10);
                         if (value < available) {
                             value++;
                             input.value = value;
-                            selections[name] = {qty: value, price: price};
+                            selections[name] = {name: name, qty: value, price: price};
                             updateSummary();
                         } else {
                             alert("Chỉ còn " + available + " vé cho " + name);
                         }
                     });
 
-                    minusBtn.addEventListener("click", function() {
+                    minusBtn.addEventListener("click", function () {
                         let value = parseInt(input.value, 10);
                         if (value > 0) {
                             value--;
@@ -286,9 +300,27 @@
                     }
 
                     totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
+
+                    // 🔥 Thêm dòng này để bật/tắt nút Tiếp tục
+                    const btnContinue = document.getElementById("btnContinue");
+                    btnContinue.disabled = totalAmount <= 0;
                 }
+
+                // Nút Tiếp tục
+                const btnContinue = document.getElementById("btnContinue");
+                btnContinue.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    if (Object.keys(selections).length === 0) {
+                        alert("Vui lòng chọn ít nhất 1 vé");
+                        return;
+                    }
+
+                    const form = document.getElementById("checkoutForm");
+                    document.getElementById("selectionsJson").value = JSON.stringify(selections);
+                    document.getElementById("totalAmount").value = totalAmount;
+                    form.submit();
+                });
             });
         </script>
-
     </body>
 </html>
