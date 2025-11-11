@@ -36,10 +36,13 @@ public class UsersDAO {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
                 u.setPassword(rs.getString("PasswordHash"));
-                u.setContactEmail(rs.getString("ContactEmail"));
                 u.setRole(rs.getInt("Role"));
                 u.setCreatedAt(rs.getDate("CreatedAt"));
                 u.setStatusID(rs.getInt("StatusID"));
+                u.setContactFullname(rs.getString("ContactFullname"));
+                u.setContactEmail(rs.getString("ContactEmail"));
+                u.setContactPhone(rs.getString("ContactPhone"));
+
                 list.add(u);
             }
         } catch (SQLException e) {
@@ -55,20 +58,57 @@ public class UsersDAO {
             ps.setInt(2, STATUS_DELETED);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new User(
-                        rs.getInt("UserID"),
-                        rs.getString("Username"),
-                        rs.getString("PasswordHash"),
-                        rs.getString("ContactEmail"),
-                        rs.getInt("Role"),
-                        rs.getDate("CreatedAt"),
-                        rs.getInt("StatusID")
-                );
+
+                User u = new User();
+                u.setUserID(rs.getInt("UserID"));
+                u.setUsername(rs.getString("Username"));
+                u.setPassword(rs.getString("PasswordHash"));
+                u.setRole(rs.getInt("Role"));
+                u.setCreatedAt(rs.getDate("CreatedAt"));
+                u.setStatusID(rs.getInt("StatusID"));
+
+                u.setContactFullname(rs.getString("ContactFullname"));
+                u.setContactEmail(rs.getString("ContactEmail"));
+                u.setContactPhone(rs.getString("ContactPhone"));
+
+                return u;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void addUser(User user) {
+        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactFullname, ContactEmail, ContactPhone) VALUES (?, ?, ?, GETDATE(), ?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setInt(3, user.getRole());
+            ps.setInt(4, STATUS_ACTIVE);
+            ps.setString(5, user.getContactFullname());
+            ps.setString(6, user.getContactEmail());
+            ps.setString(7, user.getContactPhone());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUser(User user) {
+        String sql = "UPDATE Users SET Username = ?, PasswordHash = ?, Role = ?, ContactFullname = ?, ContactEmail = ?, ContactPhone = ? WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setInt(3, user.getRole());
+            ps.setString(4, user.getContactFullname());
+            ps.setString(5, user.getContactEmail());
+            ps.setString(6, user.getContactPhone());
+            ps.setInt(7, user.getUserID());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean checkUsernameExists(String username) {
@@ -86,34 +126,6 @@ public class UsersDAO {
         return false;
     }
 
-    public void addUser(User user) {
-        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) VALUES (?, ?, ?, GETDATE(), ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword()); 
-            ps.setInt(3, user.getRole());
-            ps.setInt(4, STATUS_ACTIVE);
-            ps.setString(5, user.getContactEmail());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateUser(User user) {
-        String sql = "UPDATE Users SET Username = ?, PasswordHash = ?, Role = ?,ContactEmail =? WHERE UserID = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
-            ps.setInt(3, user.getRole());
-            ps.setString(4, user.getContactEmail());
-            ps.setInt(5, user.getUserID());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void softDeleteUser(int id) {
         String sql = "UPDATE Users SET StatusID = ? WHERE UserID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -124,9 +136,6 @@ public class UsersDAO {
             e.printStackTrace();
         }
     }
-
-
-
 
     public static void main(String[] args) {
         UsersDAO dao = new UsersDAO();
@@ -146,9 +155,9 @@ public class UsersDAO {
             System.out.println("Role          : " + (u.getRole() == 1 ? "Admin" : "User"));
             System.out.println("Created At    : " + u.getCreatedAt());
             System.out.println("Status ID     : " + u.getStatusID());
-           // System.out.println("Full Name     : " + u.getContactFullname());
+            // System.out.println("Full Name     : " + u.getContactFullname());
             System.out.println("Email         : " + u.getContactEmail());
-           // System.out.println("Phone         : " + u.getContactPhone());
+            // System.out.println("Phone         : " + u.getContactPhone());
         }
         System.out.println("=======================================");
     }
