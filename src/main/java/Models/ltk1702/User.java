@@ -19,6 +19,28 @@ public class User {
     private Date createdAt;
     private int statusID;
     private String contactEmail;
+    private String ContactFullname;
+    private String ContactPhone;
+
+    public String getContactFullname() {
+        return ContactFullname;
+    }
+
+    public void setContactFullname(String ContactFullname) {
+        this.ContactFullname = ContactFullname;
+    }
+
+    
+    
+    public String getContactPhone() {
+        return ContactPhone;
+    }
+
+    public void setContactPhone(String ContactPhone) {
+        this.ContactPhone = ContactPhone;
+    }
+    
+    
 
     public String getContactEmail() {
         return contactEmail;
@@ -31,6 +53,20 @@ public class User {
     public User() {
     }
 
+    public User(int userID, String username, String password, int role, Date createdAt, int statusID, String contactEmail, String ContactFullname, String ContactPhone) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.statusID = statusID;
+        this.contactEmail = contactEmail;
+        this.ContactFullname = ContactFullname;
+        this.ContactPhone = ContactPhone;
+    }
+
+    
+    
     public User(int userID, String username, String password, String ContactEmail, int role, Date createdAt, int statusID) {
         this.userID = userID;
         this.username = username;
