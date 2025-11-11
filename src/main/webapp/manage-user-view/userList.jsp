@@ -27,7 +27,7 @@
         <div class="container p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="text-pink">Danh sách người dùng</h4>                
-                <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
+                <a href="User-manage?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
             </div>   
             <div class="mx-auto"  
                 style="max-width: 600px; width: fit-content;">
@@ -91,9 +91,9 @@
                                 <% }%>
                             </td>
                             <td>
-                                <a href="UserServlet?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
+                                <a href="User-manage?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
                                 <% if (u.getStatusID() != 3) {%>
-                                <a href="UserServlet?action=delete&id=<%=u.getUserID()%>" 
+                                <a href="User-manage?action=delete&id=<%=u.getUserID()%>" 
                                    class="btn btn-danger btn-sm"
                                    onclick="return confirm('Bạn có chắc muốn xóa người dùng này không?')">Xóa</a>
                                 <% } %>

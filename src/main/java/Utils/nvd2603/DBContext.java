@@ -16,15 +16,15 @@ import java.util.logging.Logger;
  */
 public class DBContext {
 
-    protected Connection conn = null;
+    protected Connection conn;
 
     public DBContext() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=EventManagementV7;"
+                    + "databaseName=SWP391;"
                     + "user=sa;"
-                    + "password=nd291005;"
+                    + "password=123456;"
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             if (conn != null) {

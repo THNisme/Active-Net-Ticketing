@@ -21,7 +21,7 @@ import MD5.HashPassword;
  *
  * @author Acer
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/User-manage"})
 public class UserServlet extends HttpServlet {
 
     /**
@@ -84,7 +84,7 @@ public class UserServlet extends HttpServlet {
             case "delete":
                 int deleteId = Integer.parseInt(req.getParameter("id"));
                 dao.softDeleteUser(deleteId);
-                res.sendRedirect("UserServlet?action=list");
+                res.sendRedirect("User-manage?action=list");
                 break;
 
             default:
@@ -135,7 +135,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse res)
     if (id == 0 && dao.checkUsernameExists(username)) {
         req.getSession().setAttribute("error", "Tài khoản '" + username + "' đã tồn tại!");
         req.getSession().setAttribute("user", user);
-        res.sendRedirect("UserServlet?action=new");
+        res.sendRedirect("User-manage?action=new");
         return;
     }
 
@@ -151,7 +151,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse res)
     if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
         req.getSession().setAttribute("error", "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
         req.getSession().setAttribute("user", user);
-        res.sendRedirect(id != 0 ? "UserServlet?action=edit&id=" + id : "UserServlet?action=new");
+        res.sendRedirect(id != 0 ? "User-manage?action=edit&id=" + id : "User-manage?action=new");
         return;
     }
 
@@ -159,7 +159,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse res)
     if (!password.equals(confirmPassword)) {
         req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
         req.getSession().setAttribute("user", user);
-        res.sendRedirect(id != 0 ? "UserServlet?action=edit&id=" + id : "UserServlet?action=new");
+        res.sendRedirect(id != 0 ? "User-manage?action=edit&id=" + id : "User-manage?action=new");
         return;
     }
 
@@ -211,7 +211,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse res)
         dao.updateUser(user);
     }
 
-    res.sendRedirect("UserServlet?action=list");
+    res.sendRedirect("User-manage?action=list");
 }
 
 
