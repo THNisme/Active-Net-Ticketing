@@ -18,14 +18,24 @@ public class User {
     private int role; // 0 = user, 1 = admin
     private Date createdAt;
     private int statusID;
+    private String contactEmail;
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
 
     public User() {
     }
 
-    public User(int userID, String username, String password, int role, Date createdAt, int statusID) {
+    public User(int userID, String username, String password, String ContactEmail, int role, Date createdAt, int statusID) {
         this.userID = userID;
         this.username = username;
         this.password = password;
+        this.contactEmail = ContactEmail;
         this.role = role;
         this.createdAt = createdAt;
         this.statusID = statusID;

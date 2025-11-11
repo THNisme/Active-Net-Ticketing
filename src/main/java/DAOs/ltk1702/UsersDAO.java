@@ -36,6 +36,7 @@ public class UsersDAO {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
                 u.setPassword(rs.getString("PasswordHash"));
+                u.setContactEmail(rs.getString("ContactEmail"));
                 u.setRole(rs.getInt("Role"));
                 u.setCreatedAt(rs.getDate("CreatedAt"));
                 u.setStatusID(rs.getInt("StatusID"));
@@ -58,6 +59,7 @@ public class UsersDAO {
                         rs.getInt("UserID"),
                         rs.getString("Username"),
                         rs.getString("PasswordHash"),
+                        rs.getString("ContactEmail"),
                         rs.getInt("Role"),
                         rs.getDate("CreatedAt"),
                         rs.getInt("StatusID")
@@ -85,12 +87,13 @@ public class UsersDAO {
     }
 
     public void addUser(User user) {
-        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID) VALUES (?, ?, ?, GETDATE(), ?)";
+        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) VALUES (?, ?, ?, GETDATE(), ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
+            ps.setString(2, user.getPassword()); 
             ps.setInt(3, user.getRole());
             ps.setInt(4, STATUS_ACTIVE);
+            ps.setString(5, user.getContactEmail());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,12 +101,13 @@ public class UsersDAO {
     }
 
     public void updateUser(User user) {
-        String sql = "UPDATE Users SET Username = ?, PasswordHash = ?, Role = ? WHERE UserID = ?";
+        String sql = "UPDATE Users SET Username = ?, PasswordHash = ?, Role = ?,ContactEmail =? WHERE UserID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setInt(3, user.getRole());
-            ps.setInt(4, user.getUserID());
+            ps.setString(4, user.getContactEmail());
+            ps.setInt(5, user.getUserID());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,5 +123,33 @@ public class UsersDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+
+    public static void main(String[] args) {
+        UsersDAO dao = new UsersDAO();
+        List<User> users = dao.getAllUsers();
+
+        if (users == null || users.isEmpty()) {
+            System.out.println("Không có người dùng nào.");
+            return;
+        }
+
+        System.out.println("====== DANH SÁCH NGƯỜI DÙNG ======");
+        for (User u : users) {
+            System.out.println("---------------------------------------");
+            System.out.println("UserID        : " + u.getUserID());
+            System.out.println("Username      : " + u.getUsername());
+            System.out.println("Password Hash : " + u.getPassword());
+            System.out.println("Role          : " + (u.getRole() == 1 ? "Admin" : "User"));
+            System.out.println("Created At    : " + u.getCreatedAt());
+            System.out.println("Status ID     : " + u.getStatusID());
+           // System.out.println("Full Name     : " + u.getContactFullname());
+            System.out.println("Email         : " + u.getContactEmail());
+           // System.out.println("Phone         : " + u.getContactPhone());
+        }
+        System.out.println("=======================================");
     }
 }
