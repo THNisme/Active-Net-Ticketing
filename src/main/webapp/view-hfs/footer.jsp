@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
-
+<link href="<%= request.getContextPath()%>/css/navigationUI/footer.css" rel="stylesheet" type="text/css"/>
 <footer class="footer mt-auto py-5">
     <div class="container">
         <div class="row gy-4">
