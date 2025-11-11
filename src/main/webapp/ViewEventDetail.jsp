@@ -234,7 +234,7 @@
                     </span>
                 </div>
 
-                <a href="#" class="btn-buy">Mua vé ngay</a>
+                <a href="select-ticket?id=${event.eventID}" class="btn-buy">Mua vé ngay</a>
             </div>
 
             <div class="event-image">
