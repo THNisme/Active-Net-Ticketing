@@ -95,7 +95,7 @@
                            placeholder="Nhập tên đăng nhập người dùng" 
                            value="<%= username%>" required>              
                 </div>
-
+                <% if (isEdit) {%>
                 <div class="mb-3">
                     <label class="form-label">Họ và tên</label>
                     <input type="text" name="fullname" class="form-control"
@@ -109,7 +109,7 @@
                            placeholder="Nhập số điện thoại người dùng"
                            value="<%= phone%>">
                 </div>
-
+                <% }%>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <% if (!isEdit) {%>
