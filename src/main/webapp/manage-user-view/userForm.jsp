@@ -19,7 +19,14 @@
     String username = request.getParameter("username") != null ? request.getParameter("username") : (isEdit ? user.getUsername() : "");
     String password = request.getParameter("passwordHash") != null ? request.getParameter("passwordHash") : (isEdit ? user.getPassword() : "");
     String confirmPassword = request.getParameter("confirmPassword") != null ? request.getParameter("confirmPassword") : (isEdit ? user.getPassword() : "");
-    String email = request.getParameter("email") != null ? request.getParameter("email") : "";
+    String email = request.getParameter("email") != null ? request.getParameter("email")
+            : (isEdit && user.getContactEmail() != null ? user.getContactEmail() : "");
+    String fullname = request.getParameter("fullname") != null ? request.getParameter("fullname")
+            : (isEdit && user.getContactFullname() != null ? user.getContactFullname() : "");
+
+    String phone = request.getParameter("phone") != null ? request.getParameter("phone")
+            : (isEdit && user.getContactPhone() != null ? user.getContactPhone() : "");
+
     String roleParam = request.getParameter("role");
     int role = 0;
     if (roleParam != null && !roleParam.isEmpty()) {
@@ -27,7 +34,7 @@
     } else if (isEdit) {
         role = user.getRole();
     }
-    
+
     if (session.getAttribute("error") != null) {
         request.setAttribute("error", session.getAttribute("error"));
         session.removeAttribute("error");
@@ -36,7 +43,7 @@
         request.setAttribute("mailStatus", session.getAttribute("mailStatus"));
         session.removeAttribute("mailStatus");
     }
-    
+
     if (session.getAttribute("user") != null) {
         request.setAttribute("user", session.getAttribute("user"));
         session.removeAttribute("user");
@@ -90,6 +97,20 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">Họ và tên</label>
+                    <input type="text" name="fullname" class="form-control"
+                           placeholder="Nhập họ tên người dùng"
+                           value="<%= fullname%>">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control"
+                           placeholder="Nhập số điện thoại người dùng"
+                           value="<%= phone%>">
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Email</label>
                     <% if (!isEdit) {%>
                     <input type="email" name="email" class="form-control" value="<%= email%>" 
@@ -101,12 +122,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Mật khẩu</label><small class="text-warning">
-                        (có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt)
-                    </small>                    
+                    <label class="form-label">Mật khẩu</label>                  
                     <div class="input-group">
                         <input type="password" id="password" name="passwordHash" class="form-control"
-                               value="" required>
+                               value="" placeholder="Nhập mật khẩu (có ít nhất 8 ký tự, gồm chữ, chữ in hoa, số và ký tự đặc biệt)" required>
                         <button type="button" class="btn btn-light" onclick="togglePassword('password')"><i class="bi bi-eye"></i></button>
                     </div>
 
@@ -116,7 +135,7 @@
                     <label class="form-label">Xác nhận mật khẩu</label>                   
                     <div class="input-group">
                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                               value="" required>
+                               value="" placeholder="Nhập lại mật khẩu" required>
                         <button type="button" class="btn btn-light" onclick="togglePassword('confirmPassword')"><i class="bi bi-eye"></i></button>
                     </div>
 
@@ -156,7 +175,7 @@
                     icon.classList.remove("bi-eye-slash");
                     icon.classList.add("bi-eye");
                 }
-            }          
+            }
         </script>
 
     </body>
