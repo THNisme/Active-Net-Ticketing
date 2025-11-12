@@ -1,0 +1,111 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package DAOs.nvd2306;
+
+import Utils.nvd2603.DBContext;
+import Models.nvd2306.Ticket;
+import Utils.nvd2603.DBContext;
+
+import java.sql.*;
+import java.util.*;
+
+/**
+ *
+ * @author NguyenDuc
+ */
+public class TicketDAO extends DBContext {
+
+    // === Lấy danh sách vé còn trống của một loại ===
+    public List<Ticket> pickAvailableTickets(Connection conn, int ticketTypeId, int qty) throws SQLException {
+        List<Ticket> res = new ArrayList<>();
+        String sql = """
+            SELECT TOP (?) TicketID, TicketTypeID, SeatID, SerialNumber, StatusID, IssuedAt
+            FROM Tickets
+            WHERE TicketTypeID = ? AND StatusID = 1
+            ORDER BY TicketID;
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, qty);
+            ps.setInt(2, ticketTypeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Ticket t = new Ticket(
+                            rs.getInt("TicketID"),
+                            rs.getInt("TicketTypeID"),
+                            (Integer) rs.getObject("SeatID"),
+                            rs.getString("SerialNumber"),
+                            rs.getInt("StatusID"),
+                            rs.getTimestamp("IssuedAt")
+                    );
+                    res.add(t);
+                }
+            }
+        }
+        return res;
+    }
+
+    // === Đánh dấu danh sách vé đã bán (StatusID = 2) ===
+    public void markTicketsSold(Connection conn, List<Integer> ticketIds) throws SQLException {
+        if (ticketIds == null || ticketIds.isEmpty()) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ticketIds.size(); i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append("?");
+        }
+        String sql = "UPDATE Tickets SET StatusID = 2 WHERE TicketID IN (" + sb + ")";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            int idx = 1;
+            for (Integer id : ticketIds) {
+                ps.setInt(idx++, id);
+            }
+            ps.executeUpdate();
+        }
+    }
+
+    // === Lấy tên loại vé theo ID (hữu ích cho PDF, email) ===
+    public Map<Integer, String> loadTypeNames(Connection conn, Collection<Integer> typeIds) throws SQLException {
+        Map<Integer, String> map = new HashMap<>();
+        if (typeIds == null || typeIds.isEmpty()) {
+            return map;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < typeIds.size(); i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append("?");
+        }
+        String sql = "SELECT TicketTypeID, TypeName FROM TicketTypes WHERE TicketTypeID IN (" + sb + ")";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            int idx = 1;
+            for (Integer id : typeIds) {
+                ps.setInt(idx++, id);
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    map.put(rs.getInt("TicketTypeID"), rs.getString("TypeName"));
+                }
+            }
+        }
+        return map;
+    }
+
+    // === Đếm số vé trống còn lại của một loại ===
+    public int countAvailableByType(Connection conn, int ticketTypeId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Tickets WHERE TicketTypeID = ? AND StatusID = 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketTypeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getInt(1) : 0;
+            }
+        }
+    }
+}

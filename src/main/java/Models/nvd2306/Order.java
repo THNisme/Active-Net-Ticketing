@@ -4,6 +4,7 @@
  */
 package Models.nvd2306;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -12,28 +13,29 @@ import java.sql.Timestamp;
  */
 public class Order {
 
-    private int orderId;
-    private int userId;
+    private int orderID;
+    private int userID;
     private String contactFullname;
     private String contactPhone;
     private String contactEmail;
-    private double totalAmount;
-    private int statusId;
+    private BigDecimal totalAmount;
+    private Timestamp orderDate;
+    private int statusID;
 
-    public int getOrderId() {
-        return orderId;
+    public int getOrderID() {
+        return orderID;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getContactFullname() {
@@ -60,19 +62,27 @@ public class Order {
         this.contactEmail = contactEmail;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public int getStatusId() {
-        return statusId;
+    public Timestamp getOrderDate() {
+        return orderDate;
     }
 
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
+    public void setOrderDate(Timestamp orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
     }
 }

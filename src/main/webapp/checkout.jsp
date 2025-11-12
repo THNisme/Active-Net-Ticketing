@@ -158,7 +158,7 @@
         <!-- ==== Content ==== -->
         <div class="container">
 
-            <form action="payment" method="POST" style="display:flex;gap:40px;width:100%;">
+            <form action="payment-preview" method="post" style="display:flex;gap:40px;width:100%;">
                 <!-- LEFT: Bảng câu hỏi -->
                 <div class="left">
                     <div class="form-card">

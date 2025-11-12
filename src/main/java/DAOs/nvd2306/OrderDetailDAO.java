@@ -5,9 +5,11 @@
 package DAOs.nvd2306;
 
 import Models.nvd2306.OrderDetail;
+import Models.nvd2306.TicketItem;
 import Utils.nvd2603.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,25 +18,33 @@ import java.util.List;
  */
 public class OrderDetailDAO extends DBContext {
 
-    public void insertOrderDetail(OrderDetail d) throws Exception {
-        String sql = "INSERT INTO OrderDetail (OrderID, TicketID, UnitPrice, Quantity, StatusID) VALUES (?, ?, ?, ?, 1)";
-        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, d.getOrderID());
-            ps.setInt(2, d.getTicketID());
-            ps.setDouble(3, d.getUnitPrice());
-            ps.setInt(4, d.getQuantity());
+    // === Chèn 1 chi tiết đơn hàng ===
+    public void insertOrderDetail(Connection conn, OrderDetail detail) throws SQLException {
+        String sql = """
+            INSERT INTO OrderDetails (OrderID, TicketTypeID, UnitPrice, Quantity, StatusID)
+            VALUES (?, ?, ?, ?, 1);
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, detail.getOrderID());
+            ps.setInt(2, detail.getTicketTypeID());
+            ps.setBigDecimal(3, detail.getUnitPrice());
+            ps.setInt(4, detail.getQuantity());
             ps.executeUpdate();
         }
     }
 
-    public void batchInsert(int orderId, List<OrderDetail> items) throws Exception {
-        String sql = "INSERT INTO OrderDetail (OrderID, TicketID, UnitPrice, Quantity, StatusID) VALUES (?, ?, ?, ?, 1)";
-        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            for (OrderDetail d : items) {
+    // === Chèn hàng loạt (nếu cần thêm nhiều vé 1 lúc) ===
+    public void batchInsert(Connection conn, int orderId, List<TicketItem> items) throws SQLException {
+        String sql = """
+            INSERT INTO OrderDetails (OrderID, TicketTypeID, UnitPrice, Quantity, StatusID)
+            VALUES (?, ?, ?, ?, 1);
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (TicketItem item : items) {
                 ps.setInt(1, orderId);
-                ps.setInt(2, d.getTicketID());
-                ps.setDouble(3, d.getUnitPrice());
-                ps.setInt(4, d.getQuantity());
+                ps.setInt(2, item.getTicketTypeId());
+                ps.setBigDecimal(3, item.getPrice());
+                ps.setInt(4, item.getQuantity());
                 ps.addBatch();
             }
             ps.executeBatch();

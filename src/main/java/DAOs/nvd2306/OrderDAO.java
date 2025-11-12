@@ -19,37 +19,47 @@ import java.sql.Statement;
  */
 public class OrderDAO extends DBContext {
 
-    public int createOrder(Order order) throws SQLException {
+    /**
+     * Insert Orders và trả về OrderID (identity)
+     */
+    public int insertOrder(Connection conn, Order order) throws SQLException {
         String sql = """
             INSERT INTO Orders(UserID, ContactFullname, ContactPhone, ContactEmail, TotalAmount, OrderDate, StatusID)
             VALUES (?, ?, ?, ?, ?, GETDATE(), ?);
         """;
-        PreparedStatement stm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        stm.setInt(1, order.getUserId());
-        stm.setString(2, order.getContactFullname());
-        stm.setString(3, order.getContactPhone());
-        stm.setString(4, order.getContactEmail());
-        stm.setDouble(5, order.getTotalAmount());
-        stm.setInt(6, order.getStatusId());
-        stm.executeUpdate();
+        try (PreparedStatement stm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stm.setInt(1, order.getUserID());                 // ✅ đúng getter
+            stm.setString(2, order.getContactFullname());
+            stm.setString(3, order.getContactPhone());
+            stm.setString(4, order.getContactEmail());
+            stm.setBigDecimal(5, order.getTotalAmount());     // ✅ BigDecimal từ model
+            stm.setInt(6, order.getStatusID());               // ✅ đúng getter
+            stm.executeUpdate();
 
-        ResultSet rs = stm.getGeneratedKeys();
-        if (rs.next()) {
-            return rs.getInt(1);
+            try (ResultSet rs = stm.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
         }
         return -1;
     }
 
-    public void insertOrderDetail(int orderId, TicketItem ticket) throws SQLException {
+    /**
+     * (Dùng khi cần) Insert một dòng OrderDetails từ TicketItem trong cùng
+     * transaction
+     */
+    public void insertOrderDetail(Connection conn, int orderId, TicketItem ticket) throws SQLException {
         String sql = """
-            INSERT INTO OrderDetails(OrderID, TicketID, UnitPrice, Quantity, StatusID)
+            INSERT INTO OrderDetails (OrderID, TicketTypeID, UnitPrice, Quantity, StatusID)
             VALUES (?, ?, ?, ?, 1);
         """;
-        PreparedStatement stm = conn.prepareStatement(sql);
-        stm.setInt(1, orderId);
-        stm.setInt(2, ticket.getTicketId());
-        stm.setDouble(3, ticket.getPrice());
-        stm.setInt(4, ticket.getQty());
-        stm.executeUpdate();
+        try (PreparedStatement stm = conn.prepareStatement(sql)) {
+            stm.setInt(1, orderId);
+            stm.setInt(2, ticket.getTicketTypeId());
+            stm.setBigDecimal(3, ticket.getPrice());          // ✅ BigDecimal từ bridge getter
+            stm.setInt(4, ticket.getQuantity());
+            stm.executeUpdate();
+        }
     }
 }

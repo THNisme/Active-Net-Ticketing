@@ -15,6 +15,10 @@ import Models.nvd2306.Transaction;
 import Models.nvd2306.User;
 import Models.nvd2306.Wallet;
 import Utils.nvd2603.DBContext;
+import Utils.nvd2603.MailService;
+import Utils.nvd2603.TicketPDFGenerator;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -23,13 +27,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.File;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONObject;
 
 /**
  *
@@ -37,6 +43,11 @@ import org.json.JSONObject;
  */
 @WebServlet(name = "PaymentServlet", urlPatterns = {"/payment"})
 public class PaymentServlet extends HttpServlet {
+
+    private final WalletDao walletDao = new WalletDao();
+    private final OrderDAO orderDAO = new OrderDAO();
+    private final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+    private final TransactionDAO transactionDAO = new TransactionDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -90,33 +101,162 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Nhận dữ liệu từ checkout.jsp
-        String fullName = request.getParameter("fullName");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        String eventId = request.getParameter("eventId");
+
+        HttpSession session = request.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
+        // ==== Nhận dữ liệu từ form ====
+        String eventIdStr = request.getParameter("eventId");
         String eventName = request.getParameter("eventName");
         String placeName = request.getParameter("placeName");
-        String startStr = request.getParameter("startStr");
         String totalAmountStr = request.getParameter("totalAmount");
+        String selectionsJson = request.getParameter("selectionsJson");
 
-        // Lấy vé từ session (đã lưu ở CheckoutServlet)
-        HttpSession session = request.getSession();
-        @SuppressWarnings("unchecked")
-        List<TicketItem> tickets = (List<TicketItem>) session.getAttribute("tickets");
+        // Các thông tin người mua
+        String contactFullname = request.getParameter("fullName");
+        String contactPhone = request.getParameter("phone");
+        String contactEmail = nvl(request.getParameter("email"), user.getContactEmail());
 
-        // Gửi dữ liệu sang payment.jsp để hiển thị
-        request.setAttribute("fullName", fullName);
-        request.setAttribute("phone", phone);
-        request.setAttribute("email", email);
-        request.setAttribute("eventId", eventId);
-        request.setAttribute("eventName", eventName);
-        request.setAttribute("placeName", placeName);
-        request.setAttribute("startStr", startStr);
-        request.setAttribute("totalAmount", totalAmountStr);
-        request.setAttribute("tickets", tickets);
+        int eventId = parseIntSafe(eventIdStr, 0);
+        BigDecimal totalAmount = parseMoney(totalAmountStr);
 
-        request.getRequestDispatcher("/payment.jsp").forward(request, response);
+        // Chuyển JSON sang danh sách vé
+        Type listType = new TypeToken<List<TicketItem>>() {
+        }.getType();
+        List<TicketItem> items = new Gson().fromJson(selectionsJson, listType);
+
+        // ==== Kiểm tra ví ====
+        Wallet wallet;
+        try {
+            wallet = walletDao.getWalletByUserId(user.getUserID());
+        } catch (Exception e) {
+            forwardFail(request, response, "Không thể truy xuất ví người dùng.");
+            return;
+        }
+
+        if (wallet == null) {
+            forwardFail(request, response, "Ví không tồn tại.");
+            return;
+        }
+        if (wallet.getBalance().compareTo(totalAmount) < 0) {
+            request.setAttribute("insufficientBalance", true);
+            request.setAttribute("message", "Số dư ví không đủ để thanh toán.");
+            request.setAttribute("eventName", eventName);
+            request.setAttribute("placeName", placeName);
+            request.setAttribute("totalAmount", totalAmount);
+            request.setAttribute("selectionsJson", selectionsJson);
+            request.getRequestDispatcher("payment-preview.jsp").forward(request, response);
+            return;
+        }
+
+        // ==== Bắt đầu thanh toán ====
+        DBContext db = new DBContext();
+        try (Connection conn = db.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // 1️⃣ Tạo đơn hàng
+            Order order = new Order();
+            order.setUserID(user.getUserID());
+            order.setContactFullname(contactFullname);
+            order.setContactEmail(contactEmail);
+            order.setContactPhone(contactPhone);
+            order.setOrderDate(Timestamp.from(Instant.now()));
+            order.setTotalAmount(totalAmount);
+            order.setStatusID(1);
+
+            int orderId = orderDAO.insertOrder(conn, order);
+
+            // 2️⃣ Cập nhật số dư ví
+            BigDecimal newBalance = wallet.getBalance().subtract(totalAmount);
+            walletDao.updateBalance(conn, wallet.getWalletID(), newBalance);
+
+            // 3️⃣ Ghi giao dịch thanh toán
+            transactionDAO.insertPayment(conn, wallet.getWalletID(), orderId, totalAmount.negate(), newBalance);
+
+            conn.commit();
+
+            // ==== Tạo PDF vé và gửi mail ====
+            String pdfPath = null;
+            try {
+                File pdfFile = TicketPDFGenerator.createTicketPDF(
+                        "C:/ActiveNetTickets", // Thư mục xuất vé
+                        eventName,
+                        placeName,
+                        "Không rõ thời gian", // Có thể thay bằng startStr nếu bạn truyền
+                        contactFullname,
+                        "Vé điện tử", // Loại vé mặc định
+                        "SN" + orderId // Serial
+                );
+                pdfPath = pdfFile.getAbsolutePath();
+            } catch (Exception ignored) {
+            }
+
+            try {
+                String subject = "[Active-Net Ticketing] Thanh toán thành công #" + orderId;
+                String body = "Đơn hàng #" + orderId + " đã được thanh toán thành công.<br>"
+                        + "<b>Sự kiện:</b> " + eventName + "<br>"
+                        + "<b>Địa điểm:</b> " + placeName + "<br>"
+                        + "<b>Tổng tiền:</b> " + totalAmount + " đ<br>"
+                        + "<br>Cảm ơn bạn đã mua vé tại Active-Net Ticketing.";
+
+                List<File> attachments = new ArrayList<>();
+                if (pdfPath != null) {
+                    attachments.add(new File(pdfPath));
+                }
+
+                MailService.sendEmail(contactEmail, subject, body, attachments);
+            } catch (Exception ignored) {
+            }
+
+            // ==== Chuyển sang trang thành công ====
+            request.setAttribute("orderId", orderId);
+            request.setAttribute("eventId", eventId);
+            request.setAttribute("eventName", eventName);
+            request.setAttribute("placeName", placeName);
+            request.setAttribute("contactFullname", contactFullname);
+            request.setAttribute("contactPhone", contactPhone);
+            request.setAttribute("contactEmail", contactEmail);
+            request.setAttribute("totalAmount", totalAmount);
+            request.setAttribute("items", items);
+            request.getRequestDispatcher("payment-success.jsp").forward(request, response);
+
+        } catch (Exception ex) {
+            forwardFail(request, response, "Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
+        }
+    }
+
+    // ===== Helpers =====
+    private static String nvl(String v, String fallback) {
+        return (v == null || v.isBlank()) ? fallback : v;
+    }
+
+    private static int parseIntSafe(String s, int def) {
+        try {
+            return Integer.parseInt(s);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    private static BigDecimal parseMoney(String s) {
+        if (s == null) {
+            return BigDecimal.ZERO;
+        }
+        String cleaned = s.replace(".", "").replace(",", "").replaceAll("[^0-9-]", "");
+        if (cleaned.isBlank()) {
+            return BigDecimal.ZERO;
+        }
+        return new BigDecimal(cleaned);
+    }
+
+    private void forwardFail(HttpServletRequest request, HttpServletResponse response, String msg)
+            throws ServletException, IOException {
+        request.setAttribute("message", msg);
+        request.getRequestDispatcher("payment-fail.jsp").forward(request, response);
     }
 
     /**

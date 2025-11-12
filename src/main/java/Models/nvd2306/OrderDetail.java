@@ -4,6 +4,8 @@
  */
 package Models.nvd2306;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author NguyenDuc
@@ -12,20 +14,10 @@ public class OrderDetail {
 
     private int orderDetailID;
     private int orderID;
-    private int ticketID;
-    private double unitPrice;
+    private int ticketTypeID;
     private int quantity;
-
-    public OrderDetail() {
-    }
-
-    public OrderDetail(int orderDetailID, int orderID, int ticketID, double unitPrice, int quantity) {
-        this.orderDetailID = orderDetailID;
-        this.orderID = orderID;
-        this.ticketID = ticketID;
-        this.unitPrice = unitPrice;
-        this.quantity = quantity;
-    }
+    private BigDecimal unitPrice;
+    private int statusID;
 
     public int getOrderDetailID() {
         return orderDetailID;
@@ -43,20 +35,12 @@ public class OrderDetail {
         this.orderID = orderID;
     }
 
-    public int getTicketID() {
-        return ticketID;
+    public int getTicketTypeID() {
+        return ticketTypeID;
     }
 
-    public void setTicketID(int ticketID) {
-        this.ticketID = ticketID;
-    }
-
-    public double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setTicketTypeID(int ticketTypeID) {
+        this.ticketTypeID = ticketTypeID;
     }
 
     public int getQuantity() {
@@ -65,5 +49,21 @@ public class OrderDetail {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
     }
 }

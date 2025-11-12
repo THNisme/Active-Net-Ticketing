@@ -4,6 +4,7 @@
  */
 package Models.nvd2306;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -12,40 +13,85 @@ import java.sql.Timestamp;
  */
 public class Transaction {
 
-    private int transactionId;
-    private int userId;
-    private int transactionTypeId;
-    private double amount;
+    private int transactionID;
+    private int walletID;
+    private Integer orderID;
+    private int transactionTypeID;
+    private BigDecimal amount;
+    private BigDecimal remain;
+    private String description;
+    private Timestamp createdAt;
+    private int statusID;
 
-    public int getTransactionId() {
-        return transactionId;
+    public int getTransactionID() {
+        return transactionID;
     }
 
-    public void setTransactionId(int transactionId) {
-        this.transactionId = transactionId;
+    public void setTransactionID(int transactionID) {
+        this.transactionID = transactionID;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getWalletID() {
+        return walletID;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setWalletID(int walletID) {
+        this.walletID = walletID;
     }
 
-    public int getTransactionTypeId() {
-        return transactionTypeId;
+    public Integer getOrderID() {
+        return orderID;
     }
 
-    public void setTransactionTypeId(int transactionTypeId) {
-        this.transactionTypeId = transactionTypeId;
+    public void setOrderID(Integer orderID) {
+        this.orderID = orderID;
     }
 
-    public double getAmount() {
+    public int getTransactionTypeID() {
+        return transactionTypeID;
+    }
+
+    public void setTransactionTypeID(int transactionTypeID) {
+        this.transactionTypeID = transactionTypeID;
+    }
+
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getRemain() {
+        return remain;
+    }
+
+    public void setRemain(BigDecimal remain) {
+        this.remain = remain;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
     }
 }

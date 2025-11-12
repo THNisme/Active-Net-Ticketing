@@ -6,6 +6,7 @@ package DAOs.nvd2306;
 
 import Models.nvd2306.Transaction;
 import Utils.nvd2603.DBContext;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,15 +17,46 @@ import java.sql.SQLException;
  */
 public class TransactionDAO extends DBContext {
 
-    public void insertTransaction(Transaction t) throws SQLException {
+    /**
+     * Ghi giao dịch thanh toán (PAYMENT) trong cùng transaction
+     */
+    public void insertPayment(Connection conn, int walletId, Integer orderId,
+            BigDecimal amount, BigDecimal remain) throws SQLException {
         String sql = """
-            INSERT INTO Transactions(UserID, TransactionTypeID, Amount, CreatedAt, StatusID)
-            VALUES (?, ?, ?, GETDATE(), 1);
+            INSERT INTO Transactions (WalletID, OrderID, TransactionTypeID, Amount, Remain, CreatedAt, StatusID)
+            VALUES (?, ?, 
+                (SELECT TOP 1 TransactionTypeID FROM TransactionTypes WHERE Code = 'PAYMENT'),
+                ?, ?, GETDATE(), 1);
         """;
-        PreparedStatement stm = conn.prepareStatement(sql);
-        stm.setInt(1, t.getUserId());
-        stm.setInt(2, t.getTransactionTypeId());
-        stm.setDouble(3, t.getAmount());
-        stm.executeUpdate();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, walletId);
+            if (orderId == null) {
+                ps.setNull(2, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(2, orderId);
+            }
+            ps.setBigDecimal(3, amount);   // Ví dụ: số âm khi trừ tiền
+            ps.setBigDecimal(4, remain);   // Số dư còn lại sau thanh toán
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * (Tuỳ chọn) Ghi giao dịch nạp tiền (DEPOSIT)
+     */
+    public void insertDeposit(Connection conn, int walletId,
+            BigDecimal amount, BigDecimal remain) throws SQLException {
+        String sql = """
+            INSERT INTO Transactions (WalletID, TransactionTypeID, Amount, Remain, CreatedAt, StatusID)
+            VALUES (?, 
+                (SELECT TOP 1 TransactionTypeID FROM TransactionTypes WHERE Code = 'DEPOSIT'),
+                ?, ?, GETDATE(), 1);
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, walletId);
+            ps.setBigDecimal(2, amount);
+            ps.setBigDecimal(3, remain);
+            ps.executeUpdate();
+        }
     }
 }

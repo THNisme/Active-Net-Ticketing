@@ -41,6 +41,7 @@ public class EventDao extends DBContext {
                 e.setEndDate(rs.getTimestamp("EndDate"));
                 e.setPlaceID(rs.getInt("PlaceID"));
                 e.setStatusID(rs.getInt("StatusID"));
+                e.setLowestPrice(rs.getBigDecimal("LowestPrice"));
                 list.add(e);
             }
 
@@ -54,11 +55,20 @@ public class EventDao extends DBContext {
 
     public List<Event> getAllEvents() {
         List<Event> list = new ArrayList<>();
-        String sql = "SELECT * FROM Events";
+        String sql = """
+        SELECT 
+            e.EventID, e.CategoryID, e.EventName, e.Description,
+            e.ImageURL, e.StartDate, e.EndDate, e.PlaceID, e.StatusID,
+            MIN(tt.Price) AS LowestPrice
+        FROM Events e
+        LEFT JOIN TicketTypes tt ON e.EventID = tt.EventID
+        GROUP BY e.EventID, e.CategoryID, e.EventName, e.Description,
+                 e.ImageURL, e.StartDate, e.EndDate, e.PlaceID, e.StatusID
+        ORDER BY e.StartDate ASC
+    """;
 
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Event e = new Event();
                 e.setEventID(rs.getInt("EventID"));
@@ -70,8 +80,10 @@ public class EventDao extends DBContext {
                 e.setEndDate(rs.getTimestamp("EndDate"));
                 e.setPlaceID(rs.getInt("PlaceID"));
                 e.setStatusID(rs.getInt("StatusID"));
+                e.setLowestPrice(rs.getBigDecimal("LowestPrice"));
                 list.add(e);
             }
+
         } catch (SQLException e) {
             System.out.println("❌ Lỗi getAllEvents: " + e.getMessage());
             e.printStackTrace();

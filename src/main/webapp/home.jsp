@@ -3,6 +3,9 @@
     Created on : Oct 4, 2025, 5:25:12 PM
     Author     : NguyenDuc
 --%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.Locale"%>
 <%@page import="Models.nvd2306.Event"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -396,8 +399,12 @@
                                      style="width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px;">
                                 <div class="card-body">
                                     <h5 class="card-title"><%= e.getEventName()%></h5>
-                                    <p class="price mb-2" style="color:#ffb6b6">Từ 
-                                        <%= (e.getStatusID() == 1) ? "Miễn phí" : "Liên hệ"%>
+                                    <p class="price mb-2" style="color:#ffb6b6">
+                                        <% if (e.getLowestPrice() != null) {%>
+                                        Giá từ <%= NumberFormat.getInstance(new Locale("vi", "VN")).format(e.getLowestPrice())%> VNĐ
+                                        <% } else { %>
+                                        Giá: Đang cập nhật
+                                        <% }%>
                                     </p>
                                     <p class="date mb-0">
                                         <i class="bi bi-calendar3"></i>

@@ -14,16 +14,14 @@ public class Ticket {
 
     private int ticketID;
     private int ticketTypeID;
-    private Integer seatID;       // Có thể null
+    private Integer seatID;        // có thể null
     private String serialNumber;
     private int statusID;
     private Timestamp issuedAt;
 
-    // Constructor mặc định
     public Ticket() {
     }
 
-    // Constructor đầy đủ
     public Ticket(int ticketID, int ticketTypeID, Integer seatID, String serialNumber, int statusID, Timestamp issuedAt) {
         this.ticketID = ticketID;
         this.ticketTypeID = ticketTypeID;
@@ -33,7 +31,6 @@ public class Ticket {
         this.issuedAt = issuedAt;
     }
 
-    // Getter & Setter
     public int getTicketID() {
         return ticketID;
     }
