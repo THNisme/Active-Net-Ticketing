@@ -163,7 +163,7 @@
                 <h3>Loại vé</h3>
 
                 <c:forEach var="ticket" items="${ticketTypes}">
-                    <div class="ticket">
+                    <div class="ticket" data-ticketid="${ticket.ticketTypeID}">
                         <h3 class="ticket-name">${ticket.typeName}</h3>
                         <p class="price ticket-price" data-raw-price="${ticket.price}">
                             <fmt:formatNumber value="${ticket.price}" type="number" groupingUsed="true"/> đ
@@ -252,12 +252,21 @@
                         if (value < available) {
                             value++;
                             input.value = value;
-                            selections[name] = {name: name, qty: value, price: price};
+
+                            const ticketId = ticket.getAttribute("data-ticketid");
+
+                            selections[name] = {
+                                ticketId: parseInt(ticketId),
+                                name: name,
+                                qty: value,
+                                price: price
+                            };
                             updateSummary();
                         } else {
                             alert("Chỉ còn " + available + " vé cho " + name);
                         }
                     });
+
 
                     minusBtn.addEventListener("click", function () {
                         let value = parseInt(input.value, 10);

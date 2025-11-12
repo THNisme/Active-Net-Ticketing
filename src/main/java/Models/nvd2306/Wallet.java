@@ -10,40 +10,31 @@ package Models.nvd2306;
  */
 public class Wallet {
 
-    private int walletID;
-    private int userID;
-    private double balance;
+    private int walletId;
+    private int userId;
+    private double remain;
 
-    public Wallet() {
+    public int getWalletId() {
+        return walletId;
     }
 
-    public Wallet(int walletID, int userID, double balance) {
-        this.walletID = walletID;
-        this.userID = userID;
-        this.balance = balance;
+    public void setWalletId(int walletId) {
+        this.walletId = walletId;
     }
 
-    public int getWalletID() {
-        return walletID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setWalletID(int walletID) {
-        this.walletID = walletID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getUserID() {
-        return userID;
+    public double getRemain() {
+        return remain;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public void setRemain(double remain) {
+        this.remain = remain;
     }
 }

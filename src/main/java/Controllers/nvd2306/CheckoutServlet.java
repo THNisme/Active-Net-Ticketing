@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,7 +110,8 @@ public class CheckoutServlet extends HttpServlet {
                 double price = t.getDouble("price");
                 double total = qty * price;
 
-                tickets.add(new TicketItem(name, qty, price, total));
+                int ticketId = t.getInt("ticketId");
+                tickets.add(new TicketItem(ticketId, name, qty, price, total));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -122,6 +124,9 @@ public class CheckoutServlet extends HttpServlet {
         request.setAttribute("startStr", startStr);
         request.setAttribute("tickets", tickets);
         request.setAttribute("totalAmount", totalAmount);
+        HttpSession session = request.getSession();
+        session.setAttribute("tickets", tickets);
+        session.setAttribute("totalAmount", totalAmount);
 
         request.getRequestDispatcher("/checkout.jsp").forward(request, response);
     }

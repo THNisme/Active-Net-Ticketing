@@ -158,69 +158,91 @@
         <!-- ==== Content ==== -->
         <div class="container">
 
-            <!-- LEFT: Bảng câu hỏi -->
-            <div class="left">
-                <div class="form-card">
-                    <h3>BẢNG CÂU HỎI</h3>
-                    <div class="form-group">
-                        <label>Họ và tên *</label>
-                        <input type="text" name="fullName" placeholder="Điền câu trả lời của bạn" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Số điện thoại *</label>
-                        <input type="tel" name="phone" placeholder="Điền câu trả lời của bạn" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Địa chỉ email *</label>
-                        <input type="email" name="email" placeholder="Điền câu trả lời của bạn" required>
+            <form action="payment" method="POST" style="display:flex;gap:40px;width:100%;">
+                <!-- LEFT: Bảng câu hỏi -->
+                <div class="left">
+                    <div class="form-card">
+                        <h3>BẢNG CÂU HỎI</h3>
+                        <div class="form-group">
+                            <label>Họ và tên *</label>
+                            <input type="text" name="fullName" placeholder="Điền câu trả lời của bạn" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại *</label>
+                            <input type="tel" name="phone" placeholder="Điền câu trả lời của bạn" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ email *</label>
+                            <input type="email" name="email" placeholder="Điền câu trả lời của bạn" required>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- RIGHT: Tóm tắt vé -->
-            <div class="right">
-                <div class="summary-header">
-                    <h3>Thông tin đặt vé</h3>
-                    <a href="select-ticket?id=${eventId}">Chọn lại vé</a>
-                </div>
-
-                <c:forEach var="t" items="${tickets}">
-                    <div class="summary-item">
-                        <span>${t.name} x${t.qty}</span>
-                        <span><fmt:formatNumber value="${t.total}" type="number" groupingUsed="true"/> đ</span>
+                <!-- RIGHT: Tóm tắt vé -->
+                <div class="right">
+                    <div class="summary-header">
+                        <h3>Thông tin đặt vé</h3>
+                        <a href="select-ticket?id=${eventId}">Chọn lại vé</a>
                     </div>
-                </c:forEach>
 
-                <div class="total-line">
-                    <span>Tổng cộng</span>
-                    <span><fmt:formatNumber value="${totalAmount}" type="number" groupingUsed="true"/> đ</span>
+                    <c:forEach var="t" items="${tickets}">
+                        <div class="summary-item">
+                            <span>${t.name} x${t.qty}</span>
+                            <span><fmt:formatNumber value="${t.total}" type="number" groupingUsed="true"/> đ</span>
+                        </div>
+                    </c:forEach>
+
+                    <div class="total-line">
+                        <span>Tổng cộng</span>
+                        <span><fmt:formatNumber value="${totalAmount}" type="number" groupingUsed="true"/> đ</span>
+                    </div>
+
+                    <!-- Hidden gửi sang PaymentServlet -->
+                    <input type="hidden" name="eventId" value="${eventId}">
+                    <input type="hidden" name="totalAmount" value="${totalAmount}">
+                    <input type="hidden" name="eventName" value="${eventName}">
+                    <input type="hidden" name="placeName" value="${placeName}">
+                    <input type="hidden" name="startStr" value="${startStr}">
+
+                    <button type="submit" class="btn-continue">Tiếp tục</button>
                 </div>
-
-                <button type="button" class="btn-continue">Tiếp tục</button>
-            </div>
+            </form>
         </div>
 
         <!-- ==== Countdown Script ==== -->
         <script>
-            let m = 15, s = 0;
-            const minEl = document.getElementById('min');
-            const secEl = document.getElementById('sec');
-            const timer = setInterval(() => {
-                if (s === 0) {
-                    if (m === 0) {
-                        clearInterval(timer);
-                        alert('Hết thời gian giữ vé!');
-                        window.location.href = 'select-ticket?id=${eventId}';
-                        return;
-                    }
-                    m--;
-                    s = 59;
-                } else
-                    s--;
-                minEl.textContent = String(m).padStart(2, '0');
-                secEl.textContent = String(s).padStart(2, '0');
-            }, 1000);
-        </script>
+            const COUNTDOWN_MINUTES = 15;
+            const STORAGE_KEY = "checkout_expire_time";
 
+            let expireTime = sessionStorage.getItem(STORAGE_KEY);
+            if (!expireTime) {
+                // Nếu chưa có, đặt thời gian hết hạn mới (tính bằng milliseconds)
+                expireTime = Date.now() + COUNTDOWN_MINUTES * 60 * 1000;
+                sessionStorage.setItem(STORAGE_KEY, expireTime);
+            }
+
+            function updateTimer() {
+                const now = Date.now();
+                const diff = expireTime - now;
+
+                if (diff <= 0) {
+                    document.getElementById("min").textContent = "00";
+                    document.getElementById("sec").textContent = "00";
+                    alert("Hết thời gian giữ vé!");
+                    sessionStorage.removeItem(STORAGE_KEY);
+                    window.location.href = "select-ticket?id=${eventId}";
+                    return;
+                }
+
+                const minutes = Math.floor(diff / 60000);
+                const seconds = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById("min").textContent = String(minutes).padStart(2, "0");
+                document.getElementById("sec").textContent = String(seconds).padStart(2, "0");
+            }
+
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        </script>
     </body>
 </html>
