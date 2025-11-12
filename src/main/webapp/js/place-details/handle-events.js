@@ -48,12 +48,8 @@ function renderEvents() {
                 </div>
             </div>
             <div class="actions">
-                <a href="#"><i class="fas fa-chart-pie"></i><span>Doanh thu</span></a>
-                <a href="#"><i class="fas fa-receipt"></i><span>Đơn hàng</span></a>
+                <a href="admincenter"><i class="fas fa-chart-pie"></i><span>Về trung tâm</span></a>
                 <a href="event-form?action=update&eid=${evt.id}"><i class="fas fa-pen"></i><span>Chỉnh sửa</span></a>
-                <a class="btn-delete" data-id="${evt.id}" data-title="${evt.title}" data-bs-toggle="modal" data-bs-target="#modalDelete">
-                    <i class="fas fa-trash"></i><span>Xóa</span>
-                </a>
             </div>
         `;
         eventList.appendChild(eventDiv);

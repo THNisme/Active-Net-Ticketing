@@ -95,7 +95,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button onclick="history.back();" type="button" class="btn prev-btn">Quay lại</button>
+                        <a href="place-overview" type="button" class="btn prev-btn">Quay lại</a>
                         <button type="submit" class="btn btn-primary next-btn">Tiếp theo</button>
                     </form>
                 </div>
