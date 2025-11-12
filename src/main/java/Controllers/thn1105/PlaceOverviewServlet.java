@@ -81,8 +81,7 @@ public class PlaceOverviewServlet extends HttpServlet {
 
             request.setAttribute("places", placeList);
             request.getRequestDispatcher("view-thn1105/place-overview.jsp").forward(request, response);
-        }
-        if (action.equalsIgnoreCase("detail")) {
+        } else if (action.equalsIgnoreCase("detail")) {
             String placeIdStr = request.getParameter("pid");
             int placeID = Integer.parseInt(placeIdStr);
 

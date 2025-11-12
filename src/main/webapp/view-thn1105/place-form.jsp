@@ -107,7 +107,7 @@
                         <c:if test="${not empty globalError}">
                             <p class="text-danger"><c:out value="${globalError}"/></p>
                         </c:if>
-                        <button onclick="history.back();" type="button" class="btn prev-btn">Quay lại</button>
+                        <a href="place-overview" type="button" class="btn prev-btn">Quay lại</a>
                         <button type="submit" class="btn btn-primary next-btn" data-next="step2-tab">Tiếp theo</button>
                     </form>
                 </div>

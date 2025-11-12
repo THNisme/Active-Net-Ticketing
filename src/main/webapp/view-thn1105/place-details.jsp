@@ -346,30 +346,6 @@
 
                     <div id="event-list"></div>
                     <div class="pagination" id="pagination"></div>
-
-
-
-                    <!-- EVENT CARD -->
-                <c:forEach var="e" items="${events}">
-                    <div class="my-4">
-                        <div class="event-main">
-                            <img src="${e.imageURL}" alt="Sự kiện">
-                            <div class="event-content">
-                                <h2>${e.eventName}</h2>
-                                <p class="time">Diễn ra: ${e.startDate}</p>   
-                                <p class="time">Kết thúc: ${e.endDate}</p>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <a href="admincenter"><i class="fas fa-chart-pie"></i><span>Về trung tâm</span></a>
-                            <a href="event-form?action=update&eid=${e.eventID}"><i class="fas fa-pen"></i><span>Chỉnh sửa</span></a>
-                        </div>
-                    </div>
-                </c:forEach>
-
-
-
-
             </section>
 
         </div>

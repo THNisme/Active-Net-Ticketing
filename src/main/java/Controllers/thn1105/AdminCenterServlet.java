@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,11 @@ public class AdminCenterServlet extends HttpServlet {
         PlaceDAO pDao = new PlaceDAO();
 
         if (action == null) {
+            HttpSession session = request.getSession(false); // false để không tạo mới nếu chưa có
+            if (session != null) {
+                session.invalidate(); // xóa toàn bộ session
+            }
+            
             List<Event> eventList = eDao.getAll();
             List<Map<String, Object>> jsonList = new ArrayList<>();
 

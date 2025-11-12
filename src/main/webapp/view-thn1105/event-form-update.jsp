@@ -24,7 +24,7 @@
     </head>
 
     <body>
-        <div class="container mt-5">
+        <div class="container my-5">
             <h3 class="mb-4" style="border-bottom: solid 1px rgba(255, 255, 255, 0.3)">Cập nhật sự kiện</h3>
 
             <form id="eventForm" action="event-form?action=update" method="POST" enctype="multipart/form-data">
