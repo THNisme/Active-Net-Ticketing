@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@WebServlet("view-wallet/payment")
+@WebServlet("/payment")
 public class PaymentServlet extends HttpServlet {
     
     @Override
