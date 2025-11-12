@@ -28,6 +28,6 @@ public class TransactionHistoryServlet extends HttpServlet {
         List<Transaction> list = dao.getTransactionsByUserId(userId);
 
         request.setAttribute("transactions", list);
-        request.getRequestDispatcher("/transactionHistory.jsp").forward(request, response);
+        request.getRequestDispatcher("/view-wallet/transactionHistory.jsp").forward(request, response);
     }
 }

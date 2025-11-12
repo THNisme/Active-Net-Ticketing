@@ -79,7 +79,7 @@
             <p><span>Mã ngân hàng:</span> <%= request.getParameter("vnp_BankCode") %></p>
             <p><span>Thời gian:</span> <%= new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.text.SimpleDateFormat("yyyyMMddHHmmss").parse(request.getParameter("vnp_PayDate"))) %></p>
         </div>
-        <a href="view-wallet/deposit.jsp" class="back-button">Quay lại trang chủ</a>
+        <a href="wallet" class="back-button">Quay lại trang chủ</a>
     </div>
 </body>
 </html>
