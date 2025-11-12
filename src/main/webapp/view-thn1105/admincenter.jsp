@@ -56,8 +56,8 @@
             }
 
             .event-main img {
-                width: 160px;
-                height: 110px;
+                width: 192px;
+                height: 132px;
                 object-fit: cover;
                 border-radius: 6px;
             }
@@ -127,7 +127,7 @@
                 text-decoration: none;
             }
 
-            .actions button:hover {
+            .actions a:hover {
                 color: #38bdf8;
             }
 
@@ -168,6 +168,7 @@
                 gap: 20px;
                 width: 100%;
                 box-sizing: border-box;
+                margin-bottom: 2rem;
             }
 
             .search-box {

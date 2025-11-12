@@ -1,5 +1,11 @@
 /* 
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
+ */
+
+
+/* 
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
 
@@ -9,11 +15,6 @@ const eventsPerPage = 3;
 let currentPage = 1;
 let filteredEvents = [...events]; // mảng đang hiển thị (có thể đã được lọc)
 let totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
-
-const fnDelete = (eid, eventName) => {
-    document.getElementById("eventName").textContent = eventName;
-    document.getElementById("eventID").value = eid;
-};
 
 // Cập nhật totalPages mỗi lần dữ liệu lọc thay đổi
 function updatePaginationInfo() {

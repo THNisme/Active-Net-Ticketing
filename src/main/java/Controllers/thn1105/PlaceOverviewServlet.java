@@ -8,6 +8,7 @@ import DAOs.thn1105.EventDAO;
 import DAOs.thn1105.PlaceDAO;
 import Models.thn1105.Event;
 import Models.thn1105.Place;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,7 +17,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -82,12 +86,35 @@ public class PlaceOverviewServlet extends HttpServlet {
             String placeIdStr = request.getParameter("pid");
             int placeID = Integer.parseInt(placeIdStr);
 
+            List<Event> eventList = eDao.getEventsByPlaceID(placeID);
+            List<Map<String, Object>> jsonList = new ArrayList<>();
+
+            for (Event e : eventList) {
+                Place p = pDao.getById(e.getPlaceID());
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", e.getEventID());
+                map.put("title", e.getEventName());
+
+                // format thời gian
+                String formattedTime = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(e.getStartDate());
+                map.put("time", formattedTime);
+
+                map.put("location", p.getPlaceName());
+                map.put("address", p.getAddress());
+                map.put("image", e.getImageURL());
+
+                jsonList.add(map);
+            }
+
+            String json = new Gson().toJson(jsonList); // JSON bình thường
+//            String safeJson = new Gson().toJson(json); // JSON string literal, escape dấu "
+
             Place p = pDao.getById(placeID);
-            List<Event> events = eDao.getEventsByPlaceID(placeID);
-            int quantity = events.size();
+            int quantity = eventList.size();
 
             request.setAttribute("place", p);
-            request.setAttribute("events", events);
+            request.setAttribute("eventsJsonString", json);
             request.setAttribute("quantity", quantity);
             request.getRequestDispatcher("view-thn1105/place-details.jsp").forward(request, response);
         }

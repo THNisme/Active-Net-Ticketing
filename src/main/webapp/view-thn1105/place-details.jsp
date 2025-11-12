@@ -258,12 +258,12 @@
                 background-color: #212529;
                 border-radius: 10px;
             }
-            
+
             #modalZoneMapImageWrapper {
                 overflow: hidden;
                 background-color: #1f2937;
             }
-            
+
             .zoom-control-btn-group {
                 position: relative;
                 z-index: 999;
@@ -322,7 +322,34 @@
             <section class="event-list mb-5">
                 <h4 class="general-infor-label">Các sự kiện đang được tổ chức tại ${place.placeName} </h4>
                 <c:if test="${quantity == 0}"><p class="text-success">Nơi tổ chức hiện đang trống ! <a href="event-form">Tạo sự kiện ngay!</a></p></c:if>
-                <!-- EVENT CARD -->
+
+                    <div class="search-filter">
+                        <!-- Ô tìm kiếm -->
+                        <div class="search-box">
+                            <span class="search-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21 21-4.34-4.34" />
+                                <circle cx="11" cy="11" r="8" />
+                                </svg>
+                            </span>
+                            <input type="text" placeholder="Tìm kiếm sự kiện">
+                            <button>Tìm kiếm</button>
+                        </div>
+
+                        <!-- Bộ lọc -->
+                        <div class="filters">
+                            <a href="event-form" class="filter">Tạo sự kiện mới</a>
+                            <a href="place-overview" class="filter">Quản lí nơi tổ chức</a>
+                        </div>
+                    </div>
+
+                    <div id="event-list"></div>
+                    <div class="pagination" id="pagination"></div>
+
+
+
+                    <!-- EVENT CARD -->
                 <c:forEach var="e" items="${events}">
                     <div class="my-4">
                         <div class="event-main">
@@ -351,7 +378,11 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-        <script src="./js/place-form-js/handle-zoom-image.js"></script>
+        <script src="${pageContext.request.contextPath}/js/place-form-js/handle-zoom-image.js"></script>
+        <script>
+            const events = <c:out value="${eventsJsonString}" escapeXml="false"/>;
+        </script>        
+        <script src="${pageContext.request.contextPath}/js/place-details/handle-events.js"></script>
     </body>
 
 </html>
