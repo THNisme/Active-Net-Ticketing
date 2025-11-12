@@ -18,13 +18,13 @@
                 <!-- Sidebar -->
                 <div class="col-md-3 mb-3">
                     <div class="list-group">
-                        <a href="/userinfo" class="list-group-item list-group-item-action active">
+                        <a href="<%= request.getContextPath() %>/userinfo" class="list-group-item list-group-item-action active">
                             <i class="fa-solid fa-user me-2"></i>Thông tin tài khoản
                         </a>
-                        <a href="mytickets" class="list-group-item list-group-item-action">
+                        <a href="<%= request.getContextPath() %>/myticket" class="list-group-item list-group-item-action">
                             <i class="fa-solid fa-ticket me-2"></i>Vé của tôi
                         </a>
-                        <a href="myevents" class="list-group-item list-group-item-action">
+                        <a href="<%= request.getContextPath() %>/myevents" class="list-group-item list-group-item-action">
                             <i class="fa-solid fa-wallet me-2"></i>Ví của tôi
                         </a>
                     </div>
