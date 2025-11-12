@@ -44,9 +44,9 @@
         session.removeAttribute("mailStatus");
     }
 
-    if (session.getAttribute("user") != null) {
-        request.setAttribute("user", session.getAttribute("user"));
-        session.removeAttribute("user");
+    if (session.getAttribute("userManage") != null) {
+        request.setAttribute("userManage", session.getAttribute("userManage"));
+        //session.removeAttribute("user");
     }
 %>
 

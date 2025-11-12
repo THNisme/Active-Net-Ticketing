@@ -6,7 +6,7 @@ package Filters;
  */
 import jakarta.servlet.annotation.WebFilter;
 import java.io.IOException;
-import Models.ltk1702.User;
+import Models.nvd2306.User;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -18,7 +18,6 @@ import Models.nvd2306.User;
  */
 
 
-
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
@@ -31,48 +30,57 @@ public class AuthFilter implements Filter {
         HttpSession session = req.getSession(false);
 
         String uri = req.getRequestURI();
+        String ctx = req.getContextPath();
 
-        // ✅ Cho phép public resources
-        if (uri.endsWith("login.jsp")
-                || uri.endsWith("/login")
-                || uri.endsWith("/home")
-                || uri.contains("/register")
-                || uri.contains("/css")
-                || uri.contains("/js")
-                || uri.contains("/images")
-                || uri.contains("/assets")) {
+        // ✅ 1. Cho phép truy cập các tài nguyên công cộng (không cần login)
+        if (uri.startsWith(ctx + "/login")
+                || uri.startsWith(ctx + "/register")
+                || uri.startsWith(ctx + "/assets")
+                || uri.startsWith(ctx + "/css")
+                || uri.startsWith(ctx + "/js")
+                || uri.startsWith(ctx + "/images")
+                || uri.equals(ctx + "/")
+                || uri.equals(ctx + "/home")
+                || uri.startsWith(ctx + "/accessDenied")) { // THÊM DÒNG NÀY
             chain.doFilter(request, response);
             return;
         }
 
-        //  Kiểm tra đăng nhập
-        User user = null;
-        if (session != null) {
-            user = (User) session.getAttribute("user");
-        }
-
+        // ✅ 2. Kiểm tra người dùng đã đăng nhập chưa
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
         if (user == null) {
-            // guest => quay lại login
-            res.sendRedirect(req.getContextPath() + "/login");
+            res.sendRedirect(ctx + "/login");
             return;
         }
 
-        //  Lấy role
-        int role = user.getRole();
+        int role = user.getRole(); // 0 = user thường, 1 = admin
 
-        //  Bảo vệ vùng admin
-        if (uri.contains("/admin") && role != 1) {
-            res.sendRedirect(req.getContextPath() + "/accessDenied");
+        // ✅ 3. Phân quyền truy cập
+        if (uri.startsWith(ctx + "/admin")) {
+            if (role != 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+
+        if (uri.startsWith(ctx + "/user")) {
+            if (role == 1) {
+                res.sendRedirect(ctx + "/admin/dashboard");
+                return;
+            }
+        }
+
+        // ✅ 4. Nếu người đã đăng nhập mà vẫn cố vào /login → chuyển đúng trang
+        if (uri.equals(ctx + "/login")) {
+            if (role == 1) {
+                res.sendRedirect(ctx + "/admin/dashboard");
+            } else {
+                res.sendRedirect(ctx + "/home");
+            }
             return;
         }
 
-        //  Bảo vệ vùng user (nếu cần)
-        if (uri.contains("/user") && role != 0) {
-            res.sendRedirect(req.getContextPath() + "/accessDenied");
-            return;
-        }
-
-        // Cho phép request tiếp tục
+        // ✅ 5. Cho phép qua nếu hợp lệ
         chain.doFilter(request, response);
     }
 }
