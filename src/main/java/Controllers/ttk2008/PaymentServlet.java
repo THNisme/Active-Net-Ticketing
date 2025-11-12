@@ -6,7 +6,7 @@ package Controllers.ttk2008;
  */
 
 
-import Controller.VNPayConfig;
+import Controllers.ttk2008.VNPayConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@WebServlet("/payment")
+@WebServlet("view-wallet/payment")
 public class PaymentServlet extends HttpServlet {
     
     @Override

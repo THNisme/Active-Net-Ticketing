@@ -38,9 +38,9 @@ public class PaymentReturnServlet extends HttpServlet {
 
             WalletDAO dao = new WalletDAO();
             dao.updateBalance(userID, Balance, lastUpdated);
-            request.getRequestDispatcher("deposit_success.jsp").forward(request, response);
+            request.getRequestDispatcher("view-wallet/deposit_success.jsp").forward(request, response);
         } else {
-            request.getRequestDispatcher("deposit_failure.jsp").forward(request, response);
+            request.getRequestDispatcher("view-wallet/deposit_failure.jsp").forward(request, response);
         }
     }
 }
