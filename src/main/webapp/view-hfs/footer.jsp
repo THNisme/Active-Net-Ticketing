@@ -6,7 +6,7 @@
     }
     
     footer {
-        font-family: sans-serif;
+        font-family: "Inter", sans-serif;
         color: #ccc;
         font-size: 14px;
         background: #2d3240;
