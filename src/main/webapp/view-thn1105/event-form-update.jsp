@@ -78,7 +78,7 @@
 
                         <div class="mb-3">
                             <label for="eventPlace" class="form-label"><strong style="color: red;">* </strong>Nơi tổ chức</label>
-                            <a href="#" class="float-end">Thêm nơi tổ chức mới.</a>
+                            <a href="placeform" class="float-end">Thêm nơi tổ chức mới.</a>
                             <select class="form-select" id="eventPlace" required name="place">
                                 <c:forEach var="place" items="${placeList}">
                                     <option value="${place.placeID}" 
@@ -119,14 +119,14 @@
                         <c:remove var="errors" scope="session" />
                     </c:if>
                 </div>
-
+                
+                <a href="admincenter" type="button" class="btn prev-btn">Quay lại</a>
                 <button type="submit" class="btn btn-success">Cập nhật sự kiện</button>
-                <a href="${pageContext.request.contextPath}/event-list" class="btn btn-secondary">Hủy</a>
             </form>
 
-           
+
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
         <script src="${pageContext.request.contextPath}/js/event-form-dashboard/custom-wysiwyg.js"></script>

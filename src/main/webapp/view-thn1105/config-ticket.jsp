@@ -4,6 +4,7 @@
     Author     : BACH YEN
 --%>
 
+<%@page import="DAOs.thn1105.StatusDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -19,7 +20,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
               type='text/css' />
-  
+
         <!--Inter font - Google Fonts-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +32,7 @@
     </head>
 
     <body>
-        <div id="CONFIG-TICKET" class="container mt-5">
+        <div class="container my-5">
             <div class="row mb-3" style="border-bottom: solid 1px rgba(255, 255, 255, 0.3)">
                 <div class="col">
                     <h3 class="mb-4">Sự kiện <c:out value="${event.eventName}"/></h3>
@@ -75,6 +76,11 @@
                     <div class="mb-3">
                         <h4 for="eventDate" class="form-label"><strong style="color: red;">* </strong> Loại vé</h4>
                         <ul class="ticket-types-list">
+                            <%
+                                StatusDAO statusDao = new StatusDAO();
+                                int statusHasTicketID = statusDao.getStatusIdByCode("hasTicket");
+                                request.setAttribute("statusHasTicketID", statusHasTicketID); // <- rất quan trọng
+%>
                             <c:forEach var="tp" items="${ticketTypes}">
                                 <li class="ticket-types-item mb-3">
                                     <div class="ticket-types-name">
@@ -83,14 +89,15 @@
                                     </div>
                                     <div class="manipulate-btn-group">
                                         <c:choose>
-                                            <c:when test="${tp.statusID == 10}">
+                                            <c:when test="${tp.statusID == statusHasTicketID}">
                                                 <span class="text-success">Đã có vé</span>
                                             </c:when>
                                             <c:otherwise>
                                                 <a type="button" class="text-warning" data-bs-toggle="modal"
                                                    data-bs-target="#modalGenerateTicketType">⚠️ Chưa được tạo vé</a>
                                             </c:otherwise>
-                                        </c:choose>
+                                        </c:choose> 
+
                                         <button type="button" class="btn mx-2"
                                                 onclick="fnUpdateTicketType(
                                                 ${tp.ticketTypeID},
@@ -120,8 +127,8 @@
                         <p class="text-danger"><c:out value="${globalError}"/></p>
                     </c:if>
                     <div class="mb-3">
-                        <a href="event-form?action=update&eid=${event.eventID}" type="button" class="btn prev-btn">Quay lại</a>
-                        <a href="#" type="submit" class="btn">Hoàn tất</a>
+                        <a href="event-form?action=update&eid=${event.eventID}" type="button" class="btn prev-btn">Sửa sự kiện</a>
+                        <a href="admincenter" type="submit" class="btn">Hoàn tất</a>
                     </div>
                 </div>
             </div>
@@ -202,7 +209,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="ticketTypeZone" class="form-label"><strong style="color: red;">* </strong>Chọn zone vé</label>
-                                        <a href="#" class="float-end">Tạo zone</a>
+                                        <a href="place-overview" class="float-end">Tạo zone</a>
 
                                         <select class="form-select" aria-label="Default select example" id="ticketTypeZone" name="zoneID" required>
                                             <c:forEach var="z" items="${zones}">
@@ -292,7 +299,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="ticketTypeZone-U" class="form-label"><strong style="color: red;">* </strong>Chọn zone vé</label>
-                                        <a href="#" class="float-end">Tạo zone</a>
+                                        <a href="config-zone?pid=${event.placeID}" class="float-end">Tạo zone</a>
 
                                         <select class="form-select" aria-label="Default select example" id="ticketTypeZone-U" name="zoneID-U" required>
                                             <c:forEach var="z" items="${zones}">
@@ -358,7 +365,7 @@
                                             <label for="ticketTypeID-GenTicket" class="form-label">Loại vé</label>
                                             <select id="ticketTypeID-GenTicket" name="ticketTypeID-GenTicket" class="form-select" required>
                                                 <c:forEach var="tp" items="${ticketTypes}">
-                                                    <option value="${tp.ticketTypeID}" ${tp.statusID == 10 ? 'disabled' : ''}>${tp.typeName}</option>
+                                                    <option value="${tp.ticketTypeID}" <c:if test="${tp.statusID == statusHasTicketID}">disabled</c:if>> ${tp.typeName}</option>
                                                 </c:forEach>
                                             </select>
                                         </div>

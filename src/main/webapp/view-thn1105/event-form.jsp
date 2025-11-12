@@ -29,7 +29,7 @@
     </head>
 
     <body>
-        <div class="container mt-5">
+        <div class="container my-5">
             <h3 class="mb-4" style="border-bottom: solid 1px rgba(255, 255, 255, 0.3)">Thêm sự kiện mới</h3>
             <!-- Nav tabs -->
             <ul class="nav nav-underline" id="stepTabs" role="tablist">
@@ -102,7 +102,7 @@
 
                                 <div class="mb-3">
                                     <label for="eventPlace" class="form-label"><strong style="color: red;">* </strong>Nơi tổ chức</label>
-                                    <a href="#" class="float-end">Thêm nơi tổ chức mới.</a>
+                                    <a href="placeform" class="float-end">Thêm nơi tổ chức mới.</a>
                                     <select class="form-select" aria-label="Default select example" id="eventPlace" required name="place">
                                         <option value="0" selected>Open this select menu</option>
                                         <c:forEach var="place" items="${placeList}">
@@ -146,7 +146,7 @@
                                 <c:remove var="errors" scope="session" />
                             </c:if>
                         </div>
-
+                        <a href="admincenter" type="button" class="btn prev-btn">Quay lại</a>
                         <button type="submit" class="btn btn-primary next-btn">Tạo sự kiện</button>
                     </form>
                 </div>

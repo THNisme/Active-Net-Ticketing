@@ -32,6 +32,8 @@ public class StatusDAO {
         return -1; // không tìm thấy
     }
     
+    
+    
     public static void main(String[] args) {
         StatusDAO dao = new StatusDAO();
         int id = dao.getStatusIdByCode("hasTicket");
