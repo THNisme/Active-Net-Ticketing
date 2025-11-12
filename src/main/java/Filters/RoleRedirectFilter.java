@@ -1,26 +1,12 @@
 package Filters;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.*;
 import java.io.IOException;
 import Models.nvd2306.User;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-/**
- *
- * @author Acer
- */
-@WebFilter("/login")
+@WebFilter(filterName = "RoleRedirectFilter", urlPatterns = {"/login", "/home"})
 public class RoleRedirectFilter implements Filter {
 
     @Override
@@ -29,18 +15,27 @@ public class RoleRedirectFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-
         HttpSession session = req.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
 
-        if (user != null) {
-            if (user.getRole() == 1) {
-                res.sendRedirect(req.getContextPath() + "/User-manage");
-            } else {
-                res.sendRedirect(req.getContextPath() + "/home");
-            }
-        } else {
-            chain.doFilter(request, response);
+ 
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
+        if (user == null) {
+            chain.doFilter(request, response); 
+            return;
         }
+
+        int role = user.getRole();
+       
+        if (role == 1 && (req.getRequestURI().endsWith("/login") || req.getRequestURI().endsWith("/home"))) {
+            res.sendRedirect(req.getContextPath() + "/admin/dashboard");
+            return;
+        }
+       
+        if (role == 0 && req.getRequestURI().endsWith("/login")) {
+            res.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
+        
+        chain.doFilter(request, response);
     }
 }

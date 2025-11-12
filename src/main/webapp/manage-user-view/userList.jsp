@@ -26,11 +26,16 @@
     <body class="bg-dark text-white">
         <div class="container p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-pink">Danh sách người dùng</h4>                
-                <a href="User-manage?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
+                <h4 class="text-pink">Danh sách người dùng</h4>   
+                <div>
+                    <a href="User-manage?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="history.back()">
+                        Quay lại
+                    </button>
+                </div>
             </div>   
             <div class="mx-auto"  
-                style="max-width: 600px; width: fit-content;">
+                 style="max-width: 600px; width: fit-content;">
                 <%
                     String mailStatus = (String) session.getAttribute("mailStatus");
                     String error = (String) session.getAttribute("error");
