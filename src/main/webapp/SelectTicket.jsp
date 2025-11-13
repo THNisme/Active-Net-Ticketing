@@ -225,10 +225,30 @@
                 const tickets = document.querySelectorAll(".ticket");
                 const totalDisplay = document.getElementById("total");
                 const summaryList = document.querySelector(".summary-list");
+                const btnContinue = document.getElementById("btnContinue");
 
                 let totalAmount = 0;
                 let selections = {};
 
+                // 🔍 Kiểm tra xem còn loại vé nào có thể chọn hay không
+                const selectableInputs = document.querySelectorAll(".qty-input");
+                const hasAvailableTickets = selectableInputs.length > 0;
+
+                // Nếu HẾT VÉ HOÀN TOÀN
+                if (!hasAvailableTickets) {
+                    btnContinue.disabled = true;
+                    btnContinue.textContent = "Hết vé";
+                    btnContinue.style.background = "#555";
+                    btnContinue.style.cursor = "not-allowed";
+
+                    btnContinue.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        alert("Sự kiện này đã hết vé.");
+                    });
+                    return; // ❗ Dừng luôn, không cần set các handler khác
+                }
+
+                // Nếu còn vé thì set handler tăng/giảm như bình thường
                 tickets.forEach(ticket => {
                     const minusBtn = ticket.querySelector(".btn-minus");
                     const plusBtn = ticket.querySelector(".btn-plus");
@@ -266,7 +286,6 @@
                             alert("Chỉ còn " + available + " vé cho " + name);
                         }
                     });
-
 
                     minusBtn.addEventListener("click", function () {
                         let value = parseInt(input.value, 10);
@@ -310,13 +329,10 @@
 
                     totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
 
-                    // 🔥 Thêm dòng này để bật/tắt nút Tiếp tục
-                    const btnContinue = document.getElementById("btnContinue");
                     btnContinue.disabled = totalAmount <= 0;
                 }
 
-                // Nút Tiếp tục
-                const btnContinue = document.getElementById("btnContinue");
+                // Nút Tiếp tục (khi còn vé)
                 btnContinue.addEventListener("click", function (e) {
                     e.preventDefault();
                     if (Object.keys(selections).length === 0) {
