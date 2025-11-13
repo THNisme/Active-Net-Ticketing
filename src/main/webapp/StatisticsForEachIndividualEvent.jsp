@@ -1,6 +1,6 @@
 <%-- 
-    Document   : thongke
-    Updated on : Oct 12, 2025
+    Document   : StatisticsForEachIndividualEvent
+    Created on : Oct 24, 2025, 4:06:59 PM
     Author     : NGUYEN
 --%>
 
@@ -84,7 +84,7 @@
                 color: #ffb6b6;
             }
             .title{
-                color: #ffb6b6  
+                color: #ffb6b6
             }
 
             .progress {
@@ -115,7 +115,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <i class="bi bi-calendar-event m-2"></i>
-                     <fmt:formatDate value="${currentTime}" pattern="dd/MM/yyyy - HH:mm:ss" />
+                    <fmt:formatDate value="${currentTime}" pattern="dd/MM/yyyy - HH:mm:ss" />
                 </div>
             </div>
             <hr>
@@ -165,19 +165,22 @@
             </div>
 
             <!-- Chi tiết vé -->
-            <div class="section-title mb-3">Thống kê theo sự kiện</div>
+            <div class="section-title mb-3">
+                Thống kê của sự kiện: 
+                <span style="color:#fff; font-weight:500;">${eventName}</span>
+            </div>
 
             <div class="table-responsive">
                 <table class="table table-dark table-striped table-bordered align-middle text-center">
                     <thead>
                         <tr>
-                            <th>Tên sự kiện</th>
+                            <th>Loại vé</th>
                             <th>Tổng vé</th>
                             <th>Đã bán</th>
                             <th>Doanh thu</th>
                             <th>Tỉ lệ bán</th>
                         </tr>
-                    <tbody>
+                    <tbody>    
                         <c:forEach var="s" items="${ticketStats}">
                             <c:set var="percent" value="${(s.totalTickets > 0) ? (s.soldTickets * 100 / s.totalTickets) : 0}" />
                             <tr>
@@ -203,7 +206,7 @@
         </div>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function () { 
+            document.addEventListener("DOMContentLoaded", function () {
                 // ===== Vòng tròn phần trăm =====
                 document.querySelectorAll('.progress-ring').forEach(ring => {
                     const circle = ring.querySelector('.fg');
@@ -274,7 +277,7 @@
 //
 //                            updateRealTime();
 //                            setInterval(updateRealTime, 1000);
-                                                                            });
+            });
         </script>
 
 

@@ -61,7 +61,7 @@
             }
 
             .progress-ring circle.fg {
-                stroke: #ffb6b6;
+                stroke: #4caf50;
                 stroke-dasharray: 283;
                 stroke-dashoffset: 283;
                 transition: stroke-dashoffset 0.35s ease;
@@ -83,9 +83,6 @@
                 margin-top: 25px;
                 color: #ffb6b6;
             }
-            .title{
-                color: #ffb6b6  
-            }
 
             .progress {
                 background-color: #333;
@@ -102,9 +99,6 @@
                 text-align: right;
                 font-weight: bold;
             }
-            .progress-bar {
-                background-color: #ffb6b6
-            }
         </style>
     </head>
 
@@ -114,13 +108,13 @@
             <!-- Ngày giờ thực -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                    <i class="bi bi-calendar-event m-2"></i>
+                    <i class="bi bi-calendar-event"></i>
                      <fmt:formatDate value="${currentTime}" pattern="dd/MM/yyyy - HH:mm:ss" />
                 </div>
             </div>
             <hr>
 
-            <h5 class=" title mb-3">Tổng quan doanh thu</h5>
+            <h5 class="mb-3">Tổng quan doanh thu</h5>
 
             <div class="row g-3">
                 <!-- Tổng doanh thu -->
@@ -128,7 +122,7 @@
                     <div class="card d-flex flex-row align-items-center justify-content-between">
                         <div>
                             <div class="fw-bold fs-6">Tổng doanh thu</div>
-                            <div class="fs-5 text-info">
+                            <div class="fs-5 text-success">
                                 <fmt:formatNumber value="${tongDoanhThu}" type="number" />đ
                             </div>
                         </div>
@@ -165,10 +159,10 @@
             </div>
 
             <!-- Chi tiết vé -->
-            <div class="section-title mb-3">Thống kê theo sự kiện</div>
+            <div class="section-title mt-4 mb-2">Thống kê theo sự kiện</div>
 
             <div class="table-responsive">
-                <table class="table table-dark table-striped table-bordered align-middle text-center">
+                <table class="table table-dark table-bordered align-middle text-center">
                     <thead>
                         <tr>
                             <th>Tên sự kiện</th>
@@ -188,7 +182,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="progress flex-grow-1 me-2" style="height: 8px;">
-                                            <div class="progress-bar" data-target="${percent}" style="width: 0%"></div>
+                                            <div class="progress-bar bg-success" data-target="${percent}" style="width: 0%"></div>
                                         </div>
                                         <span class="percent">0%</span>
                                     </div>
