@@ -9,7 +9,6 @@
 
         <style>
             body {
-                background-color: #121212;
                 color: #fff;
                 font-family: "Inter", sans-serif;
             }
@@ -55,7 +54,7 @@
         </style>
     </head>
 
-    <body>
+    <body class="bg-dark">
         <%@include file="/view-hfs/header.jsp" %>
 
         <div class="container d-flex align-items-center justify-content-center min-vh-100">
@@ -80,14 +79,13 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="orderInfo" class="form-label">Thông tin đơn hàng</label>
                         <input 
-                            type="text" 
+                            type="hidden" 
                             id="orderInfo" 
                             name="orderInfo" 
                             class="form-control form-control-lg" 
                             value="Nạp tiền vào ví" 
-                            required>
+                            >
                     </div>
 
                     <button type="submit" class="btn btn-pay w-100 py-2">

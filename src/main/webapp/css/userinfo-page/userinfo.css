@@ -95,9 +95,8 @@ body {
 }
 
 .btn-warning:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 20px rgba(255, 182, 182, 0.3);
     background-color: #ff9f9f;
+    color: #fff;
 }
 
 /* Toggle password */

@@ -20,8 +20,9 @@
     </head>
 
     <%@include file="/view-hfs/header.jsp" %>
+    <%@include file="/view-ttk2008/sidebar-for-user.jsp" %>
 
-    <body>
+    <body class="bg-dark    ">
         <div class="container my-5">
             <div>
                 <!-- Content -->

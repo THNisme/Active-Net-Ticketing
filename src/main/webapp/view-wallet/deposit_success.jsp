@@ -75,7 +75,6 @@
         <div class="info">
             <p><span>Mã giao dịch:</span> <%= request.getParameter("vnp_TxnRef") %></p>
             <p><span>Số tiền:</span> <%= String.format("%,d", Long.parseLong(request.getParameter("vnp_Amount")) / 100) %> VND</p>
-            <p><span>Nội dung:</span> <%= request.getParameter("vnp_OrderInfo") %></p>
             <p><span>Mã ngân hàng:</span> <%= request.getParameter("vnp_BankCode") %></p>
             <p><span>Thời gian:</span> <%= new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.text.SimpleDateFormat("yyyyMMddHHmmss").parse(request.getParameter("vnp_PayDate"))) %></p>
         </div>
