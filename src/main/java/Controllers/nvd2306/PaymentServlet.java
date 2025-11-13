@@ -115,7 +115,6 @@ public class PaymentServlet extends HttpServlet {
         String placeName = request.getParameter("placeName");
         String totalAmountStr = request.getParameter("totalAmount");
         String selectionsJson = request.getParameter("selectionsJson");
-
         String contactFullname = request.getParameter("fullName");
         String contactPhone = request.getParameter("phone");
         String contactEmail = nvl(request.getParameter("email"), user.getContactEmail());
@@ -142,13 +141,13 @@ public class PaymentServlet extends HttpServlet {
         }
 
         if (wallet.getBalance().compareTo(totalAmount) < 0) {
-            request.setAttribute("insufficientBalance", true);
+            // Gán thêm 2 attribute cho JSP
+            request.setAttribute("currentBalance", wallet.getBalance());
+            request.setAttribute("requiredAmount", totalAmount);
+
+            // Thông báo lỗi
             request.setAttribute("message", "Số dư ví không đủ để thanh toán.");
-            request.setAttribute("eventName", eventName);
-            request.setAttribute("placeName", placeName);
-            request.setAttribute("totalAmount", totalAmount);
-            request.setAttribute("selectionsJson", selectionsJson);
-            request.getRequestDispatcher("payment-preview.jsp").forward(request, response);
+            request.getRequestDispatcher("payment-fail.jsp").forward(request, response);
             return;
         }
 

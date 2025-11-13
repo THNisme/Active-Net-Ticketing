@@ -41,13 +41,13 @@ public class UserDAO extends DBContext {
         return u;
     }
 
-    // =========================================================
+     // =========================================================
     //                 REGISTER + AUTO CREATE WALLET
     // =========================================================
     public boolean register(User user) {
-        String sqlInsertUser
-                = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
-                + "VALUES (?, ?, ?, GETDATE(), 1, ?)";
+        String sqlInsertUser = 
+              "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
+            + "VALUES (?, ?, ?, GETDATE(), 1, ?)";
 
         try {
             // 1️⃣ Insert vào Users
@@ -58,9 +58,7 @@ public class UserDAO extends DBContext {
             ps.setString(4, user.getContactEmail());
 
             int rows = ps.executeUpdate();
-            if (rows == 0) {
-                return false;
-            }
+            if (rows == 0) return false;
 
             // 2️⃣ Lấy UserID vừa tạo
             ResultSet rs = ps.getGeneratedKeys();
@@ -69,14 +67,12 @@ public class UserDAO extends DBContext {
                 newUserId = rs.getInt(1);
             }
 
-            if (newUserId <= 0) {
-                return false;
-            }
+            if (newUserId <= 0) return false;
 
             // 3️⃣ Insert vào Wallet với Balance mặc định = 0
-            String sqlInsertWallet
-                    = "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) "
-                    + "VALUES (?, 0, GETDATE(), 1)";
+            String sqlInsertWallet =
+                "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) "
+              + "VALUES (?, 0, GETDATE(), 1)";
 
             PreparedStatement psWallet = conn.prepareStatement(sqlInsertWallet);
             psWallet.setInt(1, newUserId);

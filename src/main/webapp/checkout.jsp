@@ -24,7 +24,7 @@
             }
             .event-info h2{
                 margin:0 0 10px;
-                color:#00ff80;
+                color: #ff9999;
             }
             .event-info p{
                 margin:6px 0;
@@ -101,7 +101,7 @@
                 margin-bottom:12px;
             }
             .summary-header a{
-                color:#00cc66;
+                color:#ffb6b6;
                 text-decoration:none;
             }
             .summary-item{
@@ -121,7 +121,7 @@
             }
             .btn-continue{
                 width:100%;
-                background:#00cc66;
+                background:#ffb6b6;
                 color:#fff;
                 border:none;
                 padding:14px;
@@ -132,7 +132,7 @@
                 margin-top:20px;
             }
             .btn-continue:hover{
-                background:#00b35a;
+                background:#ff9999;
             }
         </style>
     </head>

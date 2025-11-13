@@ -144,7 +144,7 @@
             }
 
             .btn-continue:hover {
-                background: #45a049;
+                background: #ff9999;
             }
         </style>
     </head>

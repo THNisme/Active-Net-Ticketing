@@ -54,7 +54,7 @@
                 </span> đ</p>
 
             <p>Số tiền cần thanh toán: <span class="amount">
-                    <%= request.getAttribute("totalAmount")%>
+                    <%= request.getAttribute("requiredAmount")%>
                 </span> đ</p>
 
             <a href="wallet.jsp">Nạp thêm tiền vào ví</a>
