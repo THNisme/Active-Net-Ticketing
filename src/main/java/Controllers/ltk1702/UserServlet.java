@@ -21,7 +21,7 @@ import MD5.HashPassword;
  *
  * @author Acer
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/admin/user-manage"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/user-manage"})
 public class UserServlet extends HttpServlet {
 
     /**
@@ -120,7 +120,15 @@ public class UserServlet extends HttpServlet {
         String email = req.getParameter("email");
         String phone = req.getParameter("phone");
         String actionType = req.getParameter("actionType");
-
+        
+        if (fullname == null ) {
+            fullname = "";
+        }
+        
+        if (phone == null) {
+            phone = "";
+        }
+        
         User user = new User();
         user.setUserID(id);
         user.setUsername(username);

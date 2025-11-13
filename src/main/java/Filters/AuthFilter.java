@@ -4,8 +4,6 @@ package Filters;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
-
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.*;
@@ -16,8 +14,6 @@ import Models.nvd2306.User;
  *
  * @author Acer
  */
-
-
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
@@ -63,9 +59,24 @@ public class AuthFilter implements Filter {
             }
         }
 
-        if (uri.startsWith(ctx + "/user")) {
-            if (role == 1) {
-                res.sendRedirect(ctx + "/admin/dashboard");
+        if (uri.startsWith(ctx + "/event-form")) {
+            if (role != 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+
+        
+        if (uri.startsWith(ctx + "/config")) {
+            if (role != 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+        
+        if (uri.startsWith(ctx + "/place")) {
+            if (role != 1) {
+                res.sendRedirect(ctx + "/accessDenied");
                 return;
             }
         }
@@ -73,7 +84,7 @@ public class AuthFilter implements Filter {
         // ✅ 4. Nếu người đã đăng nhập mà vẫn cố vào /login → chuyển đúng trang
         if (uri.equals(ctx + "/login")) {
             if (role == 1) {
-                res.sendRedirect(ctx + "/admin/dashboard");
+                res.sendRedirect(ctx + "/admincenter");
             } else {
                 res.sendRedirect(ctx + "/home");
             }
