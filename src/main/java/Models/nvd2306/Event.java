@@ -4,6 +4,7 @@
  */
 package Models.nvd2306;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -22,6 +23,10 @@ public class Event {
     private Timestamp endDate;
     private int placeID;
     private int statusID;
+    private String placeName;     // từ Places
+    private String address;       // từ Places
+    private String categoryName;  // từ EventCategories
+    private BigDecimal lowestPrice;
 
     public Event() {
     }
@@ -38,6 +43,38 @@ public class Event {
         this.endDate = endDate;
         this.placeID = placeID;
         this.statusID = statusID;
+    }
+
+    public BigDecimal getLowestPrice() {
+        return lowestPrice;
+    }
+
+    public void setLowestPrice(BigDecimal lowestPrice) {
+        this.lowestPrice = lowestPrice;
+    }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     // Getters & Setters
@@ -112,5 +149,5 @@ public class Event {
     public void setStatusID(int statusID) {
         this.statusID = statusID;
     }
-    
+
 }

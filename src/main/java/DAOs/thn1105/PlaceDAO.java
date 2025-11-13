@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +18,11 @@ import java.util.List;
  * @author Tran Hieu Nghia - CE191115
  */
 public class PlaceDAO {
-
     private Connection conn = DBContext.getInstance().getConnection();
-
     // GET ALL PLACE
     public List<Place> getAll() {
         List<Place> list = new ArrayList<>();
-        String sql = "SELECT * FROM Places WHERE StatusID = 1";
+        String sql = "SELECT * FROM Places";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -47,7 +44,7 @@ public class PlaceDAO {
 
     //GET BY ID
     public Place getById(int id) {
-        String sql = "SELECT * FROM Places WHERE PlaceID = ? AND StatusID = 1";
+        String sql = "SELECT * FROM Places WHERE PlaceID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -70,22 +67,15 @@ public class PlaceDAO {
 
     // CREATE A PLACE
     public boolean create(Place p) {
-        String sql = "INSERT INTO Places (PlaceName, Address, SeatMapURL, Description, StatusID) VALUES (?, ?, ?, ?, 1)";
-        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        String sql = "INSERT INTO Places (PlaceName, Address, SeatMapURL, Description, StatusID) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, p.getPlaceName());
             ps.setString(2, p.getAddress());
             ps.setString(3, p.getSeatMapURL());
             ps.setString(4, p.getDescription());
-
-            int rows = ps.executeUpdate();
-            if (rows > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        p.setPlaceID(rs.getInt(1)); // Gán ID vừa được tạo cho đối tượng Place
-                    }
-                }
-                return true;
-            }
+            ps.setInt(5, p.getStatusID());
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -110,6 +100,7 @@ public class PlaceDAO {
         return false;
     }
 
+    
     //DELETE A PLACE
     public boolean delete(int id) {
         String sql = "DELETE FROM Places WHERE PlaceID=?";
@@ -122,7 +113,7 @@ public class PlaceDAO {
         }
         return false;
     }
-
+    
     //SOFT DELETE
     public boolean softDelete(int id) {
         String sql = "UPDATE Places SET StatusID=3 WHERE PlaceID=?";
@@ -135,7 +126,7 @@ public class PlaceDAO {
         }
         return false;
     }
-
+    
     // GET ALL PLACES ARE SOFT DELETED
     public List<Place> getAllSoftDelete() {
         List<Place> list = new ArrayList<>();
@@ -191,6 +182,7 @@ public class PlaceDAO {
 //        
 //        dao.create(newP);
 //
+
 //        Place updateP = new Place();
 //        
 //        updateP.setPlaceID(9);
@@ -201,6 +193,8 @@ public class PlaceDAO {
 //        updateP.setStatusID(1);
 //        
 //        dao.update(updateP);
+
+    
         dao.softDelete(9);
 
         List<Place> list = dao.getAllSoftDelete();

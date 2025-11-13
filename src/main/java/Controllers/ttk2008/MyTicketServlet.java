@@ -42,7 +42,7 @@ public class MyTicketServlet extends HttpServlet {
 
         request.setAttribute("tickets", tickets);
         request.setAttribute("filter", filter);
-        RequestDispatcher rd = request.getRequestDispatcher("/view-ttk2008/myticket.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/view-myticket/myticket.jsp");
         rd.forward(request, response);
     }
 }
