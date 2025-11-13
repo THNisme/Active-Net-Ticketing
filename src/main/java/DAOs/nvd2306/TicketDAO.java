@@ -108,4 +108,24 @@ public class TicketDAO extends DBContext {
             }
         }
     }
+
+    public void markTicketAsSold(Connection conn, int ticketId) throws SQLException {
+        String sql = "UPDATE Tickets SET StatusID = 4 WHERE TicketID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ps.executeUpdate();
+        }
+    }
+
+// Đánh dấu nhiều vé cùng lúc
+    public void markTicketsAsSold(Connection conn, List<Integer> ticketIds) throws SQLException {
+        String sql = "UPDATE Tickets SET StatusID = 4 WHERE TicketID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (int id : ticketIds) {
+                ps.setInt(1, id);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
 }

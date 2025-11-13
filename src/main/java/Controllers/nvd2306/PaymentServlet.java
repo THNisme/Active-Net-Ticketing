@@ -6,6 +6,7 @@ package Controllers.nvd2306;
 
 import DAOs.nvd2306.OrderDAO;
 import DAOs.nvd2306.OrderDetailDAO;
+import DAOs.nvd2306.TicketDAO;
 import DAOs.nvd2306.TransactionDAO;
 import DAOs.nvd2306.WalletDao;
 import Models.nvd2306.Order;
@@ -179,7 +180,14 @@ public class PaymentServlet extends HttpServlet {
                     orderDetailDAO.insertOrderDetail(conn, detail);
                 }
             }
+            TicketDAO ticketDAO = new TicketDAO();
+            List<Integer> soldTicketIds = new ArrayList<>();
 
+            for (TicketItem item : items) {
+                soldTicketIds.add(item.getTicketId()); // <-- TicketID thật
+            }
+
+            ticketDAO.markTicketsAsSold(conn, soldTicketIds);
             // 2️⃣ Cập nhật số dư ví
             BigDecimal newBalance = wallet.getBalance().subtract(totalAmount);
             walletDao.updateBalance(conn, wallet.getWalletID(), newBalance);
