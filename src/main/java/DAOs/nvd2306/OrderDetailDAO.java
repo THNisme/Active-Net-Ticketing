@@ -9,7 +9,9 @@ import Models.nvd2306.TicketItem;
 import Utils.nvd2603.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,5 +48,20 @@ public class OrderDetailDAO extends DBContext {
             ps.setBigDecimal(3, detail.getUnitPrice());
             ps.executeUpdate();
         }
+    }
+
+    public List<Integer> getTicketIdsByOrderId(Connection conn, int orderId) throws SQLException {
+        List<Integer> ids = new ArrayList<>();
+        String sql = "SELECT TicketID FROM OrderDetails WHERE OrderID = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ids.add(rs.getInt("TicketID"));
+                }
+            }
+        }
+        return ids;
     }
 }

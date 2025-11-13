@@ -205,20 +205,36 @@ public class PaymentServlet extends HttpServlet {
 
             conn.commit();
 
-            // ==== Tạo PDF vé và gửi mail ====
-            String pdfPath = null;
-            try {
+            // ==== Tạo PDF đúng theo từng vé ====
+// 1) Lấy lại toàn bộ TicketID đã lưu trong OrderDetail
+            List<Integer> allTicketIds = orderDetailDAO.getTicketIdsByOrderId(conn, orderId);
+
+// 2) Danh sách file để gửi mail
+            List<File> attachments = new ArrayList<>();
+
+            for (int ticketId : allTicketIds) {
+
+                // SerialNumber thật
+                String serial = ticketDAO.getSerialByTicketId(conn, ticketId);
+
+                // Lấy ticketTypeId từ ticketId
+                int tTypeId = ticketDAO.getTypeIdByTicketId(conn, ticketId);
+
+                // Tên loại vé thật
+                String typeName = ticketDAO.getTicketTypeName(conn, tTypeId);
+
+                // Tạo file PDF cho từng vé
                 File pdfFile = TicketPDFGenerator.createTicketPDF(
                         "C:/ActiveNetTickets",
                         eventName,
                         placeName,
-                        "Không rõ thời gian",
+                        request.getParameter("startStr"),
                         contactFullname,
-                        "Vé điện tử",
-                        "SN" + orderId
+                        typeName,
+                        serial
                 );
-                pdfPath = pdfFile.getAbsolutePath();
-            } catch (Exception ignored) {
+
+                attachments.add(pdfFile); // thêm PDF của vé vào danh sách
             }
 
             try {
@@ -228,11 +244,6 @@ public class PaymentServlet extends HttpServlet {
                         + "<b>Địa điểm:</b> " + placeName + "<br>"
                         + "<b>Tổng tiền:</b> " + totalAmount + " đ<br>"
                         + "<br>Cảm ơn bạn đã mua vé tại Active-Net Ticketing.";
-
-                List<File> attachments = new ArrayList<>();
-                if (pdfPath != null) {
-                    attachments.add(new File(pdfPath));
-                }
 
                 MailService.sendEmail(contactEmail, subject, body, attachments);
             } catch (Exception ignored) {
@@ -255,8 +266,8 @@ public class PaymentServlet extends HttpServlet {
             forwardFail(request, response, "Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.<br>" + ex.getMessage());
         }
     }
-
     // ===== Helpers =====
+
     private static String nvl(String v, String fallback) {
         return (v == null || v.isBlank()) ? fallback : v;
     }

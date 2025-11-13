@@ -152,4 +152,45 @@ public class TicketDAO extends DBContext {
 
         return ticketIds;
     }
+
+    public int getTypeIdByTicketId(Connection conn, int ticketId) throws SQLException {
+        String sql = "SELECT TicketTypeID FROM Tickets WHERE TicketID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("TicketTypeID");
+                }
+            }
+        }
+        return -1;
+    }
+    // === Lấy SerialNumber thật theo TicketID ===
+
+    public String getSerialByTicketId(Connection conn, int ticketId) throws SQLException {
+        String sql = "SELECT SerialNumber FROM Tickets WHERE TicketID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("SerialNumber");
+                }
+            }
+        }
+        return null;
+    }
+
+    // === Lấy tên loại vé theo TicketTypeID ===
+    public String getTicketTypeName(Connection conn, int ticketTypeId) throws SQLException {
+        String sql = "SELECT TypeName FROM TicketTypes WHERE TicketTypeID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketTypeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("TypeName");
+                }
+            }
+        }
+        return null;
+    }
 }
