@@ -7,14 +7,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Author     : NGUYEN
 */
 
-body {
-    background-color: #000;
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 .card {
-    background-color: #1c1c1c;
+    background-color: #374151;
     border: none;
     border-radius: 10px;
     color: #fff;
@@ -50,7 +44,7 @@ body {
 }
 
 .progress-ring circle.fg {
-    stroke: #ffb6b6;
+    stroke: #22c55e;
     stroke-dasharray: 283;
     stroke-dashoffset: 283;
     transition: stroke-dashoffset 0.35s ease;
@@ -70,11 +64,11 @@ body {
     font-weight: bold;
     font-size: 1.1rem;
     margin-top: 25px;
-    color: #ffb6b6;
+    color: #fff;
 }
 
 .title {
-    color: #ffb6b6;
+    color: #fff;
 }
 
 .progress {
@@ -85,7 +79,7 @@ body {
 
 .progress-bar {
     transition: width 1s ease-out;
-    background-color: #ffb6b6;
+    background-color: #22c55e;
 }
 
 .percent {
@@ -103,8 +97,8 @@ body {
     position: absolute;
     top: 120%;
     right: 0;
-    background-color: #1c1c1c;
-    border: 1px solid #0dcaf0;
+    background-color: #22c55e;
+    border: 1px solid #22c55e;
     border-radius: 8px;
     min-width: 250px;
     opacity: 0;
@@ -133,4 +127,18 @@ body {
 
 .event-dropdown ul li a:hover {
     color: #0dcaf0 !important;
+}
+
+.green-text {
+    color: #22c55e;
+}
+
+.btn-outline-custom {
+    border-color: #22c55e;
+    color: #fff;
+}
+
+.btn-outline-custom:hover {
+    border-color: #22c55e;
+    background-color: #22c55e;
 }

@@ -271,7 +271,7 @@
                 <a href="event-form" class="filter">Tạo sự kiện mới</a>
                 <a href="place-overview" class="filter">Quản lí nơi tổ chức</a>
                 <a href="#" class="filter">Tài khoản</a>
-                <a href="#" class="filter">Thông kế chung</a>
+                <a href="statisticsevents" class="filter">Thông kế chung</a>
             </div>
         </div>
 
