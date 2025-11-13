@@ -17,15 +17,28 @@ import java.util.List;
  */
 public class TicketTypeDAO extends DBContext {
 
-      public List<TicketType> getTicketTypesByEventAndZone(int eventId, int zoneId) {
+    public List<TicketType> getTicketTypesByEventAndZone(int eventId, int zoneId) {
         List<TicketType> list = new ArrayList<>();
 
         String sql = """
-            SELECT tt.TicketTypeID, tt.EventID, tt.ZoneID, 
-                   tt.TypeName, tt.Price, tt.StatusID
-            FROM TicketTypes tt
-            WHERE tt.EventID = ? AND tt.ZoneID = ? AND tt.StatusID = 1
-        """;
+        SELECT 
+            tt.TicketTypeID,
+            tt.EventID,
+            tt.ZoneID,
+            tt.TypeName,
+            tt.Price,
+            tt.StatusID,
+            COUNT(t.TicketID) AS availableCount
+        FROM TicketTypes tt
+        LEFT JOIN Tickets t
+            ON tt.TicketTypeID = t.TicketTypeID
+            AND t.StatusID = 1  -- chỉ đếm vé còn
+        WHERE tt.EventID = ? AND tt.ZoneID = ? AND tt.StatusID = 1
+        GROUP BY 
+            tt.TicketTypeID, tt.EventID, tt.ZoneID,
+            tt.TypeName, tt.Price, tt.StatusID
+        ORDER BY tt.Price ASC
+    """;
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -42,9 +55,7 @@ public class TicketTypeDAO extends DBContext {
                 t.setTypeName(rs.getString("TypeName"));
                 t.setPrice(rs.getBigDecimal("Price"));
                 t.setStatusID(rs.getInt("StatusID"));
-
-                // Nếu bạn muốn tính availableCount, bạn nói tôi viết thêm
-                t.setAvailableCount(0);
+                t.setAvailableCount(rs.getInt("availableCount"));
 
                 list.add(t);
             }
