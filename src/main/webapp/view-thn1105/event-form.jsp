@@ -12,7 +12,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Create-Edit Event Form</title>
+        <title>Tạo sự kiện</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
@@ -29,8 +29,8 @@
     </head>
 
     <body>
-        <div class="container mt-5">
-            <h3 class="mb-4">Thêm sự kiện mới</h3>
+        <div class="container my-5">
+            <h3 class="mb-4" style="border-bottom: solid 1px rgba(255, 255, 255, 0.3)">Thêm sự kiện mới</h3>
             <!-- Nav tabs -->
             <ul class="nav nav-underline" id="stepTabs" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -52,6 +52,7 @@
                 <div class="tab-pane fade show active" id="step1" role="tabpanel">
                     <!-- FORM CREATE EVENT -->
                     <form id="eventForm" action="${pageContext.request.contextPath}/event-form" method="POST" enctype="multipart/form-data">
+                        <h5>Hãy nhập đầy đủ thông tin bắt buộc để tạo sự kiện mới (<strong style="color: red;">*</strong>)</h5>
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="drag-wrap">
@@ -73,7 +74,7 @@
                                     <div class="controls">
                                         <button class="btn" id="chooseBtn" style="display:none;">Chọn ảnh</button>
                                         <button class="btn ghost" id="clearBtn" style="display:none;">Xóa</button>
-                                        <div class="small" id="status" style="margin: auto; color: red; font-size: 0.9em;">Chưa có ảnh</div>
+                                        <div class="small" id="status" style="margin: auto; color: red; font-size: 0.9em;">Vui lòng chọn ảnh</div>
                                     </div>
 
                                     <div id="errorMsg" class="error" style="display:none; text-align: center;"></div>
@@ -90,7 +91,7 @@
                                     <label for="eventCategory" class="form-label"><strong style="color: red;">* </strong>Loại sự
                                         kiện</label>
                                     <select class="form-select" aria-label="Default select example" id="eventCategory" required name="eventCategory">
-                                        <option selected>Open this select menu</option>
+                                        <option value="0" selected>Open this select menu</option>
                                         <c:forEach var="category" items="${eventCateList}">
                                             <option value="${category.categoryID}">
                                                 <c:out value="${category.categoryName}"/>
@@ -101,9 +102,9 @@
 
                                 <div class="mb-3">
                                     <label for="eventPlace" class="form-label"><strong style="color: red;">* </strong>Nơi tổ chức</label>
-                                    <a href="#" class="float-end">Thêm nơi tổ chức mới.</a>
+                                    <a href="placeform" class="float-end">Thêm nơi tổ chức mới.</a>
                                     <select class="form-select" aria-label="Default select example" id="eventPlace" required name="place">
-                                        <option selected>Open this select menu</option>
+                                        <option value="0" selected>Open this select menu</option>
                                         <c:forEach var="place" items="${placeList}">
                                             <option value="${place.placeID}">
                                                 <c:out value="${place.placeName}"/>
@@ -134,16 +135,19 @@
                         <div class="mb-3">
                             <label for="eventDescription" class="form-label"><strong style="color: red;">* </strong>Thông tin sự
                                 kiện</label>
-                            <textarea id="eventDescription" required name="description"></textarea>
+                            <textarea id="eventDescription" name="description"></textarea>
                         </div>
 
                         <div class="mb-3">
-                            <c:if test="{not empty error"> 
-                                <p class="text-danger"><c:out value="${error}" /></p>
+                            <c:if test="${not empty sessionScope.errors}">
+                                <c:forEach var="e" items="${errors}">
+                                    <p class="text-danger"><c:out value="${e.value}"/></p>
+                                </c:forEach>
+                                <c:remove var="errors" scope="session" />
                             </c:if>
                         </div>
-
-                        <button type="submit" class="btn btn-primary next-btn" data-next="step2-tab">Tiếp theo</button>
+                        <a href="admincenter" type="button" class="btn prev-btn">Quay lại</a>
+                        <button type="submit" class="btn btn-primary next-btn">Tạo sự kiện</button>
                     </form>
                 </div>
 
