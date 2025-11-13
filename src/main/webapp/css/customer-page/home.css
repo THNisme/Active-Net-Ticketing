@@ -86,7 +86,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     display: flex;
     align-items: center;
     width: 100%;
-    background: #ffb6b6;
+    background: #fff;
     border-radius: 5px;
     overflow: hidden;
 }
@@ -109,78 +109,4 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .search-form button:active {
     opacity: 0.9;
-}
-/* ---- SEARCH BAR MODERN STYLE ---- */
-.search-box {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.search-form {
-  display: flex;
-  align-items: center;
-  width: min(720px, 90%);
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  border: 1px solid rgba(230,122,115,0.2);
-}
-
-.search-form input {
-  flex: 1;
-  padding: 12px 18px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  background: transparent;
-  color: #333;
-}
-
-.search-btn {
-  background: #E67A73;
-  border: none;
-  color: #fff;
-  padding: 0 22px;
-  font-size: 16px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-
-.search-btn:hover {
-  background: #d96a63;
-}
-
-.search-btn:active {
-  transform: scale(0.97);
-}
-
-.search-form:focus-within {
-  border-color: #E67A73;
-  box-shadow: 0 0 0 3px rgba(230,122,115,0.25);
-}
-
-.search-box button {
-    background: #ff6b6b;
-    border: none;
-    padding: 0 15px;
-    cursor: pointer;
-    color: #fff;
-    height: 50px !important;
-}
-.search-box {
-    flex: 1;
-    max-width: 450px;
-    margin: 0 30px;
-    display: flex;
-    background: #ffb6b6 !important;
-    border-radius: 5px;
-    overflow: hidden;
 }

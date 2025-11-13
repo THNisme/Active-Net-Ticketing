@@ -75,38 +75,30 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-
         String username = request.getParameter("username");
-        String email = request.getParameter("email");
         String password = request.getParameter("password");
         String repassword = request.getParameter("repassword");
 
         UserDAO userDAO = new UserDAO();
 
-        // ====== Kiểm tra dữ liệu cơ bản ======
-        if (username == null || username.isBlank()
-                || email == null || email.isBlank()
-                || password == null || password.isBlank()
-                || repassword == null || repassword.isBlank()) {
-            request.setAttribute("errorRegister", "Vui lòng nhập đầy đủ thông tin!");
+        // ✅ Kiểm tra trùng username
+        if (userDAO.checkUsernameExists(username)) {
+            request.setAttribute("errorRegister", "Tên người dùng đã tồn tại!");
             request.setAttribute("showRegister", true);
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // ====== Kiểm tra độ mạnh mật khẩu ======
+        // ✅ Kiểm tra tiêu chuẩn mật khẩu
         String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$";
         if (!password.matches(passwordPattern)) {
-            request.setAttribute("errorRegister",
-                    "Mật khẩu phải có ≥8 ký tự, gồm ≥1 chữ in hoa, ≥1 số và ≥1 ký tự đặc biệt!");
+            request.setAttribute("errorRegister", "Mật khẩu phải có ít nhất 8 ký tự, gồm ít nhất 1 chữ in hoa, 1 số và 1 ký tự đặc biệt!");
             request.setAttribute("showRegister", true);
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // ====== Kiểm tra khớp mật khẩu ======
+        // ✅ Kiểm tra khớp mật khẩu
         if (!password.equals(repassword)) {
             request.setAttribute("errorRegister", "Mật khẩu nhập lại không khớp!");
             request.setAttribute("showRegister", true);
@@ -114,41 +106,35 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // ====== Kiểm tra username/email trùng (chỉ để ngăn insert, không in lỗi ở đây) ======
-        if (userDAO.checkUsernameExists(username) || userDAO.checkEmailExists(email)) {
-            // Không in lỗi ở JSP vì realtime đã có
-            request.setAttribute("errorRegister", "Thông tin đăng ký không hợp lệ, vui lòng kiểm tra lại!");
-            request.setAttribute("showRegister", true);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        }
-
-        // ====== Lưu DB ======
+        // ✅ Mã hóa mật khẩu
         String hashedPassword = HashPassword.hashMD5(password);
+
         User user = new User();
         user.setUsername(username);
         user.setPasswordHash(hashedPassword);
         user.setRole(0);
-        user.setContactEmail(email);
 
         boolean success = userDAO.register(user);
+
         if (success) {
+            // ✅ Chuyển hướng về login với thông báo
             request.setAttribute("message", "Đăng ký thành công, vui lòng đăng nhập!");
-            request.setAttribute("showRegister", false);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
+            // ❗ Khi thất bại → vẫn giữ form đăng ký mở
             request.setAttribute("errorRegister", "Có lỗi khi đăng ký, vui lòng thử lại!");
             request.setAttribute("showRegister", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
-
-        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
-/**
- * Returns a short description of the servlet.
- *
- * @return a String containing servlet description
- */
-@Override
-public String getServletInfo() {
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
