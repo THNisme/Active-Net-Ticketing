@@ -22,7 +22,7 @@ public class DBContext {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=SWP391;"
+                    + "databaseName=Active-Net-Ticketing;"
                     + "user=sa;"
                     + "password=123456;"
                     + "encrypt=true;trustServerCertificate=true;";

@@ -1,11 +1,12 @@
+
 document.addEventListener("DOMContentLoaded", function () {
-new FroalaEditor("#eventDescription", {
-toolbarButtons: [
-        'bold', 'italic', 'underline', 'strikeThrough', '|',
-        'formatUL', 'formatOL', 'align', '|',
-        'fontSize', 'insertLink', '|',
-        'undo', 'redo', 'html'
-],
+    new FroalaEditor("#eventDescription", {
+        toolbarButtons: [
+            'bold', 'italic', 'underline', 'strikeThrough', '|',
+            'formatUL', 'formatOL', 'align', '|',
+            'fontSize', 'insertLink', '|',
+            'undo', 'redo', 'html'
+        ],
         charCounterCount: true,
         placeholderText: 'Hãy viết mô tả cho sự kiện này...',
         quickInsertTags: ['h1', 'h2', 'h3', 'p'],
@@ -33,5 +34,5 @@ toolbarButtons: [
         fileUpload: true, // <== Quan trọng để Froala tạo input file
         fileUploadURL: '/Active_Net_Ticketing/froala-upload', // có thể trỏ chung với ảnh
         fileUploadMethod: 'POST'
+    });
 });
-        });

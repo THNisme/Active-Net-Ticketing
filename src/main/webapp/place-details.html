@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Place details - [PlaceName]</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+  <!--Inter font - Google Fonts-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="../webapp/css/place-page-style/place-details-style/style.css">
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="m-5">
+      <h5 class="text-center mb-3">Thông tin chi tiết nơi tổ chức</h5>
+      <h2 class="text-center text-uppercase">Trạm Dừng - Tea and More</h2>
+    </div>
+
+    <section class="general-infor mb-5">
+      <h3 class="general-infor-label">Thông tin chung:</h3>
+      <div class="table-wrapper">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Trạm Dừng - Tea and More</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <tr>
+              <th scope="row">Địa chỉ</th>
+              <td>162/39 Đ. Nguyễn Việt Hồng, An Phú, Ninh Kiều, Cần Thơ, Can Tho, Vietnam</td>
+            </tr>
+            <tr>
+              <th scope="row">Mô tả</th>
+              <td>Trạm Dừng – cho những ngày lòng không biết dừng ở đâu.🌼</td>
+            </tr>
+            <tr>
+              <th scope="row">Trạng thái</th>
+              <td>Đang được dùng (3 sự kiện).</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                Sơ đồ nơi tổ chức
+              </th>
+              <td class="zonemap-size-cell">
+                <div id="modalZoneMapImageWrapper">
+                  <img src="./img/event-form-dashboard/zonemap.png" alt="" id="modalZoneMapImage" width="600px">
+                  <div class="zoom-control-btn-group">
+                    <button type="button" class="btn btn-warning" onclick="zoomIn()">Zoom In</button>
+                    <button type="button" class="btn btn-warning" onclick="zoomOut()">Zoom Out</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <section class="event-list mb-5">
+      <h3 class="general-infor-label">Các sự kiện đang được tổ chức tại [Trạm Dừng - Tea and More] </h3>
+
+      <!-- EVENT CARD -->
+      <div class="table-wrapper">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">[Tên Sự Kiện]</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <tr>
+              <th scope="row">Ngày tổ chức</th>
+              <td>20-10-2025 08:00:00</td>
+            </tr>
+            <tr>
+              <th scope="row">Ngày kết thúc</th>
+              <td>21-10-2025 00:00:00</td>
+            </tr>
+            <tr>
+              <th scope="row">Trạng thái</th>
+              <td>
+                <div class="event-status coming">
+                  <i class="bi bi-dot"></i>
+                  <p>Sắp diễn ra. </p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">[Tên Sự Kiện]</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <tr>
+              <th scope="row">Ngày tổ chức</th>
+              <td>20-10-2025 08:00:00</td>
+            </tr>
+            <tr>
+              <th scope="row">Ngày kết thúc</th>
+              <td>21-10-2025 00:00:00</td>
+            </tr>
+            <tr>
+              <th scope="row">Trạng thái</th>
+              <td>
+                <div class="event-status onsite">
+                  <i class="bi bi-dot"></i>
+                  <p>Đang diễn ra.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script src="./js/place-form-js/handle-zoom-image.js"></script>
+</body>
+
+</html>
