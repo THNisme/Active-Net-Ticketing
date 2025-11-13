@@ -3,15 +3,8 @@ const preview = document.getElementById('preview');
 const previewImg = document.getElementById('previewImg');
 const status = document.getElementById('status');
 const errorMsg = document.getElementById('errorMsg');
-const meta = document.getElementById('meta');
 const chooseBtn = document.getElementById('chooseBtn');
 const clearBtn = document.getElementById('clearBtn');
-
-const isUpdate = status.dataset.isUpdate === "true";
-
-status.textContent = isUpdate
-  ? "Nhấp để chọn ảnh mới (nếu muốn thay đổi)"
-  : "* Vui lòng chọn ảnh";
 
 function showError(msg) {
   errorMsg.style.display = 'block';
@@ -28,7 +21,6 @@ function setAccepted(file) {
   clearError();
   preview.style.display = 'flex';
   previewImg.src = URL.createObjectURL(file);
-  meta.style.display = 'block';
   status.textContent = file.name;
   clearBtn.style.display = 'inline-block';
 }
@@ -36,8 +28,7 @@ function setAccepted(file) {
 function clearAll() {
   preview.style.display = 'none';
   previewImg.src = '';
-  meta.style.display = 'none';
-  status.textContent = "* Vui lòng chọn ảnh";
+  status.textContent = 'Chưa có ảnh';
   clearBtn.style.display = 'none';
   clearError();
   fileInput.value = '';
@@ -48,7 +39,9 @@ function validateImageFile(file) {
     showError('Tệp không phải ảnh.');
     return;
   }
-  setAccepted(file); // ✅ Bỏ phần check kích thước, hiển thị luôn preview
+
+  // Không kiểm tra kích thước nữa
+  setAccepted(file);
 }
 
 chooseBtn.addEventListener('click', () => fileInput.click());
@@ -60,3 +53,5 @@ clearBtn.addEventListener('click', e => {
   e.preventDefault();
   clearAll();
 });
+
+clearAll();

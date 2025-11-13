@@ -6,20 +6,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Vé của tôi</title>
-
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
         <link href="<%= request.getContextPath()%>/css/myticket-page/myticket.css" rel="stylesheet" type="text/css"/>
-        <link href="<%= request.getContextPath()%>/css/wallet-page/wallet.css" rel="stylesheet" type="text/css"/>
-
+ 
     </head>
     <%@include file="../view-hfs/header.jsp" %> 
-    <%@include file="/view-ttk2008/sidebar-for-user.jsp" %>
-
-    <body class="bg-dark">
+    <body>
 
         <div class="container mt-4">
             <h2 class="text-center mb-4">Vé của tôi</h2>
@@ -85,7 +77,7 @@
             </div>
 
             <div class="text-center mt-4">
-                <a href="events.jsp" class="btn btn-accent"> Mua thêm vé</a>
+                <a href="events.jsp" class="btn btn-ff6b6b"> Mua thêm vé</a>
             </div>
         </div>
 

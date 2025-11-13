@@ -45,7 +45,7 @@ public class ZoneDAO {
     // GET ALL ZONE OF A PLACE
     public List<Zone> getAllZoneOfPlace(int placeID) {
         List<Zone> list = new ArrayList<>();
-        String sql = "SELECT * FROM Zones WHERE PlaceID = ? AND StatusID = 1";
+        String sql = "SELECT * FROM Zones WHERE PlaceID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, placeID);
