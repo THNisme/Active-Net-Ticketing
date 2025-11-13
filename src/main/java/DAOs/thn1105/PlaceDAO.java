@@ -122,7 +122,7 @@ public class PlaceDAO {
         }
         return false;
     }
-
+    
     //SOFT DELETE
     public boolean softDelete(int id) {
         String sql = "UPDATE Places SET StatusID=3 WHERE PlaceID=?";
@@ -135,7 +135,7 @@ public class PlaceDAO {
         }
         return false;
     }
-
+    
     // GET ALL PLACES ARE SOFT DELETED
     public List<Place> getAllSoftDelete() {
         List<Place> list = new ArrayList<>();

@@ -165,7 +165,7 @@ public class EventDAO {
             try {
                 conn.rollback();
             } catch (SQLException ignored) {
-            }
+        }
         }
         return false;
     }
@@ -350,5 +350,5 @@ public class EventDAO {
 //            System.out.println("Status: " + e.getStatusID());
 //            System.out.println("");
 //        }
+        }
     }
-}

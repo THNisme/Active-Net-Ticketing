@@ -103,5 +103,6 @@ document.getElementById('placeForm').addEventListener('submit', e => {
     return;
   }
 
-   e.target.submit(); // mở lại nếu muốn submit thật
+  alert('Form submitted!');
+  // e.target.submit(); // mở lại nếu muốn submit thật
 });
