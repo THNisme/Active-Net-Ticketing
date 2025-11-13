@@ -18,6 +18,15 @@ public class OrderDetail {
     private int quantity;
     private BigDecimal unitPrice;
     private int statusID;
+    private int ticketID;
+
+    public int getTicketID() {
+        return ticketID;
+    }
+
+    public void setTicketID(int ticketID) {
+        this.ticketID = ticketID;
+    }
 
     public int getOrderDetailID() {
         return orderDetailID;

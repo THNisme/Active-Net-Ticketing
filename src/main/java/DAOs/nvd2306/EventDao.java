@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection; 
 
 /**
  *
@@ -194,15 +195,28 @@ public class EventDao extends DBContext {
     // ✅ Lấy danh sách TicketType kèm số vé còn lại
     public List<TicketType> getTicketTypesByEventId(int eventId) {
         List<TicketType> list = new ArrayList<>();
-        String sql = """
-            SELECT TicketTypeID, EventID, ZoneID, TypeName, Price, StatusID
-            FROM TicketTypes
-            WHERE EventID = ? AND StatusID = 1
-            ORDER BY Price ASC
-        """;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = """
+        SELECT 
+            tt.TicketTypeID,
+            tt.EventID,
+            tt.ZoneID,
+            tt.TypeName,
+            tt.Price,
+            tt.StatusID,
+            COUNT(t.TicketID) AS AvailableCount
+        FROM TicketTypes tt
+        LEFT JOIN Tickets t ON t.TicketTypeID = tt.TicketTypeID AND t.StatusID = 1
+        WHERE tt.EventID = ?
+        GROUP BY 
+            tt.TicketTypeID, tt.EventID, tt.ZoneID, tt.TypeName, tt.Price, tt.StatusID
+        ORDER BY tt.TicketTypeID
+    """;
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, eventId);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     TicketType t = new TicketType();
@@ -212,16 +226,12 @@ public class EventDao extends DBContext {
                     t.setTypeName(rs.getString("TypeName"));
                     t.setPrice(rs.getBigDecimal("Price"));
                     t.setStatusID(rs.getInt("StatusID"));
-
-                    // lấy số vé còn lại
-                    int available = getAvailableTicketCount(t.getTicketTypeID());
-                    t.setAvailableCount(available);
-
+                    t.setAvailableCount(rs.getInt("AvailableCount")); // 🟢 Quan trọng
                     list.add(t);
                 }
             }
-        } catch (SQLException ex) {
-            System.out.println("❌ getTicketTypesByEventId: " + ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }

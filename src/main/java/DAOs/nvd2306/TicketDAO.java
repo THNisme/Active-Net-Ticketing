@@ -128,4 +128,28 @@ public class TicketDAO extends DBContext {
             ps.executeBatch();
         }
     }
+
+    public List<Integer> pickTicketIds(Connection conn, int ticketTypeId, int quantity) throws SQLException {
+        List<Integer> ticketIds = new ArrayList<>();
+
+        String sql = """
+        SELECT TOP (?) TicketID 
+        FROM Tickets
+        WHERE TicketTypeID = ? AND StatusID = 1
+        ORDER BY TicketID
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, ticketTypeId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ticketIds.add(rs.getInt("TicketID"));
+                }
+            }
+        }
+
+        return ticketIds;
+    }
 }

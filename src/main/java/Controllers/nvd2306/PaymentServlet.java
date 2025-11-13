@@ -168,26 +168,35 @@ public class PaymentServlet extends HttpServlet {
             order.setStatusID(1);
 
             int orderId = orderDAO.insertOrder(conn, order);
+            TicketDAO ticketDAO = new TicketDAO();
 
-            // ✅ 1.1. Thêm chi tiết đơn hàng (OrderDetails)
-            if (items != null && !items.isEmpty()) {
-                for (TicketItem item : items) {
+            for (TicketItem item : items) {
+
+                int ticketTypeId = item.getTicketTypeId();
+                int quantity = item.getQuantity();
+
+                // 🟢 1) Lấy đúng số lượng TicketID thật từ DB
+                List<Integer> pickedTicketIds = ticketDAO.pickTicketIds(conn, ticketTypeId, quantity);
+
+                if (pickedTicketIds.size() < quantity) {
+                    conn.rollback();
+                    forwardFail(request, response, "Không đủ vé để hoàn tất đơn hàng.");
+                    return;
+                }
+
+                // 🟢 2) Lưu OrderDetail với TỪNG TicketID thật
+                for (int ticketId : pickedTicketIds) {
                     OrderDetail detail = new OrderDetail();
                     detail.setOrderID(orderId);
-                    detail.setTicketTypeID(item.getTicketTypeId());
+                    detail.setTicketID(ticketId); // <-- DÙNG TICKETID THẬT
                     detail.setUnitPrice(item.getPrice());
                     detail.setStatusID(1);
                     orderDetailDAO.insertOrderDetail(conn, detail);
                 }
-            }
-            TicketDAO ticketDAO = new TicketDAO();
-            List<Integer> soldTicketIds = new ArrayList<>();
 
-            for (TicketItem item : items) {
-                soldTicketIds.add(item.getTicketId()); // <-- TicketID thật
+                // 🟢 3) Đánh dấu vé đã bán
+                ticketDAO.markTicketsAsSold(conn, pickedTicketIds);
             }
-
-            ticketDAO.markTicketsAsSold(conn, soldTicketIds);
             // 2️⃣ Cập nhật số dư ví
             BigDecimal newBalance = wallet.getBalance().subtract(totalAmount);
             walletDao.updateBalance(conn, wallet.getWalletID(), newBalance);
