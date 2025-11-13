@@ -30,7 +30,7 @@
             </div>
             <hr>
 
-            <h5 class="title mb-3">Tổng quan doanh thu</h5>
+            <h3 class="title mb-3 text-center">Tổng quan doanh thu</h3>
 
             <div class="row g-3">
                 <!-- Tổng doanh thu -->
