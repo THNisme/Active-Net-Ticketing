@@ -52,6 +52,7 @@ public class AuthFilter implements Filter {
         int role = user.getRole(); // 0 = user thường, 1 = admin
 
         // ✅ 3. Phân quyền truy cập
+        //block User
         if (uri.startsWith(ctx + "/admin")) {
             if (role != 1) {
                 res.sendRedirect(ctx + "/accessDenied");
@@ -73,9 +74,46 @@ public class AuthFilter implements Filter {
                 return;
             }
         }
+        if (uri.startsWith(ctx + "/statistic")) {
+            if (role != 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+        if (uri.startsWith(ctx + "/froala")) {
+            if (role != 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
         
         if (uri.startsWith(ctx + "/place")) {
             if (role != 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+        // Block Admin
+        if (uri.startsWith(ctx + "/wallet")) {
+            if (role == 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+        if (uri.startsWith(ctx + "/payment")) {
+            if (role == 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+        if (uri.startsWith(ctx + "/transactions")) {
+            if (role == 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
+        if (uri.startsWith(ctx + "/userinfo")) {
+            if (role == 1) {
                 res.sendRedirect(ctx + "/accessDenied");
                 return;
             }
