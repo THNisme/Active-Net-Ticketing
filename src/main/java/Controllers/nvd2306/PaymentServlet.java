@@ -101,7 +101,6 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
         if (user == null) {
@@ -116,7 +115,6 @@ public class PaymentServlet extends HttpServlet {
         String totalAmountStr = request.getParameter("totalAmount");
         String selectionsJson = request.getParameter("selectionsJson");
 
-        // Các thông tin người mua
         String contactFullname = request.getParameter("fullName");
         String contactPhone = request.getParameter("phone");
         String contactEmail = nvl(request.getParameter("email"), user.getContactEmail());
@@ -124,7 +122,6 @@ public class PaymentServlet extends HttpServlet {
         int eventId = parseIntSafe(eventIdStr, 0);
         BigDecimal totalAmount = parseMoney(totalAmountStr);
 
-        // Chuyển JSON sang danh sách vé
         Type listType = new TypeToken<List<TicketItem>>() {
         }.getType();
         List<TicketItem> items = new Gson().fromJson(selectionsJson, listType);
@@ -142,6 +139,7 @@ public class PaymentServlet extends HttpServlet {
             forwardFail(request, response, "Ví không tồn tại.");
             return;
         }
+
         if (wallet.getBalance().compareTo(totalAmount) < 0) {
             request.setAttribute("insufficientBalance", true);
             request.setAttribute("message", "Số dư ví không đủ để thanh toán.");
@@ -170,6 +168,18 @@ public class PaymentServlet extends HttpServlet {
 
             int orderId = orderDAO.insertOrder(conn, order);
 
+            // ✅ 1.1. Thêm chi tiết đơn hàng (OrderDetails)
+            if (items != null && !items.isEmpty()) {
+                for (TicketItem item : items) {
+                    OrderDetail detail = new OrderDetail();
+                    detail.setOrderID(orderId);
+                    detail.setTicketTypeID(item.getTicketTypeId());
+                    detail.setUnitPrice(item.getPrice());
+                    detail.setStatusID(1);
+                    orderDetailDAO.insertOrderDetail(conn, detail);
+                }
+            }
+
             // 2️⃣ Cập nhật số dư ví
             BigDecimal newBalance = wallet.getBalance().subtract(totalAmount);
             walletDao.updateBalance(conn, wallet.getWalletID(), newBalance);
@@ -183,13 +193,13 @@ public class PaymentServlet extends HttpServlet {
             String pdfPath = null;
             try {
                 File pdfFile = TicketPDFGenerator.createTicketPDF(
-                        "C:/ActiveNetTickets", // Thư mục xuất vé
+                        "C:/ActiveNetTickets",
                         eventName,
                         placeName,
-                        "Không rõ thời gian", // Có thể thay bằng startStr nếu bạn truyền
+                        "Không rõ thời gian",
                         contactFullname,
-                        "Vé điện tử", // Loại vé mặc định
-                        "SN" + orderId // Serial
+                        "Vé điện tử",
+                        "SN" + orderId
                 );
                 pdfPath = pdfFile.getAbsolutePath();
             } catch (Exception ignored) {
@@ -225,7 +235,8 @@ public class PaymentServlet extends HttpServlet {
             request.getRequestDispatcher("payment-success.jsp").forward(request, response);
 
         } catch (Exception ex) {
-            forwardFail(request, response, "Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
+            ex.printStackTrace();
+            forwardFail(request, response, "Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.<br>" + ex.getMessage());
         }
     }
 

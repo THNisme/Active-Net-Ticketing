@@ -105,6 +105,11 @@ public class PaymentPreviewServlet extends HttpServlet {
         HttpSession session = request.getSession();
         @SuppressWarnings("unchecked")
         List<TicketItem> tickets = (List<TicketItem>) session.getAttribute("tickets");
+        if (tickets == null || tickets.isEmpty()) {
+            request.setAttribute("message", "Danh sách vé không tồn tại hoặc đã hết hạn.");
+            request.getRequestDispatcher("payment-fail.jsp").forward(request, response);
+            return;
+        }
         String selectionsJson = new Gson().toJson(tickets);
         // Gửi dữ liệu sang payment.jsp để hiển thị
         request.setAttribute("fullName", fullName);

@@ -30,12 +30,15 @@ import java.io.*;
  */
 public class TicketPDFGenerator {
 
-    /**
-     * Tạo file PDF vé điện tử (hỗ trợ tiếng Việt)
-     */
-    public static File createTicketPDF(String outputDir, String eventName, String placeName,
-            String startStr, String buyerName, String ticketType, String serialNumber)
-            throws Exception {
+    public static File createTicketPDF(
+            String outputDir,
+            String eventName,
+            String placeName,
+            String startStr,
+            String buyerName,
+            String ticketType,
+            String serialNumber
+    ) throws Exception {
 
         File dir = new File(outputDir);
         if (!dir.exists()) {
@@ -48,20 +51,17 @@ public class TicketPDFGenerator {
         Document doc = new Document(pdfDoc, PageSize.A4);
         doc.setMargins(36, 36, 36, 36);
 
-        // ✅ Font Unicode: dùng Arial hệ thống (hiển thị tiếng Việt chuẩn)
         PdfFont font = PdfFontFactory.createFont("C:/Windows/Fonts/arial.ttf", PdfEncodings.IDENTITY_H);
         doc.setFont(font);
 
-        // ==== Tiêu đề ====
-        Paragraph title = new Paragraph("E-TICKET")
+        doc.add(new Paragraph("E-TICKET")
                 .setBold()
                 .setFontSize(26)
                 .setFontColor(ColorConstants.GREEN)
-                .setTextAlignment(TextAlignment.CENTER);
-        doc.add(title);
+                .setTextAlignment(TextAlignment.CENTER));
+
         doc.add(new Paragraph("\n"));
 
-        // ==== Thông tin vé ====
         doc.add(new Paragraph("Sự kiện: " + eventName).setBold().setFontSize(14));
         doc.add(new Paragraph("Địa điểm: " + placeName).setFontSize(13));
         doc.add(new Paragraph("Thời gian: " + startStr).setFontSize(13));
@@ -69,13 +69,11 @@ public class TicketPDFGenerator {
         doc.add(new Paragraph("Mã Serial: " + serialNumber).setFontSize(13));
         doc.add(new Paragraph("Người mua: " + buyerName).setFontSize(13));
 
-        // ==== Phân cách ====
         doc.add(new Paragraph("\n──────────────────────────────────────────────\n")
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontSize(10)
                 .setFontColor(ColorConstants.GRAY));
 
-        // ==== QR Code ====
         BufferedImage qrImage = QRCodeGenerator.generateBufferedQR(serialNumber, 220, 220);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(qrImage, "png", baos);
@@ -85,11 +83,11 @@ public class TicketPDFGenerator {
         qr.setBorder(new SolidBorder(ColorConstants.LIGHT_GRAY, 1));
         doc.add(qr);
 
-        // ==== Lưu ý ====
         doc.add(new Paragraph("\nLưu ý:")
                 .setBold()
                 .setFontSize(13)
                 .setFontColor(ColorConstants.GREEN));
+
         doc.add(new Paragraph(
                 "- Mỗi vé chỉ dùng cho 1 người.\n"
                 + "- Xuất trình mã QR này tại cổng soát vé.\n"
@@ -98,6 +96,8 @@ public class TicketPDFGenerator {
                 .setTextAlignment(TextAlignment.LEFT));
 
         doc.close();
+
         return pdfFile;
-    }
+    
+}
 }
