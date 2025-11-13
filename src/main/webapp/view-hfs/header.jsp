@@ -42,8 +42,8 @@
                 <a href="<%= request.getContextPath()%>/myEvents.jsp">
                     <i class="fa-regular fa-star"></i>Sự kiện của tôi
                 </a>
-                <a href="<%= request.getContextPath()%>/myAccount.jsp">
-                    <i class="fa-solid fa-user"></i>Tài khoản của tôi
+                <a href="<%= request.getContextPath()%>/userinfo">
+                    <i class="fa-solid fa-user"></i>Tài khoản
                 </a>
                 <a href="<%= request.getContextPath()%>/logout">
                     <i class="fa-solid fa-right-from-bracket"></i>Đăng xuất
