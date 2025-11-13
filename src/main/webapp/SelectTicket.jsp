@@ -159,7 +159,23 @@
                 <p><i class="fa-solid fa-clock"></i>
                     <fmt:formatDate value="${event.startDate}" pattern="HH:mm, dd/MM/yyyy"/>
                 </p>
+                <!-- ZONE SELECTOR -->
+                <h3>Loại khu vực (Zone):</h3>
 
+                <div style="display:flex; gap:12px; margin-bottom:20px;">
+                    <c:forEach var="z" items="${zones}">
+                        <a href="select-ticket?id=${event.eventID}&zone=${z.zoneID}"
+                           style="
+                           padding:10px 18px;
+                           border-radius:8px;
+                           text-decoration:none;
+                           color:white;
+                           background: ${selectedZoneId == z.zoneID ? '#00cc66' : '#222'};
+                           border:1px solid #555;">
+                            ${z.zoneName}
+                        </a>
+                    </c:forEach>
+                </div>
                 <h3>Loại vé</h3>
 
                 <c:forEach var="ticket" items="${ticketTypes}">

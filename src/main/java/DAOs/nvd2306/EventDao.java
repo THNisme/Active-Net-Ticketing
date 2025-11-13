@@ -6,6 +6,7 @@ package DAOs.nvd2306;
 
 import Models.nvd2306.Event;
 import Models.nvd2306.TicketType;
+import Models.nvd2306.Zone;
 import Utils.nvd2603.DBContext;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -15,7 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection; 
+import java.sql.Connection;
 
 /**
  *
@@ -192,7 +193,7 @@ public class EventDao extends DBContext {
         return 0;
     }
 
-    // ✅ Lấy danh sách TicketType kèm số vé còn lại
+    // ================== KHÔNG CÓ ZONE ==================
     public List<TicketType> getTicketTypesByEventId(int eventId) {
         List<TicketType> list = new ArrayList<>();
 
@@ -200,45 +201,48 @@ public class EventDao extends DBContext {
         SELECT 
             tt.TicketTypeID,
             tt.EventID,
-            tt.ZoneID,
             tt.TypeName,
             tt.Price,
             tt.StatusID,
             COUNT(t.TicketID) AS AvailableCount
         FROM TicketTypes tt
-        LEFT JOIN Tickets t ON t.TicketTypeID = tt.TicketTypeID AND t.StatusID = 1
+        LEFT JOIN Tickets t 
+               ON t.TicketTypeID = tt.TicketTypeID 
+              AND t.StatusID = 1
         WHERE tt.EventID = ?
         GROUP BY 
-            tt.TicketTypeID, tt.EventID, tt.ZoneID, tt.TypeName, tt.Price, tt.StatusID
+            tt.TicketTypeID, tt.EventID,
+            tt.TypeName, tt.Price, tt.StatusID
         ORDER BY tt.TicketTypeID
-    """;
+        """;
 
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, eventId);
+            ResultSet rs = ps.executeQuery();
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    TicketType t = new TicketType();
-                    t.setTicketTypeID(rs.getInt("TicketTypeID"));
-                    t.setEventID(rs.getInt("EventID"));
-                    t.setZoneID(rs.getInt("ZoneID"));
-                    t.setTypeName(rs.getString("TypeName"));
-                    t.setPrice(rs.getBigDecimal("Price"));
-                    t.setStatusID(rs.getInt("StatusID"));
-                    t.setAvailableCount(rs.getInt("AvailableCount")); // 🟢 Quan trọng
-                    list.add(t);
-                }
+            while (rs.next()) {
+                TicketType t = new TicketType();
+                t.setTicketTypeID(rs.getInt("TicketTypeID"));
+                t.setEventID(rs.getInt("EventID"));
+                t.setTypeName(rs.getString("TypeName"));
+                t.setPrice(rs.getBigDecimal("Price"));
+                t.setStatusID(rs.getInt("StatusID"));
+                t.setAvailableCount(rs.getInt("AvailableCount"));
+                list.add(t);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return list;
     }
 
-    // ✅ Lấy thông tin chi tiết sự kiện (đã có ở bạn)
+    // ================== KHÔNG CÓ getZonesByEventId ==================
     public Event getEventDetailById(int eventId) {
         Event event = null;
+
         String sql = """
         SELECT 
             e.EventID, e.CategoryID, e.EventName, e.Description, e.ImageURL,
@@ -251,11 +255,13 @@ public class EventDao extends DBContext {
         WHERE e.EventID = ?
         GROUP BY e.EventID, e.CategoryID, e.EventName, e.Description, e.ImageURL,
                  e.StartDate, e.EndDate, e.PlaceID, e.StatusID, p.PlaceName, p.Address
-    """;
+        """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, eventId);
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 event = new Event();
                 event.setEventID(rs.getInt("EventID"));
@@ -271,9 +277,11 @@ public class EventDao extends DBContext {
                 event.setAddress(rs.getString("Address"));
                 event.setLowestPrice(rs.getBigDecimal("LowestPrice"));
             }
+
         } catch (SQLException e) {
             System.out.println("❌ Lỗi getEventDetailById: " + e.getMessage());
         }
+
         return event;
     }
 }

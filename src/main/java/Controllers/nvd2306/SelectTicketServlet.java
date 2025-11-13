@@ -5,8 +5,11 @@
 package Controllers.nvd2306;
 
 import DAOs.nvd2306.EventDao;
+import DAOs.nvd2306.TicketTypeDAO;
+import DAOs.nvd2306.ZoneDAO;
 import Models.nvd2306.Event;
 import Models.nvd2306.TicketType;
+import Models.nvd2306.Zone;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -61,17 +64,39 @@ public class SelectTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         int eventId = Integer.parseInt(request.getParameter("id"));
-        EventDao dao = new EventDao();
 
-        Event event = dao.getEventDetailById(eventId);
-        List<TicketType> ticketTypes = dao.getTicketTypesByEventId(eventId);
+        EventDao eventDao = new EventDao();
+        TicketTypeDAO ticketDAO = new TicketTypeDAO();
+        ZoneDAO zoneDAO = new ZoneDAO();
 
+        // Lấy event trước
+        Event event = eventDao.getEventDetailById(eventId);
         request.setAttribute("event", event);
+
+        // Lấy hết zone theo PlaceID
+        List<Zone> zones = zoneDAO.getZonesByPlace(event.getPlaceID());
+        request.setAttribute("zones", zones);
+
+        // Lấy zone đang được chọn
+        String zoneParam = request.getParameter("zone");
+        int zoneId;
+
+        if (zoneParam == null) {
+            // Nếu chưa chọn zone → tự chọn zone đầu tiên
+            zoneId = zones.get(0).getZoneID();
+        } else {
+            zoneId = Integer.parseInt(zoneParam);
+        }
+
+        request.setAttribute("selectedZoneId", zoneId);
+
+        // Lọc ticket theo zone
+        List<TicketType> ticketTypes = ticketDAO.getTicketTypesByEventAndZone(eventId, zoneId);
         request.setAttribute("ticketTypes", ticketTypes);
 
         request.getRequestDispatcher("SelectTicket.jsp").forward(request, response);
-
     }
 
     /**
