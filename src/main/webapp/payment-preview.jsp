@@ -29,7 +29,7 @@
 
             .event-info h2 {
                 margin: 0 0 10px;
-                color: #ffb6b6;
+                color: #00ff80;
                 font-size: 28px;
                 font-weight: 600;
             }
@@ -88,7 +88,7 @@
             }
 
             h3, h2 {
-                color: #ffb6b6;
+                color: #00ff80;
             }
 
             table {
@@ -118,7 +118,7 @@
                 display: block;
                 margin: 30px auto 0;
                 padding: 14px 28px;
-                background: #ffb6b6;
+                background: #00cc66;
                 border: none;
                 border-radius: 10px;
                 font-size: 18px;
@@ -128,7 +128,7 @@
             }
 
             .btn-pay:hover {
-                background: #ff9999;
+                background: #00b35a;
             }
         </style>
     </head>

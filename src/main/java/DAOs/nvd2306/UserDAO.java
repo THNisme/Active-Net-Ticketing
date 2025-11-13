@@ -90,7 +90,7 @@ public class UserDAO extends DBContext {
     }
 
     public boolean checkUsernameExists(String username) {
-        String sql = "SELECT 1 FROM Users WHERE username = ?"; //Status no la so 3
+        String sql = "SELECT 1 FROM Users WHERE username = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);

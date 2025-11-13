@@ -26,11 +26,11 @@
                 margin-bottom:20px;
             }
             .amount{
-                color:#ffb6b6;
+                color:#00ff80;
                 font-weight:bold;
             }
             a{
-                color:#ffb6b6;
+                color:#00ff80;
                 text-decoration:none;
                 display:block;
                 margin-top:15px;

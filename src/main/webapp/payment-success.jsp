@@ -21,12 +21,12 @@
                 background: #1b1b1b;
                 padding: 40px;
                 border-radius: 16px;
-                box-shadow: 0 0 25px aliceblue;
+                box-shadow: 0 0 25px rgba(0,255,128,0.15);
                 text-align: center;
             }
 
             h1 {
-                color: #ffb6b6;
+                color: #00ff80;
                 margin-bottom: 10px;
                 font-size: 30px;
             }
@@ -46,7 +46,7 @@
             }
 
             .info-box h3 {
-                color: #ffb6b6;
+                color: #00ff80;
                 margin-bottom: 10px;
             }
 
@@ -75,7 +75,7 @@
                 font-size: 20px;
                 font-weight: 700;
                 margin-top: 20px;
-                color: #ffb6b6;
+                color: #00ff80;
             }
 
             .buttons {
@@ -83,7 +83,7 @@
             }
 
             .btn {
-                background: #ffb6b6;
+                background: #00cc66;
                 border: none;
                 color: white;
                 padding: 12px 26px;
@@ -97,12 +97,12 @@
             }
 
             .btn:hover {
-                background: #ff9999;
+                background: #00a75a;
             }
 
             .icon-success {
                 font-size: 65px;
-                color: #ffb6b6;
+                color: #00ff80;
                 margin-bottom: 20px;
             }
 
