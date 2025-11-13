@@ -105,6 +105,11 @@
             .progress-bar {
                 background-color: #ffb6b6
             }
+            .table a.text-decoration-none.text-white.fw-bold:hover {
+                color: #0dcaf0 !important;
+                text-decoration: underline;
+                transition: color 0.3s ease;
+            }
         </style>
     </head>
 
@@ -181,7 +186,12 @@
                         <c:forEach var="s" items="${ticketStats}">
                             <c:set var="percent" value="${(s.totalTickets > 0) ? (s.soldTickets * 100 / s.totalTickets) : 0}" />
                             <tr>
-                                <td>${s.eventName}</td>
+                                <td>
+                                    <a href="StatisticsForEachIndividualEventServlet?eventName=${s.eventName}" 
+                                       class="text-decoration-none text-white fw-bold">
+                                        ${s.eventName}
+                                    </a>
+                                </td>
                                 <td>${s.totalTickets}</td>
                                 <td>${s.soldTickets}</td>
                                 <td><fmt:formatNumber value="${s.totalRevenue}" type="number"/>đ</td>
