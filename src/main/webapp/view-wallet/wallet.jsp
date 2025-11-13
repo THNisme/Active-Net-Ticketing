@@ -39,12 +39,10 @@
                         <div class="alert alert-success text-center"><%= message%></div>
                         <% } %>
 
-                        <%-- Hiển thị lỗi nếu có --%>
                         <% if (error != null) {%>
                         <div class="alert alert-danger text-center"><%= error%></div>
                         <% } %>
 
-                        <%-- Nếu đã có ví --%>
                         <% if (wallet != null) {%>
                         <div class="wallet-info text-center">
                             <p class="meta-small"><strong>Mã ví:</strong> <%= wallet.getWalletID()%></p>
