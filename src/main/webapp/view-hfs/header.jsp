@@ -11,12 +11,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
 
-<header class="header bg-pink py-2">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <a href="<%= request.getContextPath()%>/home">
-                    <img src="<%= request.getContextPath()%>/img/LogoA_White.png" alt="ACTIVE" style="width:50px; border-radius:8px;">
+<header class="header"> 
+    <div class="logo">
+        <img src="<%= request.getContextPath()%>/img/LogoA_White.png" alt="ACTIVE">
+    </div>
+
+    <div class="search-box">
+        <form action="<%= request.getContextPath()%>/search" method="get" class="search-form">
+            <input type="text" name="keyword" placeholder="Bạn tìm gì hôm nay?" required>
+            <button type="submit" class="search-btn">
+                <i class="fa fa-search"></i> Tìm kiếm
+            </button>
+        </form>
+    </div>
+
+    <div class="header-right">
+        <a href="<%= request.getContextPath()%>/createEvent.jsp" class="create-event-box">
+            <i class="fa-solid fa-plus"></i>Tạo sự kiện
+        </a>
+
+        <a href="<%= request.getContextPath()%>/myticket" class="active-net-box">
+            Vé của tôi
+        </a>
+
+
+
+        <div class="account-box">
+            <button class="account-btn">
+                <i class="fa-solid fa-user"></i>Tài khoản 
+            </button>
+            <div class="dropdown-menu">
+                <a href="<%= request.getContextPath()%>/myticket">
+                    <i class="fa-solid fa-ticket"></i> Vé của tôi
                 </a>
             </div>
             <div class="col">
