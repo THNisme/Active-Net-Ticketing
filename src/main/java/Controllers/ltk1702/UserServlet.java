@@ -21,7 +21,7 @@ import MD5.HashPassword;
  *
  * @author Acer
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/admin/user-manage"})
 public class UserServlet extends HttpServlet {
 
     /**
@@ -84,7 +84,7 @@ public class UserServlet extends HttpServlet {
             case "delete":
                 int deleteId = Integer.parseInt(req.getParameter("id"));
                 dao.softDeleteUser(deleteId);
-                res.sendRedirect("UserServlet?action=list");
+                res.sendRedirect("user-manage?action=list");
                 break;
 
             default:
@@ -116,26 +116,10 @@ public class UserServlet extends HttpServlet {
         String password = req.getParameter("passwordHash");
         String confirmPassword = req.getParameter("confirmPassword");
         int role = Integer.parseInt(req.getParameter("role"));
+        String fullname = req.getParameter("fullname");
         String email = req.getParameter("email");
+        String phone = req.getParameter("phone");
         String actionType = req.getParameter("actionType");
-
-        if (id == 0 && dao.checkUsernameExists(username)) {
-            req.setAttribute("error", "Tài khoản đã tồn tại!");
-            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
-            return;
-        }
-
-        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
-            req.setAttribute("error", "❌ Mật khẩu xác nhận không khớp!");
-            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
-            return;
-        }
-
-        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
-            req.setAttribute("error", "❌ Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
-            req.getRequestDispatcher("/manage-user-view/userForm.jsp").forward(req, res);
-            return;
-        }
 
         User user = new User();
         user.setUserID(id);
@@ -143,25 +127,95 @@ public class UserServlet extends HttpServlet {
         user.setPassword(HashPassword.hashMD5(password));
         user.setRole(role);
         user.setStatusID(1);
+        user.setContactFullname(fullname);
+        user.setContactEmail(email);
+        user.setContactPhone(phone);
 
+        // Check username exists only when creating new
+        if (id == 0 && dao.checkUsernameExists(username)) {
+            req.getSession().setAttribute("error", "Tài khoản '" + username + "' đã tồn tại!");
+            req.getSession().setAttribute("userManage", user);
+            res.sendRedirect("user-manage?action=new");
+            return;
+        }
+
+        // Validate email format
+        if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+            req.getSession().setAttribute("error", "Vui lòng nhập mail đúng định dạng. Ví dụ: abc124@gmail.com");
+            req.getSession().setAttribute("userManage", user);
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
+            return;
+        }
+
+        // Password rule
+        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
+            req.getSession().setAttribute("error", "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
+            req.getSession().setAttribute("userManage", user);
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
+            return;
+        }
+
+        // Confirm password
+        if (!password.equals(confirmPassword)) {
+            req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
+            req.getSession().setAttribute("userManage", user);
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
+            return;
+        }
+
+        // CREATE USER
         if (id == 0) {
 
             if ("saveAndSend".equals(actionType)) {
                 try {
                     MailService.sendAccountEmail(email, username, password);
-                    req.setAttribute("mailStatus", "Đã gửi mail cho " + email);
-                    dao.addUser(user);
+                    req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo tài khoản mới đến " + email);
                 } catch (Exception e) {
-                    req.setAttribute("error", "Không thể gửi mail: " + e.getMessage());
+                    req.getSession().setAttribute("error", "Không thể gửi mail: " + e.getMessage());
                 }
-            } else {
-                dao.addUser(user);
+            }
+            dao.addUser(user);
+
+        } else { // UPDATE USER
+
+            user.setPassword(HashPassword.hashMD5(password));
+
+            if ("editAndSend".equals(actionType)) {
+                try {
+                    User oldUser = dao.getUserById(id);
+
+                    boolean usernameChanged = !oldUser.getUsername().equals(username);
+                    boolean passwordChanged = !oldUser.getPassword().equals(HashPassword.hashMD5(password));
+                    boolean roleChanged = oldUser.getRole() != role;
+                    boolean fullnameChanged = !String.valueOf(oldUser.getContactFullname()).equals(fullname);
+                    boolean phoneChanged = !String.valueOf(oldUser.getContactPhone()).equals(phone);
+
+                    if (usernameChanged || passwordChanged || roleChanged || fullnameChanged || phoneChanged) {
+                        MailService.sendUpdateNotificationEmail(
+                                email,
+                                oldUser.getUsername(),
+                                username,
+                                passwordChanged,
+                                roleChanged,
+                                fullnameChanged,
+                                phoneChanged,
+                                role,
+                                password,
+                                fullname,
+                                phone                                
+                        );
+                        req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi tài khoản đến " + email);
+                    }
+
+                } catch (Exception e) {
+                    req.getSession().setAttribute("error", "Không thể gửi mail: " + e.getMessage());
+                }
             }
 
-        } else {
             dao.updateUser(user);
         }
-        res.sendRedirect("UserServlet?action=list");
+
+        res.sendRedirect("user-manage?action=list");
     }
 
     /**

@@ -6,8 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
 <%@ page import="java.util.*, Models.ltk1702.User" %>
-<link href="<%= request.getContextPath()%>/css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
-<link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -15,36 +13,50 @@
         <meta charset="UTF-8">
         <title>Quản lý người dùng</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/navigationUI/header.css" rel="stylesheet" type="text/css"/>
+        <link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>     
+        <!--Inter font - Google Fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+            rel="stylesheet">
     </head>
 
-    <%@include file="../view-hfs/header.jsp" %>
+
     <body class="bg-dark text-white">
         <div class="container p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-pink">Danh sách người dùng</h4>
-                <a href="UserServlet?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
+                <h4 class="text-pink">Danh sách người dùng</h4>   
+                <div>
+                    <a href="user-manage?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="history.back()">
+                        Quay lại
+                    </button>
+                </div>
+            </div>   
+            <div class="mx-auto"  
+                 style="max-width: 600px; width: fit-content;">
+                <%
+                    String mailStatus = (String) session.getAttribute("mailStatus");
+                    String error = (String) session.getAttribute("error");
+                    if (mailStatus != null) {
+                %>
+                <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                    <%= mailStatus%>
+                </div>
+                <%
+                        session.removeAttribute("mailStatus");
+                    }
+                    if (error != null) {
+                %>
+                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                    <%= error%>                   
+                </div>
+                <%
+                        session.removeAttribute("error");
+                    }
+                %>
             </div>
-
-            <!-- 🔹 Thông báo thành công hoặc lỗi -->
-            <%
-                String mailStatus = (String) session.getAttribute("mailStatus");
-                String error = (String) session.getAttribute("error");
-                if (mailStatus != null) {
-            %>
-            <div class="alert alert-success"><%= mailStatus%></div>
-            <%
-                    session.removeAttribute("mailStatus");
-                }
-                if (error != null) {
-            %>
-            <div class="alert alert-danger"><%= error%></div>
-            <%
-                    session.removeAttribute("error");
-                }
-            %>
-
             <div class="table-responsive bg-dark border rounded">
                 <table id="users-table" class="table table-dark table-bordered align-middle mb-0">
                     <thead class="table-secondary text-dark">
@@ -84,16 +96,16 @@
                                 <% }%>
                             </td>
                             <td>
-                                <a href="UserServlet?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
+                                <a href="user-manage?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
                                 <% if (u.getStatusID() != 3) {%>
-                                <a href="UserServlet?action=delete&id=<%=u.getUserID()%>" 
+                                <a href="user-manage?action=delete&id=<%=u.getUserID()%>" 
                                    class="btn btn-danger btn-sm"
                                    onclick="return confirm('Bạn có chắc muốn xóa người dùng này không?')">Xóa</a>
                                 <% } %>
                             </td>
                         </tr>
                         <% }
-                    } else { %>
+                        } else { %>
                         <tr><td colspan="6" class="text-center">Không có người dùng nào</td></tr>
                         <% }%>
                     </tbody>
@@ -101,5 +113,5 @@
             </div>
         </div>
     </body>
-    <%@include file="../view-hfs/footer.jsp" %>
+
 </html>
