@@ -28,7 +28,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="text-pink">Danh sách người dùng</h4>   
                 <div>
-                    <a href="User-manage?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
+                    <a href="user-manage?action=new" class="btn btn-pink btn-sm">+ Thêm người dùng</a>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="history.back()">
                         Quay lại
                     </button>
@@ -96,9 +96,9 @@
                                 <% }%>
                             </td>
                             <td>
-                                <a href="User-manage?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
+                                <a href="user-manage?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
                                 <% if (u.getStatusID() != 3) {%>
-                                <a href="User-manage?action=delete&id=<%=u.getUserID()%>" 
+                                <a href="user-manage?action=delete&id=<%=u.getUserID()%>" 
                                    class="btn btn-danger btn-sm"
                                    onclick="return confirm('Bạn có chắc muốn xóa người dùng này không?')">Xóa</a>
                                 <% } %>

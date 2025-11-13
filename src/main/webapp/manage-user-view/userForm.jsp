@@ -86,7 +86,7 @@
             </div>
             <% }%>
 
-            <form id="userForm" action="User-manage" method="post" onsubmit="return validateForm();">
+            <form id="userForm" action="user-manage" method="post" onsubmit="return validateForm();">
                 <input type="hidden" name="userID" value="<%= isEdit ? userId : ""%>">
 
                 <div class="mb-3">
@@ -159,7 +159,7 @@
                     Sửa và gửi mail
                 </button>
                 <% }%>
-                <a href="User-manage?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
+                <a href="user-manage?action=list" class="btn btn-outline-light ms-2">Quay lại</a>
             </form>
         </div>      
         <script>

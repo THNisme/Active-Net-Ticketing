@@ -21,7 +21,7 @@ import MD5.HashPassword;
  *
  * @author Acer
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/User-manage"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/admin/user-manage"})
 public class UserServlet extends HttpServlet {
 
     /**
@@ -84,7 +84,7 @@ public class UserServlet extends HttpServlet {
             case "delete":
                 int deleteId = Integer.parseInt(req.getParameter("id"));
                 dao.softDeleteUser(deleteId);
-                res.sendRedirect("User-manage?action=list");
+                res.sendRedirect("user-manage?action=list");
                 break;
 
             default:
@@ -135,7 +135,7 @@ public class UserServlet extends HttpServlet {
         if (id == 0 && dao.checkUsernameExists(username)) {
             req.getSession().setAttribute("error", "Tài khoản '" + username + "' đã tồn tại!");
             req.getSession().setAttribute("userManage", user);
-            res.sendRedirect("User-manage?action=new");
+            res.sendRedirect("user-manage?action=new");
             return;
         }
 
@@ -143,7 +143,7 @@ public class UserServlet extends HttpServlet {
         if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
             req.getSession().setAttribute("error", "Vui lòng nhập mail đúng định dạng. Ví dụ: abc124@gmail.com");
             req.getSession().setAttribute("userManage", user);
-            res.sendRedirect(id != 0 ? "User-manage?action=edit&id=" + id : "User-manage?action=new");
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
             return;
         }
 
@@ -151,7 +151,7 @@ public class UserServlet extends HttpServlet {
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
             req.getSession().setAttribute("error", "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
             req.getSession().setAttribute("userManage", user);
-            res.sendRedirect(id != 0 ? "User-manage?action=edit&id=" + id : "User-manage?action=new");
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
             return;
         }
 
@@ -159,7 +159,7 @@ public class UserServlet extends HttpServlet {
         if (!password.equals(confirmPassword)) {
             req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
             req.getSession().setAttribute("userManage", user);
-            res.sendRedirect(id != 0 ? "User-manage?action=edit&id=" + id : "User-manage?action=new");
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
             return;
         }
 
@@ -215,7 +215,7 @@ public class UserServlet extends HttpServlet {
             dao.updateUser(user);
         }
 
-        res.sendRedirect("User-manage?action=list");
+        res.sendRedirect("user-manage?action=list");
     }
 
     /**
