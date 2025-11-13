@@ -8,6 +8,48 @@ public class WalletDAO {
 
     private Connection conn = DBContext.getInstance().getConnection();
 
+    public Wallet createWalletForUser(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Wallet wallet = null;
+        try {
+            String sql = "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) VALUES (?, 0, ?, 1)";
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            ps.setInt(1, userId);
+            ps.setTimestamp(2, now);
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                ResultSet gk = ps.getGeneratedKeys();
+                if (gk.next()) {
+                    int walletId = gk.getInt(1);
+                    wallet = new Wallet();
+                    wallet.setWalletID(walletId);
+                    wallet.setUserID(userId);
+                    wallet.setBalance(new java.math.BigDecimal(0));
+                    wallet.setLastUpdated(now);
+                }
+                if (gk != null) {
+                    gk.close();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return wallet;
+    }
+
     public Wallet getWalletByUserId(int userId) {
         Wallet wallet = null;
         PreparedStatement ps = null;
