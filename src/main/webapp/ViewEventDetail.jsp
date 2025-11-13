@@ -77,7 +77,7 @@
             }
 
             .event-info .datetime {
-                color: #9ef59b;
+                color: #ffb6b6;
                 font-weight: bold;
                 margin: 12px 0;
                 font-size: 15px;
@@ -96,14 +96,14 @@
             }
 
             .price span {
-                color: #00cc66;
+                color:#ffb6b6;
             }
 
             .btn-buy {
                 position: absolute;
                 bottom: 50px;
                 left: 50px;
-                background: #00cc66;
+                background: #ffb6b6;
                 color: #fff;
                 padding: 14px 190px;
                 border-radius: 8px;
@@ -113,7 +113,7 @@
             }
 
             .btn-buy:hover {
-                background: #00b35a;
+                background: #ff9999;
             }
 
             .event-image {

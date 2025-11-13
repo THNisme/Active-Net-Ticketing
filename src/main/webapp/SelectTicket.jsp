@@ -30,7 +30,7 @@
             }
 
             h2 {
-                color: #4caf50;
+                color: #ffb6b6;
                 margin-bottom: 10px;
             }
 
@@ -40,7 +40,7 @@
             }
 
             .ticket h3 {
-                color: #4caf50;
+                color:#ffb6b6;
                 margin: 0;
             }
 
@@ -57,7 +57,7 @@
             }
 
             .quantity button {
-                background: #4caf50;
+                background: #ffb6b6;
                 border: none;
                 color: #fff;
                 padding: 5px 10px;
@@ -117,7 +117,7 @@
             }
 
             .summary-item span:last-child {
-                color: #4caf50;
+                color: #ffb6b6;
             }
 
             .total {
@@ -131,7 +131,7 @@
             .btn-continue {
                 display: block;
                 width: 100%;
-                background: #4caf50;
+                background: #ffb6b6;
                 border: none;
                 color: #fff;
                 font-size: 18px;
@@ -170,7 +170,7 @@
                            border-radius:8px;
                            text-decoration:none;
                            color:white;
-                           background: ${selectedZoneId == z.zoneID ? '#00cc66' : '#222'};
+                           background: ${selectedZoneId == z.zoneID ? '#ffb6b6' : '#222'};
                            border:1px solid #555;">
                             ${z.zoneName}
                         </a>
