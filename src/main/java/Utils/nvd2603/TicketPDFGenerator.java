@@ -57,7 +57,7 @@ public class TicketPDFGenerator {
         doc.add(new Paragraph("E-TICKET")
                 .setBold()
                 .setFontSize(26)
-                .setFontColor(ColorConstants.GREEN)
+                .setFontColor(ColorConstants.PINK)
                 .setTextAlignment(TextAlignment.CENTER));
 
         doc.add(new Paragraph("\n"));
@@ -86,7 +86,7 @@ public class TicketPDFGenerator {
         doc.add(new Paragraph("\nLưu ý:")
                 .setBold()
                 .setFontSize(13)
-                .setFontColor(ColorConstants.GREEN));
+                .setFontColor(ColorConstants.PINK));
 
         doc.add(new Paragraph(
                 "- Mỗi vé chỉ dùng cho 1 người.\n"
