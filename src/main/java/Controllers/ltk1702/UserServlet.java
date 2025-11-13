@@ -197,8 +197,12 @@ public class UserServlet extends HttpServlet {
                                 username,
                                 passwordChanged,
                                 roleChanged,
+                                fullnameChanged,
+                                phoneChanged,
                                 role,
-                                password
+                                password,
+                                fullname,
+                                phone                                
                         );
                         req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi tài khoản đến " + email);
                     }

@@ -46,7 +46,7 @@
 
     if (session.getAttribute("userManage") != null) {
         request.setAttribute("userManage", session.getAttribute("userManage"));
-        //session.removeAttribute("user");
+        session.removeAttribute("userManage");
     }
 %>
 
