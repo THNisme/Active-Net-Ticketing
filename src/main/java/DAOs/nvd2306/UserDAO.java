@@ -41,20 +41,55 @@ public class UserDAO extends DBContext {
         return u;
     }
 
+    // =========================================================
+    //                 REGISTER + AUTO CREATE WALLET
+    // =========================================================
     public boolean register(User user) {
-        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
+        String sqlInsertUser
+                = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
                 + "VALUES (?, ?, ?, GETDATE(), 1, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        try {
+            // 1️⃣ Insert vào Users
+            PreparedStatement ps = conn.prepareStatement(sqlInsertUser, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPasswordHash());
             ps.setInt(3, user.getRole());
-            ps.setString(4, user.getContactEmail()); // <-- NEW
+            ps.setString(4, user.getContactEmail());
+
             int rows = ps.executeUpdate();
-            return rows > 0;
+            if (rows == 0) {
+                return false;
+            }
+
+            // 2️⃣ Lấy UserID vừa tạo
+            ResultSet rs = ps.getGeneratedKeys();
+            int newUserId = -1;
+            if (rs.next()) {
+                newUserId = rs.getInt(1);
+            }
+
+            if (newUserId <= 0) {
+                return false;
+            }
+
+            // 3️⃣ Insert vào Wallet với Balance mặc định = 0
+            String sqlInsertWallet
+                    = "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) "
+                    + "VALUES (?, 0, GETDATE(), 1)";
+
+            PreparedStatement psWallet = conn.prepareStatement(sqlInsertWallet);
+            psWallet.setInt(1, newUserId);
+
+            psWallet.executeUpdate();
+
+            return true;
+
         } catch (SQLException e) {
-            System.out.println("Lỗi register: " + e.getMessage());
+            System.out.println("Lỗi register (User + Wallet): " + e.getMessage());
             e.printStackTrace();
         }
+
         return false;
     }
 
