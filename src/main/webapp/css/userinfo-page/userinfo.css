@@ -69,7 +69,7 @@ body {
 }
 
 /* Form inputs */
-.form-control {
+.form-control-userinfor {
     background-color: #2b2b2b;
     border: 1px solid #555;
     border-radius: 12px;

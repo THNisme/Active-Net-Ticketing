@@ -6,6 +6,8 @@
         <meta charset="UTF-8">
         <title>Thông tin tài khoản</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
         <link href="<%= request.getContextPath()%>/css/userinfo-page/userinfo.css" rel="stylesheet" type="text/css"/>
     </head>
@@ -32,53 +34,53 @@
                             <form action="userinfo" method="post" onsubmit="return validateForm(event)">
                                 <div class="mb-3">
                                     <label class="form-label">Tên đăng nhập</label>
-                                    <input type="text" class="form-control" name="username" value="${user.username}" required>
+                                    <input type="text" class="form-control form-control-userinfor" name="username" value="${user.username}" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Họ và tên</label>
-                                    <input type="text" class="form-control" name="fullname" value="${user.contactFullname}">
+                                    <input type="text" class="form-control form-control-userinfor" name="fullname" value="${user.contactFullname}">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email" value="${user.contactEmail}">
+                                    <input type="email" class="form-control form-control-userinfor" name="email" value="${user.contactEmail}">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Số điện thoại</label>
-                                    <input type="text" class="form-control" name="phone" value="${user.contactPhone}">
+                                    <input type="text" class="form-control form-control-userinfor" name="phone" value="${user.contactPhone}">
                                 </div>
 
                                 <!-- Password -->
                                 <div class="mb-3 position-relative">
                                     <label class="form-label">Mật khẩu mới</label>
-                                    <input type="password" class="form-control" name="newPassword" id="newPassword" oninput="toggleConfirm()">
+                                    <input type="password" class="form-control form-control-userinfor" name="newPassword" id="newPassword" oninput="toggleConfirm()">
                                     <i class="fa-solid fa-eye position-absolute top-70 end-0 translate-middle-y me-3 toggle-password" id="togglePass"></i>
                                 </div>
 
                                 <div id="confirmSection" style="display:none;" class="mb-3 position-relative">
                                     <label class="form-label">Xác nhận mật khẩu</label>
-                                    <input type="password" class="form-control" name="confirmPassword" id="confirmPassword">
+                                    <input type="password" class="form-control form-control-userinfor" name="confirmPassword" id="confirmPassword">
                                     <i class="fa-solid fa-eye position-absolute top-70 end-0 translate-middle-y me-3 toggle-password" id="toggleConfirm"></i>
                                 </div>
 
                                 <!-- Readonly info -->
                                 <div class="mb-3">
                                     <label class="form-label">Ngày tạo tài khoản</label>
-                                    <input type="text" class="form-control" value="${user.createdAt}" readonly>
+                                    <input type="text" class="form-control form-control-userinfor" value="${user.createdAt}" readonly>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Trạng thái</label>
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control form-control-userinfor"
                                            value="${user.statusId == 1 ? 'Đang hoạt động' : user.statusId == 2 ? 'Ngừng hoạt động' : 'Đã bị xóa'}"
                                            readonly>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Vai trò</label>
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control form-control-userinfor"
                                            value="${user.role == 1 ? 'Quản trị viên' : 'Người dùng'}"
                                            readonly>
                                 </div>
