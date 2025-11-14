@@ -38,6 +38,7 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/uploads")
                 || uri.equals(ctx + "/")
                 || uri.equals(ctx + "/home")
+                || uri.equals(ctx + "/check")
                 || uri.startsWith(ctx + "/accessDenied")) { // THÊM DÒNG NÀY
             chain.doFilter(request, response);
             return;
@@ -68,7 +69,6 @@ public class AuthFilter implements Filter {
             }
         }
 
-        
         if (uri.startsWith(ctx + "/config")) {
             if (role != 1) {
                 res.sendRedirect(ctx + "/accessDenied");
@@ -87,7 +87,7 @@ public class AuthFilter implements Filter {
                 return;
             }
         }
-        
+
         if (uri.startsWith(ctx + "/place")) {
             if (role != 1) {
                 res.sendRedirect(ctx + "/accessDenied");

@@ -20,8 +20,12 @@
                 </a>
             </div>
             <div class="col">
-                <form class="d-flex justify-content-center">
-                    <input class="form-control me-2 w-50" type="text" placeholder="Bạn tìm gì hôm nay?">
+                <form action="search" method="get" class="d-flex justify-content-center">
+                    <input class="form-control me-2 w-50" 
+                           type="text" 
+                           name="keyword" 
+                           placeholder="Bạn tìm gì hôm nay?" 
+                           value="${keyword}">
                     <button class="btn btn-danger">Tìm kiếm</button>
                 </form>
             </div>

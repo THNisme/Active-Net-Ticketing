@@ -3,6 +3,9 @@
     Created on : Oct 4, 2025, 5:25:12 PM
     Author     : NguyenDuc
 --%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.Locale"%>
 <%@page import="Models.nvd2306.Event"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -10,12 +13,9 @@
 <html>
     <head>
         <title>Trang chủ</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
         <link href="css/customer-page/home.css" rel="stylesheet" type="text/css"/>     
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             #monthsDisplay {
                 display: flex;
@@ -390,22 +390,29 @@
                     <% } else {
                         for (Event e : events) {%>
                     <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="h-100 border-0 event-card">
-                            <img src="<%= e.getImageURL() != null ? e.getImageURL() : "https://via.placeholder.com/400x250?text=No+Image"%>"
-                                 alt="<%= e.getEventName()%>"
-                                 loading="lazy"
-                                 style="width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px;">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= e.getEventName()%></h5>
-                                <p class="price mb-2" style="color:#ffb6b6">Từ 
-                                    <%= (e.getStatusID() == 1) ? "Miễn phí" : "Liên hệ"%>
-                                </p>
-                                <p class="date mb-0">
-                                    <i class="bi bi-calendar3"></i>
-                                    <%= e.getStartDate() != null ? e.getStartDate().toLocalDateTime().toLocalDate() : "Chưa có ngày"%>
-                                </p>
+                        <a href="event-detail?id=<%= e.getEventID()%>" 
+                           style="text-decoration:none; color:inherit; display:block;">
+                            <div class="h-100 border-0 event-card">
+                                <img src="<%= e.getImageURL() != null ? e.getImageURL() : "https://via.placeholder.com/400x250?text=No+Image"%>"
+                                     alt="<%= e.getEventName()%>"
+                                     loading="lazy"
+                                     style="width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= e.getEventName()%></h5>
+                                    <p class="price mb-2" style="color:#ffb6b6">
+                                        <% if (e.getLowestPrice() != null) {%>
+                                        Giá từ <%= NumberFormat.getInstance(new Locale("vi", "VN")).format(e.getLowestPrice())%> VNĐ
+                                        <% } else { %>
+                                        Giá: Đang cập nhật
+                                        <% }%>
+                                    </p>
+                                    <p class="date mb-0">
+                                        <i class="bi bi-calendar3"></i>
+                                        <%= e.getStartDate() != null ? e.getStartDate().toLocalDateTime().toLocalDate() : "Chưa có ngày"%>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <% }
                         }%>
@@ -414,6 +421,8 @@
         </section>
         <%@include file="view-hfs/footer.jsp" %>
 
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script>
                                         console.log('🚀 Script loaded');
 
