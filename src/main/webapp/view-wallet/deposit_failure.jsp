@@ -96,7 +96,7 @@
         </div>
         <div class="actions">
             <a href="wallet" class="action-button">Thử lại</a>
-            <a href="../view-hfs/support.jsp" class="action-button contact-support">Liên hệ hỗ trợ</a>
+            <a href="<%= request.getContextPath()%>/view-hfs/support.jsp" class="action-button contact-support">Liên hệ hỗ trợ</a>
         </div>
     </div>
 </body>

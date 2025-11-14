@@ -60,7 +60,7 @@
                             <p class="meta-small"><strong>Cập nhật lần cuối:</strong> <%= wallet.getLastUpdated()%></p>
 
                             <div class="d-flex justify-content-center gap-3 mt-4">
-                                <a href="<%= request.getContextPath()%>/deposit.jsp" class="btn btn-accent">
+                                <a href="<%= request.getContextPath()%>/deposit" class="btn btn-accent">
                                     <i class="fa-solid fa-arrow-up-from-bracket me-2"></i> Nạp thêm tiền
                                 </a>
                                 <a href="<%= request.getContextPath()%>/transactions" class="btn btn-outline-accent">
