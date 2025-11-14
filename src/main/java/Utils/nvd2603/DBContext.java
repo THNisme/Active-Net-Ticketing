@@ -16,13 +16,14 @@ import java.util.logging.Logger;
  */
 public class DBContext {
 
-    protected Connection conn = null;
+    protected Connection conn;
 
     public DBContext() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbURL = "jdbc:sqlserver://localhost:1433;"
                     + "databaseName=Active-Net-Ticketing;"
+//                    + "databaseName=SWP391;"
                     + "user=sa;"
                     + "password=123456;"
                     + "encrypt=true;trustServerCertificate=true;";
