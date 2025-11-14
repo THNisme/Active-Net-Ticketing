@@ -93,52 +93,38 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     font-weight: 500;
 }
 
+/* Khung dropdown */
 .event-dropdown {
+    display: none;
     position: absolute;
-    top: 120%;
-    right: 0;
-    background-color: #22c55e;
-    border: 1px solid #22c55e;
+    background-color: #1f2937; /* xám đậm */
+    padding: 10px;
     border-radius: 8px;
-    min-width: 250px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-5px);
-    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-    z-index: 1000;
+    width: 230px;
+    z-index: 100;
 }
 
-.event-dropdown.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+/* Loại bỏ style mặc định UL */
+.event-dropdown .event-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.event-dropdown ul li {
-    padding: 8px 12px;
-}
-
-.event-dropdown ul li a {
-    display: inline-block;
+/* Item */
+.event-dropdown .event-item {
+    display: block;
+    background-color: #374151; /* xám đậm hơn */
+    color: #ffffff;            /* chữ trắng */
+    padding: 10px 14px;
+    border-radius: 6px;
     text-decoration: none;
+    margin-bottom: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover → màu xanh lá */
+.event-dropdown .event-item:hover {
+    background-color: #22c55e; /* xanh lá */
     color: #ffffff;
-    transition: color 0.3s ease;
-}
-
-.event-dropdown ul li a:hover {
-    color: #0dcaf0 !important;
-}
-
-.green-text {
-    color: #22c55e;
-}
-
-.btn-outline-custom {
-    border-color: #22c55e;
-    color: #fff;
-}
-
-.btn-outline-custom:hover {
-    border-color: #22c55e;
-    background-color: #22c55e;
 }

@@ -36,6 +36,7 @@
                 color: white;
                 font-family: 'Inter', sans-serif;
                 padding: 20px;
+                
             }
         </style>
 
@@ -48,7 +49,7 @@
                     <fmt:formatDate value="${currentTime}" pattern="dd/MM/yyyy - HH:mm:ss" />
                 </div>
                 <div>
-                    <a href="admincenter" class="btn btn-primary">Về trung tâm</a>
+                    <a href="admincenter" class="btn btn-outline-success">Quay lại</a>
                 </div>
             </div>
             <hr>
