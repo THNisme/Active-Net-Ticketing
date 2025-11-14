@@ -100,6 +100,12 @@ public class AuthFilter implements Filter {
                 return;
             }
         }
+        if (uri.startsWith(ctx + "/deposit")) {
+            if (role == 1) {
+                res.sendRedirect(ctx + "/accessDenied");
+                return;
+            }
+        }
         if (uri.startsWith(ctx + "/payment")) {
             if (role == 1) {
                 res.sendRedirect(ctx + "/accessDenied");
