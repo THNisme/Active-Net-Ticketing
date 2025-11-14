@@ -74,7 +74,7 @@ public class PlaceOverviewServlet extends HttpServlet {
         if (action == null) {
             HttpSession session = request.getSession(false); // false để không tạo mới nếu chưa có
             if (session != null) {
-                session.invalidate(); // xóa toàn bộ session
+                session.getAttribute("currentPlaceID"); // xóa currentPlaceID session
             }
 
             List<Place> placeList = pDao.getAll();

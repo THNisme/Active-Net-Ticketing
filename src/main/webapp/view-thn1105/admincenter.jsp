@@ -248,8 +248,16 @@
                 border-color: #4CAF50;
             }
         </style>
+        <div class="d-flex mb-3" style="justify-content: space-between; align-items: center">
+            <div>
+                <h1 class="m-0">Sự kiện của tôi</h1>
+            </div>
+            <div>
+                <a href="logout" class="btn btn-primary">Đăng xuất</a>
+            </div>
 
-        <h1>Sự kiện của tôi</h1>
+        </div>
+
 
 
         <div class="search-filter">
@@ -269,8 +277,9 @@
             <!-- Bộ lọc -->
             <div class="filters">
                 <a href="event-form" class="filter">Tạo sự kiện mới</a>
+                <a href="eventcategories" class="filter">Danh mục sự kiện</a>
                 <a href="place-overview" class="filter">Quản lí nơi tổ chức</a>
-                <a href="#" class="filter">Tài khoản</a>
+                <a href="user-manage" class="filter">Tài khoản</a>
                 <a href="statisticsevents" class="filter">Thông kế chung</a>
             </div>
         </div>

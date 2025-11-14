@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class DBContext {
 
-    protected Connection conn = null;
+    protected Connection conn;
 
     public DBContext() {
         try {
