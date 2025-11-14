@@ -17,16 +17,18 @@ public class User {
     private String passwordHash;
     private int role;
     private Date createdAt;
+    private String contactEmail;
 
     public User() {
     }
 
-    public User(int userID, String username, String passwordHash, int role, Date createdAt) {
+    public User(int userID, String username, String passwordHash, int role, Date createdAt, String contactEmail) {
         this.userID = userID;
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
         this.createdAt = createdAt;
+        this.contactEmail = contactEmail;
     }
 
     public int getUserID() {
@@ -68,4 +70,13 @@ public class User {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
 }

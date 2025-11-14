@@ -28,7 +28,6 @@
                     <!-- Username -->
                     <div class="user-box">
                         <div class="input-with-icon">
-
                             <input type="text" name="username" id="register-username" required />
                             <label>Tên đăng nhập</label>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none"
@@ -42,7 +41,18 @@
                             <span style="color:red"><c:out value="${error}"/></span>
                         </c:if>
                     </div>
-
+                    <div class="user-box">
+                        <div class="input-with-icon">
+                            <input type="email" name="email" id="register-email" required />
+                            <label>Email</label>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16v16H4z" />
+                            <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                        </div>
+                        <span id="emailError" style="color:red; font-size:13px;"></span>
+                    </div>
 
                     <!-- Password -->
                     <div class="user-box">
@@ -86,9 +96,15 @@
                         </div>
                         <span id="repasswordError" style="color:red; font-size:13px;"></span>
                     </div>
+                    <!-- Error or success message -->
                     <c:if test="${not empty errorRegister}">
-                        <p style="color: red; text-align: center; margin-top: 5px; font-weight:bold ">
+                        <p style="color: red; text-align: center; margin-top: 5px; font-weight:bold;">
                             <c:out value="${errorRegister}"/>
+                        </p>
+                    </c:if>
+                    <c:if test="${not empty message}">
+                        <p style="color: green; text-align: center; margin-top: 5px; font-weight:bold;">
+                            <c:out value="${message}"/>
                         </p>
                     </c:if>
                     <button type="submit">Tạo</button>
@@ -181,40 +197,6 @@
                 });
             </script>
         </c:if>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const password = document.getElementById("password");
-                const repassword = document.getElementById("repassword");
-                const passwordError = document.getElementById("passwordError");
-                const repasswordError = document.getElementById("repasswordError");
-
-                password.addEventListener("input", function () {
-                    const value = password.value;
-                    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
-
-                    if (value.length === 0) {
-                        passwordError.textContent = "";
-                    } else if (!regex.test(value)) {
-                        passwordError.textContent = "❌ Mật khẩu phải có ≥8 ký tự, 1 chữ in hoa, 1 số và 1 ký tự đặc biệt.";
-                    } else {
-                        passwordError.textContent = "✅ Mật khẩu hợp lệ.";
-                        passwordError.style.color = "green";
-                    }
-                });
-
-                repassword.addEventListener("input", function () {
-                    if (repassword.value.length === 0) {
-                        repasswordError.textContent = "";
-                    } else if (repassword.value !== password.value) {
-                        repasswordError.textContent = "❌ Mật khẩu nhập lại không khớp.";
-                        repasswordError.style.color = "red";
-                    } else {
-                        repasswordError.textContent = "✅ Mật khẩu khớp.";
-                        repasswordError.style.color = "green";
-                    }
-                });
-            });
-        </script>
         <!-- Hiển thị thông báo khi đăng ký thành công -->
         <c:if test="${not empty message}">
             <script>

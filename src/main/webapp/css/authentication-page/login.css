@@ -362,3 +362,45 @@ a:hover {
     margin-top: 3px;
     margin-left: 5px;
 }
+/* === Phóng to TỔNG thể: container + form === */
+#container {
+  width: 1024px;        /* ↑ từ 768px */
+  min-height: 640px;    /* ↑ từ 500px */
+  transition: width .35s ease, min-height .35s ease;
+}
+
+/* Hai form vẫn chia 50/50, nhưng nới không gian bên trong để thoáng */
+.form-container { width: 50%; }
+
+.form-container form {
+  padding: 0 72px;      /* ↑ từ 50px */
+}
+
+/* Input, nút to hơn chút cho cân đối */
+.user-box input { padding: 14px 18px; font-size: 16px; }
+button { padding: 14px 100px; font-size: 16px; }
+
+/* Dòng lỗi dài tự xuống hàng, căn giữa gọn */
+.register-container p,
+.login-container p {
+  max-width: 95%;
+  margin: 10px auto;
+  line-height: 1.5;
+  word-wrap: break-word;
+  text-align: center;
+}
+
+/* Responsive: giữ đẹp trên màn hình nhỏ */
+@media (max-width: 1200px) {
+  #container { width: 95vw; min-height: 600px; }
+  .form-container form { padding: 0 36px; }
+  button { padding: 12px 72px; font-size: 15px; }
+}
+/* === FIX LABEL CHE KHI NHẬP === */
+.user-box input:focus ~ label,
+.user-box input[value]:not([value=""]) ~ label {
+  top: -10px;
+  font-size: 12px;
+  color: #ffb6b6;
+  transform: none;
+}

@@ -21,9 +21,9 @@ public class DBContext {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=Active-Net-Ticketing;"
+                    + "databaseName=EventManagementV7;"
                     + "user=sa;"
-                    + "password=123456;"
+                    + "password=nd291005;"
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             DatabaseMetaData dm = conn.getMetaData();

@@ -111,19 +111,19 @@ public class EventFormController extends HttpServlet {
                 int eid = Integer.parseInt(eIDstr);
 
                 Event e = eDao.getById(eid);
-                List<EventCategory> eventCateList = eventCateDAO.getAll();
-                List<Place> placeList = placeDAO.getAll();
+            List<EventCategory> eventCateList = eventCateDAO.getAll();
+            List<Place> placeList = placeDAO.getAll();
 
                 System.out.println("In event-form/update, current EID " + eid);
 
-                request.setAttribute("event", e);
+            request.setAttribute("event", e);
                 request.setAttribute("eventCateList", eventCateList);
                 request.setAttribute("placeList", placeList);
-                request.getRequestDispatcher("/view-thn1105/event-form-update.jsp").forward(request, response);
-            }
+            request.getRequestDispatcher("/view-thn1105/event-form-update.jsp").forward(request, response);
+        }
         } else if (action.equalsIgnoreCase("delete")) {
             handleDeleteEvent(request, response, eDao);
-        }
+    }
     }
 
     /**
