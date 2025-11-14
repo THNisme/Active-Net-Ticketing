@@ -19,10 +19,15 @@ public class MyTicketServlet extends HttpServlet {
 
 
        
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-        int userId = user.getUserID(); 
+              HttpSession session = request.getSession(false);
+        User loginUser = (session != null) ? (User) session.getAttribute("user") : null;
 
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        int userId = loginUser.getUserID();
 
         String filter = request.getParameter("filter");
         MyTicketDAO dao = new MyTicketDAO();
