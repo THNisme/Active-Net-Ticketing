@@ -5,7 +5,7 @@
 package DAOs.nvd2306;
 
 import Models.nvd2306.Transaction;
-import Utils.nvd2603.DBContext;
+import Utils.singleton.DBContext;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,13 @@ import java.sql.SQLException;
  *
  * @author NguyenDuc
  */
-public class TransactionDAO extends DBContext {
+public class TransactionDAO {
+
+    private final Connection conn;
+
+    public TransactionDAO() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     /**
      * Ghi giao dịch thanh toán (PAYMENT) trong cùng transaction

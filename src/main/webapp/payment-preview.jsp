@@ -181,7 +181,7 @@
                 Tổng cộng: <fmt:formatNumber value="${totalAmount}" type="number" groupingUsed="true"/> đ
             </div>
 
-            <form action="payment" method="post">
+            <form action="payments" method="post">
                 <input type="hidden" name="fullName" value="${fullName}">
                 <input type="hidden" name="phone" value="${phone}">
                 <input type="hidden" name="email" value="${email}">

@@ -5,7 +5,7 @@
 package DAOs.nvd2306;
 
 import Models.nvd2306.Wallet;
-import Utils.nvd2603.DBContext;
+import Utils.singleton.DBContext;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,10 +16,12 @@ import java.sql.SQLException;
  *
  * @author NguyenDuc
  */
-public class WalletDao extends DBContext {
+public class WalletDao {
+
+    private final Connection conn;
 
     public WalletDao() {
-        super();
+        this.conn = DBContext.getInstance().getConnection();
     }
 
     public Wallet getWalletByUserId(int userId) throws SQLException {

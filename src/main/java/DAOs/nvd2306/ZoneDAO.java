@@ -5,7 +5,7 @@
 package DAOs.nvd2306;
 
 import Models.nvd2306.Zone;
-import Utils.nvd2603.DBContext;
+import Utils.singleton.DBContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,13 @@ import java.util.List;
  *
  * @author NguyenDuc
  */
-public class ZoneDAO extends DBContext{
+public class ZoneDAO {
+
+    private final Connection conn;
+
+    public ZoneDAO() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     public List<Zone> getZonesByPlace(int placeId) {
         List<Zone> list = new ArrayList<>();

@@ -1,14 +1,20 @@
 package DAOs.nvd2306;
 
 import Models.nvd2306.User;
-import Utils.nvd2603.DBContext;
+import Utils.singleton.DBContext;
 import MD5.HashPassword;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDAO extends DBContext {
+public class UserDAO {
+
+    private final Connection conn;
+
+    public UserDAO() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     public User login(String username, String password) {
         String sql = "SELECT * FROM [Users] WHERE username = ?";
@@ -41,13 +47,13 @@ public class UserDAO extends DBContext {
         return u;
     }
 
-     // =========================================================
+    // =========================================================
     //                 REGISTER + AUTO CREATE WALLET
     // =========================================================
     public boolean register(User user) {
-        String sqlInsertUser = 
-              "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
-            + "VALUES (?, ?, ?, GETDATE(), 1, ?)";
+        String sqlInsertUser
+                = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
+                + "VALUES (?, ?, ?, GETDATE(), 1, ?)";
 
         try {
             // 1️⃣ Insert vào Users
@@ -58,7 +64,9 @@ public class UserDAO extends DBContext {
             ps.setString(4, user.getContactEmail());
 
             int rows = ps.executeUpdate();
-            if (rows == 0) return false;
+            if (rows == 0) {
+                return false;
+            }
 
             // 2️⃣ Lấy UserID vừa tạo
             ResultSet rs = ps.getGeneratedKeys();
@@ -67,12 +75,14 @@ public class UserDAO extends DBContext {
                 newUserId = rs.getInt(1);
             }
 
-            if (newUserId <= 0) return false;
+            if (newUserId <= 0) {
+                return false;
+            }
 
             // 3️⃣ Insert vào Wallet với Balance mặc định = 0
-            String sqlInsertWallet =
-                "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) "
-              + "VALUES (?, 0, GETDATE(), 1)";
+            String sqlInsertWallet
+                    = "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) "
+                    + "VALUES (?, 0, GETDATE(), 1)";
 
             PreparedStatement psWallet = conn.prepareStatement(sqlInsertWallet);
             psWallet.setInt(1, newUserId);

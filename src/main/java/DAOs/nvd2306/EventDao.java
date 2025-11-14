@@ -4,10 +4,10 @@
  */
 package DAOs.nvd2306;
 
+import Utils.singleton.DBContext;
 import Models.nvd2306.Event;
 import Models.nvd2306.TicketType;
 import Models.nvd2306.Zone;
-import Utils.nvd2603.DBContext;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -22,7 +22,13 @@ import java.sql.Connection;
  *
  * @author NguyenDuc
  */
-public class EventDao extends DBContext {
+public class EventDao {
+
+    private final Connection conn;
+
+    public EventDao() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     public List<Event> searchEvents(String keyword) {
         List<Event> list = new ArrayList<>();

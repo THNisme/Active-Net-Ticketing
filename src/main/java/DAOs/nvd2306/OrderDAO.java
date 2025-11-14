@@ -4,9 +4,10 @@
  */
 package DAOs.nvd2306;
 
+import Utils.singleton.DBContext;
 import Models.nvd2306.Order;
 import Models.nvd2306.TicketItem;
-import Utils.nvd2603.DBContext;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,13 @@ import java.sql.Statement;
  *
  * @author NguyenDuc
  */
-public class OrderDAO extends DBContext {
+public class OrderDAO {
+
+    private final Connection conn;
+
+    public OrderDAO() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     /**
      * Insert Orders và trả về OrderID (identity)

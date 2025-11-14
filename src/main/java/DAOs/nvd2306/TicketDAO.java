@@ -4,10 +4,8 @@
  */
 package DAOs.nvd2306;
 
-import Utils.nvd2603.DBContext;
 import Models.nvd2306.Ticket;
-import Utils.nvd2603.DBContext;
-
+import Utils.singleton.DBContext;
 import java.sql.*;
 import java.util.*;
 
@@ -15,7 +13,13 @@ import java.util.*;
  *
  * @author NguyenDuc
  */
-public class TicketDAO extends DBContext {
+public class TicketDAO {
+
+    private final Connection conn;
+
+    public TicketDAO() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     // === Lấy danh sách vé còn trống của một loại ===
     public List<Ticket> pickAvailableTickets(Connection conn, int ticketTypeId, int qty) throws SQLException {

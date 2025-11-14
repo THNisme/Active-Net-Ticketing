@@ -5,7 +5,7 @@
 package DAOs.nvd2306;
 
 import Models.nvd2306.TicketType;
-import Utils.nvd2603.DBContext;
+import Utils.singleton.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -15,7 +15,13 @@ import java.util.List;
  *
  * @author NguyenDuc
  */
-public class TicketTypeDAO extends DBContext {
+public class TicketTypeDAO  {
+
+    private final java.sql.Connection conn;
+
+    public TicketTypeDAO() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     public List<TicketType> getTicketTypesByEventAndZone(int eventId, int zoneId) {
         List<TicketType> list = new ArrayList<>();

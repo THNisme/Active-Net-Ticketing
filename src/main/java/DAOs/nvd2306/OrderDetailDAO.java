@@ -6,7 +6,7 @@ package DAOs.nvd2306;
 
 import Models.nvd2306.OrderDetail;
 import Models.nvd2306.TicketItem;
-import Utils.nvd2603.DBContext;
+import Utils.singleton.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +18,13 @@ import java.util.List;
  *
  * @author NguyenDuc
  */
-public class OrderDetailDAO extends DBContext {
+public class OrderDetailDAO {
+
+    private final Connection conn;
+
+    public OrderDetailDAO() {
+        this.conn = DBContext.getInstance().getConnection();
+    }
 
     // === Chèn 1 chi tiết đơn hàng (dùng TicketID theo DB thật) ===
 //    public void insertOrderDetail(Connection conn, OrderDetail detail) throws SQLException {

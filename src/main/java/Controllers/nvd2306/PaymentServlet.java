@@ -42,7 +42,7 @@ import java.util.List;
  *
  * @author NguyenDuc
  */
-@WebServlet(name = "PaymentServlet", urlPatterns = {"/payment"})
+@WebServlet(name = "PaymentServlet", urlPatterns = {"/payments"})
 public class PaymentServlet extends HttpServlet {
 
     private final WalletDao walletDao = new WalletDao();
