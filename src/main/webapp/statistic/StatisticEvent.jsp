@@ -24,12 +24,13 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
             rel="stylesheet">
-        
+
         <!-- Custom CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/statistic/statisticevent.css">
     </head>
 
     <body>
+
         <style>
             body {
                 background: #111827;
@@ -37,8 +38,46 @@
                 font-family: 'Inter', sans-serif;
                 padding: 20px;
             }
+
+            /* ===========================
+               DROPDOWN EVENT CUSTOM CSS
+               =========================== */
+            .event-dropdown {
+                position: absolute;
+                top: 110%;
+                right: 0;
+                background-color: #1f2937; /* nền xám đậm */
+                padding: 10px;
+                border-radius: 8px;
+                width: 240px;
+                display: none;
+                z-index: 1000;
+            }
+
+            .event-dropdown ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .event-item {
+                display: block;
+                background-color: #374151; /* nền xám */
+                color: #ffffff; /* chữ trắng */
+                padding: 10px 14px;
+                border-radius: 6px;
+                text-decoration: none;
+                margin-bottom: 6px;
+                transition: color 0.2s ease;
+            }
+
+            /* Hover chỉ đổi màu chữ */
+            .event-item:hover {
+                color: #22c55e !important; /* xanh lá */
+                background-color: #374151 !important; /* giữ nguyên nền */
+            }
         </style>
-        
+
         <div class="container py-4">
             <!-- CurrentTime -->
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -60,11 +99,41 @@
                         </button>
 
                         <!-- Dropdown -->
-                        <div id="eventDropdown" class="event-dropdown shadow">
-                            <ul class="list-unstyled m-0">
+
+                        <!-- Dropdown -->
+                        <div id="eventDropdown" class="shadow"
+                             style="
+                             position:absolute;
+                             top:110%;
+                             right:0;
+                             background-color:#1f2937;
+                             padding:10px;
+                             border-radius:8px;
+                             width:240px;
+                             display:none;
+                             z-index:1000;
+                             ">
+                            <ul class="m-0"
+                                style="
+                                list-style:none;
+                                padding:0;
+                                margin:0;
+                                ">
                                 <c:forEach var="e" items="${otherEvents}">
-                                    <li>
-                                        <a href="statisticsevent?eventId=${e.eventID}" class="dropdown-item text-light">
+                                    <li style="margin-bottom:6px;">
+                                        <a href="statisticsevent?eventId=${e.eventID}"
+                                           style="
+                                           display:block;
+                                           text-decoration:none;
+                                           background-color:#374151;
+                                           color:#ffffff;
+                                           padding:10px 14px;
+                                           border-radius:6px;
+                                           transition:background-color .2s ease,color .2s ease;
+                                           "
+                                           onmouseover="this.style.backgroundColor = '#22c55e'; this.style.color = '#ffffff';"
+                                           onmouseout="this.style.backgroundColor = '#374151'; this.style.color = '#ffffff';"
+                                           >
                                             ${e.eventName}
                                         </a>
                                     </li>
@@ -74,6 +143,9 @@
                     </div>
                 </div>
             </div>
+
+
+
 
             <hr>
 
@@ -156,6 +228,7 @@
                                 </td>
                             </tr>
                         </c:forEach>
+
                     </tbody>
                 </table>
             </div>
@@ -165,3 +238,20 @@
         <script src="${pageContext.request.contextPath}/js/statistic/statisticevent.js"></script>
     </body>
 </html>
+<script>
+const btn = document.getElementById("toggleEventList");
+const dropdown = document.getElementById("eventDropdown");
+
+btn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+});
+
+// Click ra ngoài đóng
+document.addEventListener("click", function (e) {
+    if (!dropdown.contains(e.target) && e.target !== btn) {
+        dropdown.style.display = "none";
+    }
+});
+</script>
+
