@@ -1,0 +1,12 @@
+    body {
+        font-family: "Inter", sans-serif;
+    }
+
+    .bg-pink {
+        background-color: #ffb6b6;
+    }
+
+    .header .btn-outline-light:hover {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
