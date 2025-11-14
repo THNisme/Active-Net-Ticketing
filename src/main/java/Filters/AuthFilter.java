@@ -34,7 +34,8 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/assets")
                 || uri.startsWith(ctx + "/css")
                 || uri.startsWith(ctx + "/js")
-                || uri.startsWith(ctx + "/images")
+                || uri.startsWith(ctx + "/img")
+                || uri.startsWith(ctx + "/uploads")
                 || uri.equals(ctx + "/")
                 || uri.equals(ctx + "/home")
                 || uri.startsWith(ctx + "/accessDenied")) { // THÊM DÒNG NÀY
