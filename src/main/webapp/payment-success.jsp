@@ -26,7 +26,7 @@
             }
 
             h1 {
-                color: #00ff80;
+                color: #ffb6b6;
                 margin-bottom: 10px;
                 font-size: 30px;
             }
@@ -83,7 +83,7 @@
             }
 
             .btn {
-                background: #00cc66;
+                background: #ffb6b6;
                 border: none;
                 color: white;
                 padding: 12px 26px;

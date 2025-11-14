@@ -17,7 +17,11 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version> <!-- hoặc version mới hơn bạn muốn -->
+        </dependency>
         <!-- Gson (giữ một bản duy nhất) -->
         <dependency>
             <groupId>com.google.code.gson</groupId>

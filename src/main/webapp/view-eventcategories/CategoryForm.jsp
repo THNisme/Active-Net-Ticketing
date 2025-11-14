@@ -1,18 +1,19 @@
-<%-- 
-    Document   : userList
-    Created on : 8 Oct 2025, 14.10.26
-    Author     : Acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
-<%@ page import="java.util.*, Models.ltk1702.User" %>
+<%@ page import="Models.ltk1702.EventCategories" %>
+
+<%
+    EventCategories category = (EventCategories) request.getAttribute("category");
+    boolean isEdit = (category != null);
+    int categoryId = isEdit ? category.getCategoryID() : 0;
+    String categoryName = isEdit ? category.getCategoryName() : "";
+    String description = isEdit ? category.getDescription() : "";
+%>
 
 <!DOCTYPE html>
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
-        <title>Quản lý người dùng</title>
-
+        <title><%= isEdit ? "Chỉnh sửa" : "Thêm mới"%> danh mục sự kiện</title>    
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <!--Inter font - Google Fonts-->
@@ -21,11 +22,11 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
             rel="stylesheet">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">        
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/place-page-style/style.css">
-       <!--<link href="<%= request.getContextPath()%>/css/cssForUser/pink.css" rel="stylesheet" type="text/css"/>-->     
 
     </head>
-
 
     <body>
         <style>
@@ -251,95 +252,58 @@
                 border-color: #4CAF50;
             }
         </style>
+        <div class="col-md-6 mx-auto mt-4">
+            <h3 class="text-center mb-4">
+                <%= isEdit ? "Chỉnh sửa danh mục sự kiện" : "Thêm mới danh mục sự kiện"%>
+            </h3>
 
-        <div class="container p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-pink">Danh sách người dùng</h4>   
-                <div>
-                    <a href="user-manage?action=new" class="btn btn-primary mx-3">+ Thêm người dùng</a>
-                    <a type="button" class="btn prev-btn" href="admincenter">
-                        Về trung tâm
+            <% if (session.getAttribute("error") != null) {%>
+            <div class="alert alert-danger text-center">
+                <%= session.getAttribute("error")%>
+
+            </div>
+            <% session.removeAttribute("error");
+                } %>
+
+            <% if (session.getAttribute("success") != null) {%>
+            <div class="alert alert-success text-center">
+                <%= session.getAttribute("success")%>
+
+            </div>
+           <% session.removeAttribute("success");
+                } %>
+
+            <form action="eventcategories" method="post" class="bg-dark p-4 rounded-4 shadow-lg border border-secondary">
+                <input type="hidden" name="categoryID" value="<%= categoryId%>">
+
+                <div class="mb-3">
+                    <label class="form-label">Tên danh mục</label>
+                    <input type="text" name="categoryName" class="form-control" placeholder="Nhập tên danh mục sự kiện"
+                           value="<%= categoryName%>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mô tả</label>
+                    <textarea name="description" class="form-control" rows="4"
+                              placeholder="Nhập mô tả cho danh mục (tuỳ chọn)"><%= description%></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="eventcategories?action=list" class="btn btn-outline-light">
+                        <i class="bi bi-arrow-left-circle"></i> Quay lại
                     </a>
+
+                    <% if (isEdit) { %>
+                    <button type="submit" name="action" value="update" class="btn btn-success px-4">
+                        <i class="bi bi-pencil-square"></i> Cập nhật
+                    </button>
+                    <% } else { %>
+                    <button type="submit" name="action" value="create" class="btn btn-primary px-4">
+                        <i class="bi bi-plus-circle"></i> Thêm mới
+                    </button>
+                    <% }%>
                 </div>
-            </div>   
-            <div class="mx-auto"  
-                 style="max-width: 600px; width: fit-content;">
-                <%
-                    String mailStatus = (String) session.getAttribute("mailStatus");
-                    String error = (String) session.getAttribute("error");
-                    if (mailStatus != null) {
-                %>
-                <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                    <%= mailStatus%>
-                </div>
-                <%
-                        session.removeAttribute("mailStatus");
-                    }
-                    if (error != null) {
-                %>
-                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-                    <%= error%>                   
-                </div>
-                <%
-                        session.removeAttribute("error");
-                    }
-                %>
-            </div>
-            <div class="table-responsive bg-dark border rounded">
-                <table id="users-table" class="table table-dark table-bordered align-middle mb-0">
-                    <thead class="table-secondary text-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên đăng nhập</th>
-                            <th>Vai trò</th>
-                            <th>Ngày tạo</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                            List<User> list = (List<User>) request.getAttribute("userList");
-                            if (list != null && !list.isEmpty()) {
-                                for (User u : list) {
-                        %>
-                        <tr>
-                            <td><%= u.getUserID()%></td>
-                            <td><%= u.getUsername()%></td>
-                            <td>
-                                <% if (u.getRole() == 1) { %>
-                                <span class="badge bg-danger">Admin</span>
-                                <% } else { %>
-                                <span class="badge bg-primary">User</span>
-                                <% }%>
-                            </td>
-                            <td><%= u.getCreatedAt()%></td>
-                            <td>
-                                <% if (u.getStatusID() == 1) { %>
-                                <span class="badge bg-success">Hoạt động</span>
-                                <% } else if (u.getStatusID() == 2) { %>
-                                <span class="badge bg-secondary">Ngừng</span>
-                                <% } else { %>
-                                <span class="badge bg-danger">Đã xóa</span>
-                                <% }%>
-                            </td>
-                            <td>
-                                <a href="user-manage?action=edit&id=<%=u.getUserID()%>" class="btn btn-warning btn-sm me-1">Sửa</a>
-                                <% if (u.getStatusID() != 3) {%>
-                                <a href="user-manage?action=delete&id=<%=u.getUserID()%>" 
-                                   class="btn delete-btn"
-                                   onclick="return confirm('Bạn có chắc muốn xóa người dùng này không?')">Xóa</a>
-                                <% } %>
-                            </td>
-                        </tr>
-                        <% }
-                        } else { %>
-                        <tr><td colspan="6" class="text-center">Không có người dùng nào</td></tr>
-                        <% }%>
-                    </tbody>
-                </table>
-            </div>
+            </form>
         </div>
     </body>
-
 </html>

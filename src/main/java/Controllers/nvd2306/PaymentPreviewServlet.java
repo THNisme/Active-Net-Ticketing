@@ -15,7 +15,7 @@ import Models.nvd2306.TicketItem;
 import Models.nvd2306.Transaction;
 import Models.nvd2306.User;
 import Models.nvd2306.Wallet;
-import Utils.nvd2603.DBContext;
+import Utils.singleton.DBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
+import java.util.UUID;
 
 /**
  *
@@ -110,6 +111,12 @@ public class PaymentPreviewServlet extends HttpServlet {
             request.getRequestDispatcher("payment-fail.jsp").forward(request, response);
             return;
         }
+
+        // tạo token và đưa vào session + request
+        String paymentToken = UUID.randomUUID().toString();
+        session.setAttribute("paymentToken", paymentToken);
+        request.setAttribute("paymentToken", paymentToken);
+
         String selectionsJson = new Gson().toJson(tickets);
         // Gửi dữ liệu sang payment.jsp để hiển thị
         request.setAttribute("fullName", fullName);

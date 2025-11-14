@@ -14,11 +14,10 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
-
 public class MailService {
 
-    private static final String FROM_EMAIL = "letkiet714@gmail.com"; 
-    private static final String FROM_PASSWORD = "yxeykgqmxiuanptr"; 
+    private static final String FROM_EMAIL = "clbfactive8386@gmail.com";
+    private static final String FROM_PASSWORD = "zefhnzdprcwslttc";
 
     public static void sendAccountEmail(String toEmail, String username, String password) {
         String subject = "Tài khoản Active Net Ticketing";
@@ -28,8 +27,41 @@ public class MailService {
                 + "Mật khẩu: " + password + "\n\n"
                 + "Vui lòng đăng nhập và đổi mật khẩu sau khi sử dụng lần đầu.\n\n"
                 + "Trân trọng,\nActive Net Ticketing";
-
+        
         sendMail(toEmail, subject, body);
+    }
+
+    public static void sendUpdateNotificationEmail(String toEmail, String oldUsername, String newUsername,
+            boolean passwordChanged, boolean roleChanged , boolean fullnameChanged, boolean phoneChanged, int newRole, String password, String fullname, String phone) {
+        String subject = "Thông báo cập nhật tài khoản";
+
+        StringBuilder body = new StringBuilder();
+        body.append("Xin chào ").append(fullname).append(",\n\n");
+        body.append("Tài khoản của bạn đã được cập nhật với các thay đổi sau:\n\n");
+        
+        if (fullnameChanged) {
+            body.append("Tên của bạn đã được thay đổi.\n");
+            body.append("- Tên mới: ").append(fullname).append("\n");
+        }
+        if (phoneChanged) {
+            body.append("Số điện thoại đã được thay đổi.\n");
+            body.append("- Số điện thoại: ").append(phone).append("\n");
+        }
+        if (!oldUsername.equals(newUsername)) {
+            body.append("- Tên đăng nhập mới: ").append(newUsername).append("\n");
+        }
+        if (passwordChanged) {
+            body.append("Mật khẩu đã được thay đổi.\n");
+            body.append("- Mật khẩu mới: ").append(password).append("\n");
+        }       
+        if (roleChanged) {
+            body.append("- Quyền hệ thống mới: ").append(newRole == 1 ? "Admin" : "User").append("\n");
+        }
+
+        body.append("\nNếu bạn không thực hiện thay đổi này, vui lòng liên hệ hỗ trợ ngay.\n\n");
+        body.append("Trân trọng,\nActive Net Ticketing");
+
+        sendMail(toEmail, subject, body.toString());
     }
 
     private static void sendMail(String to, String subject, String body) {
@@ -59,4 +91,5 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
 }
