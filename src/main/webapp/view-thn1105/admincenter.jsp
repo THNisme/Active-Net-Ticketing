@@ -280,7 +280,7 @@
                 <a href="eventcategories" class="filter">Danh mục sự kiện</a>
                 <a href="place-overview" class="filter">Quản lí nơi tổ chức</a>
                 <a href="user-manage" class="filter">Tài khoản</a>
-                <a href="#" class="filter">Thông kế chung</a>
+                <a href="statisticsevents" class="filter">Thông kế chung</a>
             </div>
         </div>
 
