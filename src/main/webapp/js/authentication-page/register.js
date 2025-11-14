@@ -10,12 +10,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = usernameInput.closest("form");
     let usernameTaken = false;
 
-    usernameInput.addEventListener("blur", function () {
+    usernameInput.addEventListener("input", function () {
         const username = usernameInput.value.trim();
         if (!username)
             return;
 
-        fetch(`check?username=${encodeURIComponent(username)}`)
+        fetch(`${CONTEXT}/check?username=${encodeURIComponent(username)}`)
                 .then(res => res.json())
                 .then(data => {
                     usernameTaken = data.exists;

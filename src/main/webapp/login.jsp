@@ -14,7 +14,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="css/authentication-page/login.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/authentication-page/login.css" />
 
 
     </head>
@@ -43,7 +43,18 @@
                         </c:if>
                     </div>
 
-
+                    <div class="user-box">
+                        <div class="input-with-icon">
+                            <input type="email" name="email" id="register-email" required />
+                            <label>Email</label>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16v16H4z" />
+                            <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                        </div>
+                        <span id="emailError" style="color:red; font-size:13px;"></span>
+                    </div>
                     <!-- Password -->
                     <div class="user-box">
                         <div class="input-with-icon">
@@ -164,8 +175,12 @@
                 </div>
             </div>
         </div>
-        <script src="js/authentication-page/index.js"></script>
-        <script src="js/authentication-page/register.js"></script>
+        <script src="${pageContext.request.contextPath}/js/authentication-page/index.js"></script>
+        <script>
+                                const CONTEXT = "${pageContext.request.contextPath}";
+        </script>
+        <script src="${pageContext.request.contextPath}/js/authentication-page/register.js"></script>
+
         <c:if test="${not empty errorLogin}">
             <script>
                                 document.addEventListener("DOMContentLoaded", function () {
@@ -183,8 +198,8 @@
         </c:if>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const password = document.getElementById("password");
-                const repassword = document.getElementById("repassword");
+                const password = document.getElementById("register-password");
+                const repassword = document.getElementById("register-repassword");
                 const passwordError = document.getElementById("passwordError");
                 const repasswordError = document.getElementById("repasswordError");
 
@@ -223,6 +238,7 @@
                 });
             </script>
         </c:if>
+
     </body>
 
 </html>

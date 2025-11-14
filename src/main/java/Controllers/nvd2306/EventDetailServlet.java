@@ -1,11 +1,13 @@
 /*
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers.nvd2306;
 
 import DAOs.nvd2306.EventDao;
 import Models.nvd2306.Event;
+import Models.nvd2306.TicketType;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +15,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  *
  * @author NguyenDuc
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "EventDetailServlet", urlPatterns = {"/event-detail"})
+public class EventDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +43,10 @@ public class SearchServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchServlet</title>");
+            out.println("<title>Servlet EventDetailServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EventDetailServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,23 +64,24 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String keyword = request.getParameter("keyword");
-        EventDao dao = new EventDao();
-        List<Event> events;
+        String idStr = request.getParameter("id");
+        if (idStr != null) {
+            try {
+                int id = Integer.parseInt(idStr);
+                EventDao dao = new EventDao();
+                Event event = dao.getEventDetailById(id);
 
-        // nếu không nhập gì → trả tất cả sự kiện
-        if (keyword == null || keyword.trim().isEmpty()) {
-            events = dao.getAllEvents();
-            keyword = "";  // để tránh null khi set lại lên form
-        } else {
-            events = dao.searchEvents(keyword);
+                if (event != null) {
+                    request.setAttribute("event", event);
+                    RequestDispatcher rd = request.getRequestDispatcher("ViewEventDetail.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        request.setAttribute("events", events);
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("isSearch", true);
-
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        response.sendRedirect("home.jsp");
     }
 
     /**

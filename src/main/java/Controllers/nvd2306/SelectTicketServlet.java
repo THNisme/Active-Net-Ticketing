@@ -1,11 +1,15 @@
 /*
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers.nvd2306;
 
 import DAOs.nvd2306.EventDao;
+import DAOs.nvd2306.TicketTypeDAO;
+import DAOs.nvd2306.ZoneDAO;
 import Models.nvd2306.Event;
+import Models.nvd2306.TicketType;
+import Models.nvd2306.Zone;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,8 +23,8 @@ import java.util.List;
  *
  * @author NguyenDuc
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "SelectTicketServlet", urlPatterns = {"/select-ticket"})
+public class SelectTicketServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +43,10 @@ public class SearchServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchServlet</title>");
+            out.println("<title>Servlet SelectTicketServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SelectTicketServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,23 +64,39 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String keyword = request.getParameter("keyword");
-        EventDao dao = new EventDao();
-        List<Event> events;
 
-        // nếu không nhập gì → trả tất cả sự kiện
-        if (keyword == null || keyword.trim().isEmpty()) {
-            events = dao.getAllEvents();
-            keyword = "";  // để tránh null khi set lại lên form
+        int eventId = Integer.parseInt(request.getParameter("id"));
+
+        EventDao eventDao = new EventDao();
+        TicketTypeDAO ticketDAO = new TicketTypeDAO();
+        ZoneDAO zoneDAO = new ZoneDAO();
+
+        // Lấy event trước
+        Event event = eventDao.getEventDetailById(eventId);
+        request.setAttribute("event", event);
+
+        // Lấy hết zone theo PlaceID
+        List<Zone> zones = zoneDAO.getZonesByPlace(event.getPlaceID());
+        request.setAttribute("zones", zones);
+
+        // Lấy zone đang được chọn
+        String zoneParam = request.getParameter("zone");
+        int zoneId;
+
+        if (zoneParam == null) {
+            // Nếu chưa chọn zone → tự chọn zone đầu tiên
+            zoneId = zones.get(0).getZoneID();
         } else {
-            events = dao.searchEvents(keyword);
+            zoneId = Integer.parseInt(zoneParam);
         }
 
-        request.setAttribute("events", events);
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("isSearch", true);
+        request.setAttribute("selectedZoneId", zoneId);
 
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        // Lọc ticket theo zone
+        List<TicketType> ticketTypes = ticketDAO.getTicketTypesByEventAndZone(eventId, zoneId);
+        request.setAttribute("ticketTypes", ticketTypes);
+
+        request.getRequestDispatcher("SelectTicket.jsp").forward(request, response);
     }
 
     /**

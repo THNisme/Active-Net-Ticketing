@@ -85,7 +85,7 @@
             </div>
 
             <div class="text-center mt-4">
-                <a href="events.jsp" class="btn btn-accent"> Mua thêm vé</a>
+                <a href="home" class="btn btn-accent"> Mua thêm vé</a>
             </div>
         </div>
 
