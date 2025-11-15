@@ -302,13 +302,23 @@
                 document.querySelectorAll(".seat-tag:not([disabled])").forEach(btn => {
                     btn.addEventListener("click", function () {
 
+                        // ĐẾM GHẾ ĐANG CHỌN
+                        const selectedSeats = document.querySelectorAll(".active-seat").length;
+
+                        // Nếu user CLICK để chọn ghế (không phải bỏ chọn)
+                        if (!this.classList.contains("active-seat") && selectedSeats >= 5) {
+                            alert("Bạn chỉ được chọn tối đa 5 ghế.");
+                            return; // ❌ không cho chọn thêm
+                        }
+
+                        // Toggle trạng thái chọn ghế
                         this.classList.toggle("active-seat");
 
                         const seatId = this.dataset.seat;
                         const seatLabel = this.textContent.trim();
                         const ticketEl = this.closest(".ticket");
                         const ticketTypeId = ticketEl.dataset.ticketid;
-                        const ticketName = ticketEl.dataset.ticketname; // lấy từ data-ticketname
+                        const ticketName = ticketEl.dataset.ticketname;
                         const price = parseInt(ticketEl.querySelector(".ticket-price").dataset.rawPrice);
 
                         const key = "SEAT-" + ticketTypeId + "-" + seatLabel;
@@ -329,7 +339,6 @@
                         updateSummary();
                     });
                 });
-
                 /* ======================================================
                  * 2️⃣ XỬ LÝ VÉ KHÔNG GHẾ (+ / -)
                  * ====================================================== */
@@ -352,7 +361,7 @@
                     plusBtn.addEventListener("click", function () {
                         let value = parseInt(input.value);
 
-                        if (value < available) {
+                        if (value < available && value < 5) {
                             value++;
                             input.value = value;
 
@@ -363,6 +372,9 @@
                                 price: price,
                                 isSeat: false
                             };
+                        } else if (value >= 5) {
+                            alert("Bạn chỉ được chọn tối đa 5 vé.");
+                            return;
                         }
 
                         const remainEl = ticket.querySelector(".remaining");
@@ -418,35 +430,35 @@
                             left.textContent = item.name;
                         } else {
                             // Ví dụ: "Không Seat × 2"
-                          left.textContent = item.name + " × " + item.qty;
-                                            }
+                            left.textContent = item.name + " × " + item.qty;
+                        }
 
-                                            const right = document.createElement("span");
-                                            right.textContent = lineTotal.toLocaleString("vi-VN") + " đ";
+                        const right = document.createElement("span");
+                        right.textContent = lineTotal.toLocaleString("vi-VN") + " đ";
 
-                                            div.appendChild(left);
-                                            div.appendChild(right);
-                                            summaryList.appendChild(div);
-                                        });
+                        div.appendChild(left);
+                        div.appendChild(right);
+                        summaryList.appendChild(div);
+                    });
 
-                                        totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
-                                    }
+                    totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
+                }
 
-                                    // ==========================
-                                    // 4. SUBMIT CHECKOUT
-                                    // ==========================
-                                    btnContinue.addEventListener("click", function (e) {
-                                        if (Object.keys(selections).length === 0) {
-                                            e.preventDefault();
-                                            alert("Vui lòng chọn ít nhất 1 vé");
-                                            return;
-                                        }
+                // ==========================
+                // 4. SUBMIT CHECKOUT
+                // ==========================
+                btnContinue.addEventListener("click", function (e) {
+                    if (Object.keys(selections).length === 0) {
+                        e.preventDefault();
+                        alert("Vui lòng chọn ít nhất 1 vé");
+                        return;
+                    }
 
-                                        document.getElementById("selectionsJson").value = JSON.stringify(selections);
-                                        document.getElementById("totalAmount").value = totalAmount;
-                                    });
+                    document.getElementById("selectionsJson").value = JSON.stringify(selections);
+                    document.getElementById("totalAmount").value = totalAmount;
+                });
 
-                                });
+            });
         </script>
 
     </body>
