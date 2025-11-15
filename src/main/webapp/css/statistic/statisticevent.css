@@ -1,11 +1,8 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on : Nov 4, 2025, 9:12:35 AM
-    Author     : NGUYEN
-*/
+body {
+    background: #111827;
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
 
 .card {
     background-color: #374151;
@@ -20,6 +17,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     transform: translateY(-3px);
 }
 
+/* PROGRESS RING */
 .progress-ring {
     position: relative;
     width: 100px;
@@ -28,15 +26,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .progress-ring svg {
     transform: rotate(-90deg);
-    width: 100%;
-    height: 100%;
 }
 
 .progress-ring circle {
     fill: none;
     stroke-width: 10;
     stroke-linecap: round;
-    transform-origin: 50% 50%;
 }
 
 .progress-ring circle.bg {
@@ -47,7 +42,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     stroke: #22c55e;
     stroke-dasharray: 283;
     stroke-dashoffset: 283;
-    transition: stroke-dashoffset 0.35s ease;
 }
 
 .progress-ring .percent-text {
@@ -57,74 +51,80 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     transform: translate(-50%, -50%);
     font-size: 1rem;
     font-weight: bold;
-    color: #fff;
 }
 
-.section-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-top: 25px;
-    color: #fff;
-}
-
-.title {
-    color: #fff;
+/* TABLE */
+table th {
+    color: #22c55e !important;
 }
 
 .progress {
     background-color: #333;
-    border-radius: 5px;
-    overflow: hidden;
 }
 
 .progress-bar {
-    transition: width 1s ease-out;
     background-color: #22c55e;
+    transition: width 0.8s ease;
 }
 
 .percent {
-    min-width: 45px;
-    text-align: right;
+    min-width: 40px;
     font-weight: bold;
 }
 
-.event-name {
-    color: #fff;
-    font-weight: 500;
+.section-title {
+    color: #ffffff !important; /* chữ trắng */
+    font-weight: bold;
 }
 
-/* Khung dropdown */
+.section-title .event-name {
+    color: #22c55e !important; /* xanh lá */
+}
+
+
+/* DROPDOWN */
 .event-dropdown {
-    display: none;
     position: absolute;
-    background-color: #1f2937; /* xám đậm */
-    padding: 10px;
+    top: 120%;
+    right: 0;
+    background-color: #1f2937;
+    border: 1px solid #22c55e;
     border-radius: 8px;
-    width: 230px;
-    z-index: 100;
+    min-width: 250px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: opacity .2s ease, transform .2s ease;
+    z-index: 1000;
 }
 
-/* Loại bỏ style mặc định UL */
-.event-dropdown .event-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.event-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
-/* Item */
-.event-dropdown .event-item {
+.event-dropdown ul li a {
+    color: #fff;
+    padding: 8px 12px;
     display: block;
-    background-color: #374151; /* xám đậm hơn */
-    color: #ffffff;            /* chữ trắng */
-    padding: 10px 14px;
-    border-radius: 6px;
     text-decoration: none;
-    margin-bottom: 6px;
-    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Hover → màu xanh lá */
-.event-dropdown .event-item:hover {
-    background-color: #22c55e; /* xanh lá */
-    color: #ffffff;
+.event-dropdown ul li a:hover {
+    color: #22c55e !important;
+}
+
+#toggleEventList {
+    position: relative;
+}
+
+#toggleEventList:after {
+    content: "";
+    background-color: transparent;
+    width: 100%;
+    height: 15px;
+    position: absolute;
+    left: 0;
+    bottom: -10px;
 }
