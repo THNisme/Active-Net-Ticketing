@@ -399,13 +399,20 @@
                                      style="width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px;">
                                 <div class="card-body">
                                     <h5 class="card-title"><%= e.getEventName()%></h5>
+                                    <%
+                                        Number lowestPrice = e.getLowestPrice();
+                                        if (lowestPrice != null) {
+                                            double priceValue = lowestPrice.doubleValue();
+                                    %>
                                     <p class="price mb-2" style="color:#ffb6b6">
-                                        <% if (e.getLowestPrice() != null) {%>
-                                        Giá từ <%= NumberFormat.getInstance(new Locale("vi", "VN")).format(e.getLowestPrice())%> VNĐ
-                                        <% } else { %>
-                                        Giá: Đang cập nhật
-                                        <% }%>
+                                        <% if (priceValue <= 0) { %>
+                                        Miễn phí
+                                        <% } else {%>
+                                        Giá từ <%= NumberFormat.getInstance(new Locale("vi", "VN")).format(lowestPrice)%> VNĐ
+                                        <% } %>
                                     </p>
+                                    <% }%>                        
+
                                     <p class="date mb-0">
                                         <i class="bi bi-calendar3"></i>
                                         <%= e.getStartDate() != null ? e.getStartDate().toLocalDateTime().toLocalDate() : "Chưa có ngày"%>

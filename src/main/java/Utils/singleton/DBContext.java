@@ -34,9 +34,9 @@ public class DBContext {
     public Connection getConnection() {
         try {
             String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=EventManagementV7;"
+                    + "databaseName=Active-Net-Ticketing;"
                     + "user=sa;"
-                    + "password=nd291005;"
+                    + "password=123456;"
                     + "encrypt=true;trustServerCertificate=true;";
 
             // ❗ Luôn mở mới Connection

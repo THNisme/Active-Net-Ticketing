@@ -5,6 +5,9 @@
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
         <title>Thanh toán thành công - ${eventName}</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
         <style>
@@ -169,15 +172,15 @@
             </div>
         </div>
         <script>
-            // URL trang home (sửa lại đúng servlet của bạn: "home", "events", "index" ...)
             const HOME_URL = "${pageContext.request.contextPath}/home";
 
-            // Đẩy state hiện tại vào history
-            history.pushState(null, "", location.href);
+            // ép history luôn có 2 state để back luôn đi đúng hướng
+            history.pushState({layer: 1}, "", location.href);
+            history.pushState({layer: 2}, "", location.href);
 
-            // Khi người dùng bấm nút Back
-            window.addEventListener("popstate", function () {
-                window.location.replace(HOME_URL);
+            window.addEventListener("popstate", function (event) {
+                // Không cho quay về payment-preview
+                window.location.href = HOME_URL;
             });
         </script>
     </body>
