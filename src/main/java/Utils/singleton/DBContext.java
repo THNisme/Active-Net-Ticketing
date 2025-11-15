@@ -50,6 +50,22 @@ public class DBContext {
     }
 
     public Connection getConnection() {
+        try {
+            // Nếu connection bị đóng hoặc null → mở lại
+            if (conn == null || conn.isClosed()) {
+                String dbURL = "jdbc:sqlserver://localhost:1433;"
+                        + "databaseName=EventManagementV7;"
+                        + "user=sa;"
+                        + "password=nd291005;"
+                        + "encrypt=true;trustServerCertificate=true;";
+
+                conn = DriverManager.getConnection(dbURL);
+                System.out.println("🔄 Reconnected to database!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return conn;
     }
 }

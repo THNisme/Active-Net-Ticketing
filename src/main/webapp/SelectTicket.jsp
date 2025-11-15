@@ -345,7 +345,7 @@
 
                     totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
 
-                    btnContinue.disabled = totalAmount <= 0;
+                    btnContinue.disabled = totalAmount < 0;
                 }
 
                 // Nút Tiếp tục (khi còn vé)

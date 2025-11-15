@@ -59,7 +59,7 @@
 
             <a href="view-wallet/wallet.jsp">Nạp thêm tiền vào ví</a>
 
-            <a href="home.jsp" class="back">Quay về trang chủ</a>
+            <a href="${pageContext.request.contextPath}/home" class="btn">Về trang chủ</a>
         </div>
     </body>
 </html>

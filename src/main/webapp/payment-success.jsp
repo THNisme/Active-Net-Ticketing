@@ -159,7 +159,7 @@
             <div class="divider"></div>
 
             <div class="buttons">
-                <a href="home" class="btn"><i class="fa-solid fa-house"></i> Về trang chủ</a>
+                <a href="${pageContext.request.contextPath}/home" class="btn">Về trang chủ</a>
 
                 <c:if test="${not empty pdfPath}">
                     <a href="${pdfPath}" target="_blank" class="btn">
