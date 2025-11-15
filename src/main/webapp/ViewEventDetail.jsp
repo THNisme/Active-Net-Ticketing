@@ -7,7 +7,8 @@
     <head>
         <meta charset="UTF-8">
         <title>${event.eventName}</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             * {
                 box-sizing: border-box;
@@ -237,7 +238,7 @@
     </head>
 
     <body>
-
+        <%@include file="view-hfs/header.jsp" %>
         <!-- Main event container -->
         <section class="event-container">
             <div class="event-info">
@@ -282,5 +283,10 @@
             <hr>
             <p>${event.description}</p>
         </section>
+
+        <%@include file="view-hfs/footer.jsp" %>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

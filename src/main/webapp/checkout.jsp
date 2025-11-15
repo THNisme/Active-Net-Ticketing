@@ -213,6 +213,9 @@
         <script>
             const COUNTDOWN_MINUTES = 15;
             const STORAGE_KEY = "checkout_expire_time";
+            
+            // TRANG checkout.jsp — reset mỗi khi load
+            sessionStorage.removeItem("checkout_expire_time");
 
             let expireTime = sessionStorage.getItem(STORAGE_KEY);
             if (!expireTime) {

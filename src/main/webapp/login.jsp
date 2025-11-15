@@ -176,18 +176,18 @@
             </div>
         </div>
         <script>
-                                const CONTEXT = "${pageContext.request.contextPath}";
+            const CONTEXT = "${pageContext.request.contextPath}";
         </script>
         <script src="${pageContext.request.contextPath}/js/authentication-page/index.js"></script>
-        
+
         <script src="${pageContext.request.contextPath}/js/authentication-page/register.js"></script>
 
         <c:if test="${not empty errorLogin}">
             <script>
-                                document.addEventListener("DOMContentLoaded", function () {
-                                    const container = document.getElementById("container");
-                                    container.classList.remove("right-panel-active"); // đảm bảo hiện LOGIN
-                                });
+            document.addEventListener("DOMContentLoaded", function () {
+                const container = document.getElementById("container");
+                container.classList.remove("right-panel-active"); // đảm bảo hiện LOGIN
+            });
             </script>
         </c:if>
         <c:if test="${showRegister}">
