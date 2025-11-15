@@ -166,10 +166,11 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/home")
                 || uri.startsWith(ctx + "/event-detail")
                 || uri.startsWith(ctx + "/filter-events")
-                || uri.startsWith(ctx + "/select-ticket")
-                || uri.startsWith(ctx + "/checkout")
-                || uri.startsWith(ctx + "/payments")
+//                || uri.startsWith(ctx + "/select-ticket")
+//                || uri.startsWith(ctx + "/checkout")
+//                || uri.startsWith(ctx + "/payments")
                 || uri.startsWith(ctx + "/check")
+                || uri.startsWith(ctx + "/search")
                 || uri.startsWith(ctx + "/accessDenied");
 
         // ===== 2. Đang login mà user đã đăng nhập rồi → chuyển hướng đúng trang =====

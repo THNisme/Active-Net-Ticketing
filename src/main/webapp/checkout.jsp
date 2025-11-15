@@ -211,9 +211,9 @@
 
         <!-- ==== Countdown Script ==== -->
         <script>
-           const COUNTDOWN_MINUTES = 10;
+            const COUNTDOWN_MINUTES = 10;
             const STORAGE_KEY = "checkout_expire_time";
-            
+
             // TRANG checkout.jsp — reset mỗi khi load
             sessionStorage.removeItem("checkout_expire_time");
 
@@ -246,6 +246,33 @@
 
             setInterval(updateTimer, 1000);
             updateTimer();
+        </script>
+
+        <script>
+            const CTX = '<%= request.getContextPath()%>';
+
+            // Đẩy state để bắt sự kiện back
+            history.pushState(null, '', location.href);
+
+            window.addEventListener('popstate', function () {
+
+                const confirmCancel = confirm(
+                        "Bạn có chắc muốn hủy quá trình đặt vé?\n" +
+                        "⚠ Vé đang giữ sẽ bị hủy.\n" +
+                        "⚠ Thời gian giữ vé sẽ bị xóa."
+                        );
+
+                if (confirmCancel) {
+                    // Xóa timer
+                    sessionStorage.removeItem("checkout_expire_time");
+
+                    // Điều hướng về home
+                    window.location.href = CTX + "/home";
+                } else {
+                    // Nếu cancel thì push lại state để chặn back
+                    history.pushState(null, '', location.href);
+                }
+            });
         </script>
     </body>
 </html>

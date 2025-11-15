@@ -3,6 +3,9 @@
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
         <title>Thanh toán thất bại</title>
         <style>
             body {
@@ -61,5 +64,19 @@
 
             <a href="${pageContext.request.contextPath}/home" class="btn">Về trang chủ</a>
         </div>
+
+        <script>
+            const HOME_URL = "${pageContext.request.contextPath}/home";
+
+            // ép history luôn có 2 state để back luôn đi đúng hướng
+            history.pushState({layer: 1}, "", location.href);
+            history.pushState({layer: 2}, "", location.href);
+
+            window.addEventListener("popstate", function (event) {
+                // Không cho quay về payment-preview
+                window.location.href = HOME_URL;
+            });
+        </script>
+
     </body>
 </html>
