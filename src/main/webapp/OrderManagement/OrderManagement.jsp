@@ -7,119 +7,22 @@
     <head>
         <meta charset="UTF-8">
         <title>Danh sách đơn hàng - OrderManagement</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+        <!-- Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-        <style>
-            body {
-                background-color: #000;
-                color: #fff;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
 
-            .card {
-                background-color: transparent;
-                border: none;
-                border-radius: 10px;
-                padding: 0;
-            }
+        <!-- Inter Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
-            .table-custom {
-                background-color: #1c1c1c;
-                border-collapse: separate;
-                border-spacing: 0;
-            }
-
-            .table-custom th {
-                background-color: #222;
-                color: #ffb6b6;
-            }
-
-            .table-custom td {
-                border: 1px solid #333;
-            }
-
-            .table-custom tbody tr:hover {
-                background-color: #2a2a2a;
-            }
-
-            .no-data {
-                color: #777;
-                text-align: center;
-                padding: 40px 0;
-            }
-
-            .search-box {
-                background-color: #1c1c1c;
-                color: #fff;
-                border: 1px solid #333;
-            }
-
-            .section-title {
-                color: #ffb6b6;
-                font-weight: 600;
-                margin-top: 15px;
-            }
-
-            .btn-outline-success {
-                border-color: #28a745;
-                color: #28a745;
-            }
-
-            .btn-outline-success:hover {
-                background-color: #28a745;
-                color: #fff;
-            }
-
-            .btn-outline-info {
-                border-color: #0dcaf0;
-                color: #0dcaf0;
-            }
-
-            .btn-outline-info:hover {
-                background-color: #0dcaf0;
-                color: #000;
-            }
-
-            /* Dropdown style */
-            .event-dropdown {
-                position: absolute;
-                top: 120%;
-                right: 0;
-                background-color: #1c1c1c;
-                border: 1px solid #0dcaf0;
-                border-radius: 8px;
-                min-width: 220px;
-                display: none;
-                z-index: 1000;
-            }
-
-            .event-dropdown ul {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-            }
-
-            .event-dropdown ul li a {
-                display: block;
-                color: #fff;
-                text-decoration: none;
-                padding: 10px 15px;
-                transition: background 0.2s ease, color 0.2s ease;
-            }
-
-            .event-dropdown ul li a:hover {
-                background-color: #0dcaf0;
-                color: #000;
-            }
-
-            .table-custom thead th {
-                border-right: 1px solid #333;
-            }
-
-            .table-custom thead th:last-child {
-                border-right: none;
-            }
-        </style>
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/OrderManagement/order_management.css">
     </head>
     <body>
         <div class="container py-4">
@@ -132,24 +35,24 @@
 
                 <div class="d-flex align-items-center gap-2">
                     <!-- Nút quay lại -->
-                    <button type="button" class="btn btn-outline-success btn-sm" onclick="history.back()">
+                    <a type="button" class="btn btn-outline-success btn-sm" href="admincenter">
                         <i class="bi bi-arrow-left"></i>
-                    </button>
+                    </a>
 
                     <!-- Nút đổi sự kiện -->
                     <div class="position-relative">
-                        <button id="toggleEventList" type="button" class="btn btn-outline-info btn-sm">
+                        <button id="toggleEventList" type="button" class="btn btn-outline-success btn-sm">
                             <i class="bi bi-arrow-repeat me-1"></i> Đổi sự kiện
                             <i class="bi bi-caret-down-fill ms-1"></i>
                         </button>
 
                         <!-- Dropdown danh sách sự kiện -->
                         <div id="eventDropdown" class="event-dropdown shadow">
-                            <ul>
+                            <ul class="no-bullets m-0">
                                 <c:forEach var="e" items="${otherEvents}">
                                     <li>
                                         <a href="order_management?eventID=${e.eventID}">
-                                            <i class="bi bi-calendar-event me-2 text-info"></i>${e.eventName}
+                                            ${e.eventName}
                                         </a>
                                     </li>
                                 </c:forEach>
@@ -165,7 +68,7 @@
             <h4 class="section-title mb-5">
                 Danh sách đơn hàng 
                 <c:if test="${not empty eventName}">
-                    của sự kiện: <span class="text-info">${eventName}</span>
+                    của sự kiện: <span class="name">${eventName}</span>
                 </c:if>
             </h4>
 
@@ -189,12 +92,10 @@
                     </c:if>
                 </form>
 
-
                 <div class="d-flex gap-2">
-                    <a href="export_order?eventID=${eventID}" class="btn btn-outline-info btn-sm">
+                    <a href="export_order?eventID=${eventID}" class="btn btn-outline-success btn-sm">
                         <i class="bi bi-download"></i> Xuất báo cáo
                     </a>
-
                 </div>
             </div>
 
@@ -248,12 +149,7 @@
                                                 onclick="confirmDelete(${o.orderId})">
                                                 <i class="bi bi-trash"></i>
                                             </a>
-
-
-
                                         </td>
-
-
                                     </tr>
                                 </c:forEach>
                             </c:otherwise>
@@ -263,56 +159,36 @@
             </div>
         </div>
 
-        <script>
-            const toggleBtn = document.getElementById("toggleEventList");
-            const dropdown = document.getElementById("eventDropdown");
-
-            toggleBtn.addEventListener("click", () => {
-                dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-            });
-
-            document.addEventListener("click", (e) => {
-                if (!toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.style.display = "none";
-                }
-            });
-        </script>
-        <script>
-            document.querySelector("input[name='keyword']").addEventListener("keydown", function (e) {
-                if (e.key === "Enter") {
-                    e.preventDefault(); // tránh submit form
-
-                    const keyword = this.value.trim();
-                    const eventID = new URLSearchParams(window.location.search).get("eventID");
-
-                    let url = "order_management?";
-
-                    if (eventID) {
-                        url += "eventID=" + eventID + "&";
-                    }
-
-                    if (keyword.length > 0) {
-                        url += "keyword=" + encodeURIComponent(keyword);
-                    }
-
-                    window.location.href = url;
-                }
-            });
-        </script>
-        <script>
-            function confirmDelete(orderId) {
-                if (confirm("Bạn có chắc muốn xóa đơn hàng này?")) {
-                    document.getElementById("deleteOrderId").value = orderId;
-                    document.getElementById("deleteForm").submit();
-                }
-            }
-        </script>
+        <!-- Delete form -->
         <form id="deleteForm" action="order_management" method="post" style="display:none;">
             <input type="hidden" name="action" value="delete">
             <input type="hidden" name="orderID" id="deleteOrderId">
             <input type="hidden" name="eventID" value="${eventID}">
         </form>
 
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Bạn có chắc muốn xóa đơn hàng này?
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+
+
+
+        <!-- External JS -->
+        <script src="${pageContext.request.contextPath}/js/OrderManagement/order_management.js"></script>
     </body>
 </html>

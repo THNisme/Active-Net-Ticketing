@@ -27,7 +27,7 @@ body {
     overflow: hidden;
     width: 768px;
     max-width: 100%;
-    min-height: 500px;
+    min-height: 600px;
 }
 
 .form-container {
@@ -35,6 +35,10 @@ body {
     top: 0;
     height: 100%;
     transition: all 0.6s ease-in-out;
+}
+
+.form-container form {
+    border-radius: 25px;
 }
 
 .login-container {
@@ -79,6 +83,7 @@ body {
     width: 50%;
     height: 100%;
     overflow: hidden;
+    border-radius: 25px;
     transition: transform 0.6s ease-in-out;
     z-index: 100;
 }
@@ -234,7 +239,6 @@ p {
     line-height: 20px;
     letter-spacing: 0.5px;
     margin: 20px 0 30px;
-    text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
 }
 
 a {

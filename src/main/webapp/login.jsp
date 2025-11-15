@@ -6,7 +6,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Double Slider Login / Registration Form</title>
+        <title>Chào mừng</title>
         <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
 
         <!--Inter font - Google Fonts-->
@@ -177,18 +177,19 @@
                 </div>
             </div>
         </div>
-        <script src="${pageContext.request.contextPath}/js/authentication-page/index.js"></script>
         <script>
-                                const CONTEXT = "${pageContext.request.contextPath}";
+            const CONTEXT = "${pageContext.request.contextPath}";
         </script>
+        <script src="${pageContext.request.contextPath}/js/authentication-page/index.js"></script>
+
         <script src="${pageContext.request.contextPath}/js/authentication-page/register.js"></script>
 
         <c:if test="${not empty errorLogin}">
             <script>
-                                document.addEventListener("DOMContentLoaded", function () {
-                                    const container = document.getElementById("container");
-                                    container.classList.remove("right-panel-active"); // đảm bảo hiện LOGIN
-                                });
+            document.addEventListener("DOMContentLoaded", function () {
+                const container = document.getElementById("container");
+                container.classList.remove("right-panel-active"); // đảm bảo hiện LOGIN
+            });
             </script>
         </c:if>
         <c:if test="${showRegister}">

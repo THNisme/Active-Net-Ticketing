@@ -161,6 +161,7 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/js")
                 || uri.startsWith(ctx + "/img")
                 || uri.startsWith(ctx + "/uploads")
+                || uri.contains(ctx + "/event-detail")
                 || uri.equals(ctx + "/")
                 || uri.startsWith(ctx + "/home")
                 || uri.startsWith(ctx + "/event-detail")

@@ -2,23 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Utils.nvd2603;
+
+package Utils.original;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author Nguyen Viet Duc
+ * @author Tran Hieu Nghia - CE191115
  */
-public class DBContext {
+public class DBContextOrigin {
 
     protected Connection conn;
 
-    public DBContext() {
+    public DBContextOrigin() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbURL = "jdbc:sqlserver://localhost:1433;"
