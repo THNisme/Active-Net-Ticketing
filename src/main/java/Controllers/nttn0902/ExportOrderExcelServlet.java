@@ -158,7 +158,7 @@ public class ExportOrderExcelServlet extends HttpServlet {
     // ====== TIÊU ĐỀ BÁO CÁO ======
     Row titleRow = sheet.createRow(0);
     Cell titleCell = titleRow.createCell(0);
-    titleCell.setCellValue("BÁO CÁO ĐƠN HÀNG CỦA " + "eventName".toUpperCase());
+    titleCell.setCellValue("BÁO CÁO ĐƠN HÀNG CỦA\n " + "eventName".toUpperCase());
     titleCell.setCellStyle(titleStyle);
     sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
 

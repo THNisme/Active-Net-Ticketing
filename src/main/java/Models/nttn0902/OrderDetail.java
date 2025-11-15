@@ -33,6 +33,7 @@ public class OrderDetail {
     // Ticket info
     private String serialNumber;
     private String ticketTypeName;
+    private double ticketPrice;
     private String zoneName;
     private String rowLabel;
     private int seatNumber;
@@ -44,7 +45,7 @@ public class OrderDetail {
     public OrderDetail(int orderId, String contactFullname, String contactEmail, String contactPhone,
             Date createdDate, String eventName, String categoryName, Date startDate,
             Date endDate, String placeName, String placeAddress, String serialNumber,
-            String ticketTypeName, String zoneName, String rowLabel, int seatNumber) {
+            String ticketTypeName,double ticketPrice, String zoneName, String rowLabel, int seatNumber) {
 
         this.orderId = orderId;
         this.contactFullname = contactFullname;
@@ -62,6 +63,7 @@ public class OrderDetail {
 
         this.serialNumber = serialNumber;
         this.ticketTypeName = ticketTypeName;
+        this.ticketPrice = ticketPrice;
         this.zoneName = zoneName;
         this.rowLabel = rowLabel;
         this.seatNumber = seatNumber;
@@ -194,5 +196,13 @@ public class OrderDetail {
 
     public void setSeatNumber(int seatNumber) {
         this.seatNumber = seatNumber;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(double ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 }

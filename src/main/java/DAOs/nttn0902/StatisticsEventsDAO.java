@@ -24,20 +24,20 @@ public class StatisticsEventsDAO {
     public List<StatisticsEvents> getStatisticsEvent() {
         List<StatisticsEvents> list = new ArrayList<>();
 
-        String sql = """
-             SELECT 
-                            e.EventID,
-                            e.EventName,
-                            COUNT(t.TicketID) AS totalTickets,
-                            COUNT(DISTINCT od.TicketID) AS soldTickets,
-                            ISNULL(SUM(od.UnitPrice), 0) AS totalRevenue
-                        FROM Events e
-                        LEFT JOIN TicketTypes tt ON e.EventID = tt.EventID
-                        LEFT JOIN Tickets t ON tt.TicketTypeID = t.TicketTypeID
-                        LEFT JOIN OrderDetails od ON t.TicketID = od.TicketID
-                        GROUP BY e.EventID, e.EventName
-                        ORDER BY e.EventName
-        """;
+        String sql =
+        "SELECT "
+        + "    e.EventID, "
+        + "    e.EventName, "
+        + "    COUNT(t.TicketID) AS totalTickets, "
+        + "    COUNT(DISTINCT od.TicketID) AS soldTickets, "
+        + "    ISNULL(SUM(od.UnitPrice), 0) AS totalRevenue "
+        + "FROM Events e "
+        + "LEFT JOIN TicketTypes tt ON e.EventID = tt.EventID "
+        + "LEFT JOIN Tickets t ON tt.TicketTypeID = t.TicketTypeID "
+        + "LEFT JOIN OrderDetails od ON t.TicketID = od.TicketID "
+        + "GROUP BY e.EventID, e.EventName "
+        + "ORDER BY e.EventName";
+
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);

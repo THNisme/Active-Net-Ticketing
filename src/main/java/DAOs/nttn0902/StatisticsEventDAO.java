@@ -22,21 +22,21 @@ public class StatisticsEventDAO {
 
      public List<StatisticsEvent> getTicketTypeStatistics(int eventId) {
         List<StatisticsEvent> list = new ArrayList<>();
-        String sql = """
-            SELECT 
-                e.EventName,
-                tt.TypeName AS TicketTypeName,
-                COUNT(t.TicketID) AS TotalTickets,
-                COUNT(DISTINCT od.TicketID) AS SoldTickets,
-                ISNULL(SUM(od.UnitPrice), 0) AS TotalRevenue
-            FROM Events e
-            LEFT JOIN TicketTypes tt ON e.EventID = tt.EventID
-            LEFT JOIN Tickets t ON tt.TicketTypeID = t.TicketTypeID
-            LEFT JOIN OrderDetails od ON t.TicketID = od.TicketID
-            WHERE e.EventID = ?
-            GROUP BY e.EventName, tt.TypeName
-            ORDER BY tt.TypeName
-        """;
+        String sql = 
+        "SELECT "
+        + "    e.EventName, "
+        + "    tt.TypeName AS TicketTypeName, "
+        + "    COUNT(t.TicketID) AS TotalTickets, "
+        + "    COUNT(DISTINCT od.TicketID) AS SoldTickets, "
+        + "    ISNULL(SUM(od.UnitPrice), 0) AS TotalRevenue "
+        + "FROM Events e "
+        + "LEFT JOIN TicketTypes tt ON e.EventID = tt.EventID "
+        + "LEFT JOIN Tickets t ON tt.TicketTypeID = t.TicketTypeID "
+        + "LEFT JOIN OrderDetails od ON t.TicketID = od.TicketID "
+        + "WHERE e.EventID = ? "
+        + "GROUP BY e.EventName, tt.TypeName "
+        + "ORDER BY tt.TypeName";
+
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, eventId);
@@ -62,14 +62,14 @@ public class StatisticsEventDAO {
      * total event revenue
      */
     public double getTotalEventRevenue(int eventId) {
-        String sql = """
-            SELECT ISNULL(SUM(od.UnitPrice), 0) AS totalRevenue
-            FROM OrderDetails od
-            INNER JOIN Tickets t ON od.TicketID = t.TicketID
-            INNER JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID
-            INNER JOIN Events e ON tt.EventID = e.EventID
-            WHERE e.EventID = ?  
-        """;
+        String sql =
+        "SELECT ISNULL(SUM(od.UnitPrice), 0) AS totalRevenue "
+        + "FROM OrderDetails od "
+        + "INNER JOIN Tickets t ON od.TicketID = t.TicketID "
+        + "INNER JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID "
+        + "INNER JOIN Events e ON tt.EventID = e.EventID "
+        + "WHERE e.EventID = ? ";
+
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, eventId);
@@ -87,12 +87,12 @@ public class StatisticsEventDAO {
      * Total Tickets
      */
     public int getTotalTickets(int eventId) {
-        String sql = """
-            SELECT COUNT(t.TicketID) AS totalTickets
-            FROM Tickets t
-            INNER JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID
-            WHERE tt.EventID = ?
-        """;
+        String sql =
+        "SELECT COUNT(t.TicketID) AS totalTickets "
+        + "FROM Tickets t "
+        + "INNER JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID "
+        + "WHERE tt.EventID = ? ";
+
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, eventId);
@@ -108,13 +108,13 @@ public class StatisticsEventDAO {
      * 
      */
     public int getSoldTickets(int eventId) {
-        String sql = """
-            SELECT COUNT(DISTINCT od.TicketID) AS soldTickets
-            FROM OrderDetails od
-            INNER JOIN Tickets t ON od.TicketID = t.TicketID
-            INNER JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID
-            WHERE tt.EventID = ?
-        """;
+        String sql =
+        "SELECT COUNT(DISTINCT od.TicketID) AS soldTickets "
+        + "FROM OrderDetails od "
+        + "INNER JOIN Tickets t ON od.TicketID = t.TicketID "
+        + "INNER JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID "
+        + "WHERE tt.EventID = ? ";
+
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, eventId);
