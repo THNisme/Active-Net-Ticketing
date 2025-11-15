@@ -35,9 +35,9 @@
 
                 <div class="d-flex align-items-center gap-2">
                     <!-- Nút quay lại -->
-                    <button type="button" class="btn btn-outline-success btn-sm" onclick="history.back()">
+                    <a type="button" class="btn btn-outline-success btn-sm" href="admincenter">
                         <i class="bi bi-arrow-left"></i>
-                    </button>
+                    </a>
 
                     <!-- Nút đổi sự kiện -->
                     <div class="position-relative">
@@ -93,7 +93,7 @@
                 </form>
 
                 <div class="d-flex gap-2">
-                    <a href="export_order?eventID=${param.eventID}" class="btn btn-outline-success btn-sm">
+                    <a href="export_order?eventID=${eventID}" class="btn btn-outline-success btn-sm">
                         <i class="bi bi-download"></i> Xuất báo cáo
                     </a>
                 </div>

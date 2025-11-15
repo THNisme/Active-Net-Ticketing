@@ -12,7 +12,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Statistic Events</title>
+    <title>Thống kê sự kiện</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">

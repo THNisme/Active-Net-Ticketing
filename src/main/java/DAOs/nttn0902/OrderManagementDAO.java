@@ -81,7 +81,6 @@ public class OrderManagementDAO {
                 + "JOIN Events e ON tt.EventID = e.EventID "
                 + "WHERE tt.EventID = ? "
                 + "AND o.StatusID = 1 "
-                + "AND t.StatusID = 1 "
                 + "ORDER BY o.OrderDate DESC";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -310,4 +309,17 @@ public class OrderManagementDAO {
         return list;
     }
 
+    public static void main(String[] args) {
+        OrderManagementDAO dao = new OrderManagementDAO();
+        List<OrderManagement> list = dao.getAllOrdersByEventId(1);
+
+        for (OrderManagement o : list) {
+            System.out.println(o.getOrderId());
+            System.out.println(o.getOrderDate());
+            System.out.println(o.getContactEmail());
+            System.out.println(o.getContactPhone());
+            System.out.println(o.getTotalAmount());
+            System.out.println("");
+        }
+    }
 }
