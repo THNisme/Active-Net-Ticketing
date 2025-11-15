@@ -114,10 +114,17 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // ====== Kiểm tra username/email trùng (chỉ để ngăn insert, không in lỗi ở đây) ======
-        if (userDAO.checkUsernameExists(username) || userDAO.checkEmailExists(email)) {
-            // Không in lỗi ở JSP vì realtime đã có
-            request.setAttribute("errorRegister", "Thông tin đăng ký không hợp lệ, vui lòng kiểm tra lại!");
+        // ====== Kiểm tra username trùng ======
+        if (userDAO.checkUsernameExists(username)) {
+            request.setAttribute("errorUsername", "Tên đăng nhập đã tồn tại!");
+            request.setAttribute("showRegister", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+// ====== Kiểm tra email trùng ======
+        if (userDAO.checkEmailExists(email)) {
+            request.setAttribute("errorEmail", "Email này đã được sử dụng!");
             request.setAttribute("showRegister", true);
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
@@ -142,13 +149,14 @@ public class RegisterServlet extends HttpServlet {
 
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
-/**
- * Returns a short description of the servlet.
- *
- * @return a String containing servlet description
- */
-@Override
-public String getServletInfo() {
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

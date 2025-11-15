@@ -19,6 +19,7 @@ public class TicketType {
     private BigDecimal price;
     private int statusID;
     private int availableCount;
+    private boolean hasSeat;
 
     // Constructor mặc định
     public TicketType() {
@@ -32,6 +33,14 @@ public class TicketType {
         this.typeName = typeName;
         this.price = price;
         this.statusID = statusID;
+    }
+
+    public boolean isHasSeat() {
+        return hasSeat;
+    }
+
+    public void setHasSeat(boolean hasSeat) {
+        this.hasSeat = hasSeat;
     }
 
     // Getter & Setter

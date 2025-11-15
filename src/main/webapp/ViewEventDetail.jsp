@@ -265,7 +265,7 @@
                     </span>
                 </div>
 
-                <a href="select-ticket?id=${event.eventID}" class="btn-buy">Mua vé ngay</a>
+                <a href="select-ticket?id=${event.eventID}&zone=${zones.get(0).zoneID}" class="btn-buy">Mua vé ngay</a>
             </div>
 
             <div class="event-image">

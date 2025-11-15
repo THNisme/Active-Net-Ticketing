@@ -42,18 +42,20 @@
                             <span style="color:red"><c:out value="${error}"/></span>
                         </c:if>
                     </div>
-
                     <div class="user-box">
                         <div class="input-with-icon">
                             <input type="email" name="email" id="register-email" required />
                             <label>Email</label>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none"
-                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16v16H4z" />
-                            <polyline points="22,6 12,13 2,6" />
-                            </svg>
+                            <%-- ĐÃ BỎ ICON EMAIL Ở ĐÂY (xóa thẻ SVG) --%>
                         </div>
-                        <span id="emailError" style="color:red; font-size:13px;"></span>
+
+                        <!-- Lỗi realtime -->
+                        <span id="email-feedback" class="error-text"></span>
+
+                        <!-- Lỗi từ server -->
+                        <c:if test="${not empty errorEmail}">
+                            <span class="error-text"><c:out value="${errorEmail}"/></span>
+                        </c:if>
                     </div>
                     <!-- Password -->
                     <div class="user-box">

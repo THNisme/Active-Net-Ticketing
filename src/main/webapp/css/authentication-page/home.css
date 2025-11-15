@@ -46,3 +46,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     background-color: rgb(45, 194, 117);
 
 }
+/* ---- EMAIL ERROR ---- */
+.input-with-icon.error input {
+    border: 2px solid #ff4d4d !important;
+    background-color: #ffe6e6 !important;
+}
+
+.input-with-icon.success input {
+    border: 2px solid #28a745 !important;
+    background-color: #e7ffe7 !important;
+}
+
+.input-with-icon.error input {
+    border: 2px solid #ff6b6b !important;
+    background-color: #ffecec !important;
+}
+
+.input-with-icon.success input {
+    border: 2px solid #31c48d !important;
+    background-color: #e8fff4 !important;
+}

@@ -146,6 +146,12 @@
             .btn-continue:hover {
                 background: #ff9999;
             }
+            .active-seat {
+                background: #ffb6b6 !important;
+                color: #000 !important;
+                border-color: #ffb6b6 !important;
+                font-weight: bold;
+            }
         </style>
     </head>
 
@@ -187,12 +193,61 @@
 
                         <c:choose>
                             <c:when test="${ticket.availableCount > 0}">
-                                <div class="quantity">
-                                    <button class="btn-minus" type="button">-</button>
-                                    <input class="qty-input" type="text" value="0" readonly data-available="${ticket.availableCount}"/>
-                                    <button class="btn-plus" type="button">+</button>
-                                </div>
-                                <p class="remain">Còn ${ticket.availableCount} vé</p>
+                                <c:if test="${!ticket.hasSeat}">
+                                    <div class="quantity">
+                                        <button class="btn-minus" type="button">-</button>
+                                        <input class="qty-input" type="text" value="0"
+                                               readonly data-available="${ticket.availableCount}"/>
+                                        <button class="btn-plus" type="button">+</button>
+                                    </div>
+                                </c:if>
+
+                                <c:if test="${ticket.hasSeat}">
+                                    <h4 style="color:#ffb6b6; margin:6px 0;">Chọn ghế:</h4>
+
+                                    <div class="seat-list" data-tickettype="${ticket.ticketTypeID}"
+                                         style="display:flex; flex-wrap:wrap; gap:8px;">
+
+                                        <c:forEach var="s" items="${seats}">
+                                            <c:choose>
+
+                                                
+                                                <c:when test="${s.statusID == 4}">
+                                                    <button type="button"
+                                                            disabled
+                                                            class="seat-tag sold-out-seat"
+                                                            style="
+                                                            padding:6px 10px;
+                                                            background:#444;
+                                                            border:1px solid #555;
+                                                            border-radius:6px;
+                                                            cursor:not-allowed;
+                                                            opacity:0.4;
+                                                            color:#888;">
+                                                        ${s.rowLabel}${s.seatNumber}
+                                                    </button>
+                                                </c:when>
+
+                                                
+                                                <c:otherwise>
+                                                    <button type="button"
+                                                            class="seat-tag"
+                                                            data-seat="${s.seatID}"
+                                                            style="
+                                                            padding:6px 10px;
+                                                            background:#222;
+                                                            border:1px solid #444;
+                                                            border-radius:6px;
+                                                            cursor:pointer;
+                                                            color:white;">
+                                                        ${s.rowLabel}${s.seatNumber}
+                                                    </button>
+                                                </c:otherwise>
+
+                                            </c:choose>
+                                        </c:forEach>
+                                    </div>
+                                </c:if>
                             </c:when>
                             <c:otherwise>
                                 <span class="soldout">Hết vé</span>
@@ -238,58 +293,71 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const tickets = document.querySelectorAll(".ticket");
+
                 const totalDisplay = document.getElementById("total");
-                const summaryList = document.querySelector(".summary-list");
+                const summaryList = document.getElementById("summaryList");
                 const btnContinue = document.getElementById("btnContinue");
 
                 let totalAmount = 0;
                 let selections = {};
 
-                // 🔍 Kiểm tra xem còn loại vé nào có thể chọn hay không
-                const selectableInputs = document.querySelectorAll(".qty-input");
-                const hasAvailableTickets = selectableInputs.length > 0;
+                // ==========================
+                //  XỬ LÝ GHẾ (SEAT)
+                // ==========================
+                document.querySelectorAll(".seat-tag:not([disabled])").forEach(btn => {
+                    btn.addEventListener("click", function () {
 
-                // Nếu HẾT VÉ HOÀN TOÀN
-                if (!hasAvailableTickets) {
-                    btnContinue.disabled = true;
-                    btnContinue.textContent = "Hết vé";
-                    btnContinue.style.background = "#555";
-                    btnContinue.style.cursor = "not-allowed";
+                        this.classList.toggle("active-seat");
 
-                    btnContinue.addEventListener("click", function (e) {
-                        e.preventDefault();
-                        alert("Sự kiện này đã hết vé.");
+                        let seatId = this.dataset.seat;
+                        let seatLabel = this.textContent.trim();
+                        let ticketTypeId = this.closest(".seat-list").dataset.tickettype;
+
+                        let ticketName = this.closest(".ticket").querySelector(".ticket-name").textContent.trim();
+                        let price = parseInt(this.closest(".ticket").querySelector(".ticket-price").dataset.rawPrice);
+
+                        let key = "SEAT-" + ticketTypeId + "-" + seatLabel;
+
+                        if (this.classList.contains("active-seat")) {
+                            selections[key] = {
+                                ticketId: parseInt(ticketTypeId),
+                                seatId: parseInt(seatId),
+                                name: ticketName + " - " + seatLabel,
+                                qty: 1,
+                                price: price,
+                                isSeat: true
+                            };
+                        } else {
+                            delete selections[key];
+                        }
+
+                        updateSummary();
                     });
-                    return; // ❗ Dừng luôn, không cần set các handler khác
-                }
+                });
 
-                // Nếu còn vé thì set handler tăng/giảm như bình thường
-                tickets.forEach(ticket => {
+
+                // ==========================
+                //  XỬ LÝ + - CHO VÉ KHÔNG CÓ SEAT
+                // ==========================
+                document.querySelectorAll(".ticket").forEach(ticket => {
+
                     const minusBtn = ticket.querySelector(".btn-minus");
                     const plusBtn = ticket.querySelector(".btn-plus");
                     const input = ticket.querySelector(".qty-input");
 
-                    const nameElement = ticket.querySelector(".ticket-name");
-                    const priceElement = ticket.querySelector(".ticket-price");
+                    if (!minusBtn || !plusBtn || !input)
+                        return; // vé có seat sẽ bỏ qua
 
-                    if (!nameElement || !priceElement || !input)
-                        return;
-
-                    const name = nameElement.textContent.trim();
-                    const price = parseFloat(priceElement.getAttribute('data-raw-price'));
-                    const available = parseInt(input.getAttribute('data-available'));
-
-                    if (!plusBtn || !minusBtn)
-                        return;
+                    const name = ticket.querySelector(".ticket-name").textContent.trim();
+                    const price = parseInt(ticket.querySelector(".ticket-price").dataset.rawPrice);
+                    const ticketId = ticket.dataset.ticketid;
+                    const available = parseInt(input.dataset.available);
 
                     plusBtn.addEventListener("click", function () {
-                        let value = parseInt(input.value, 10);
+                        let value = parseInt(input.value);
                         if (value < available) {
                             value++;
                             input.value = value;
-
-                            const ticketId = ticket.getAttribute("data-ticketid");
 
                             selections[name] = {
                                 ticketId: parseInt(ticketId),
@@ -298,16 +366,15 @@
                                 price: price
                             };
                             updateSummary();
-                        } else {
-                            alert("Chỉ còn " + available + " vé cho " + name);
                         }
                     });
 
                     minusBtn.addEventListener("click", function () {
-                        let value = parseInt(input.value, 10);
+                        let value = parseInt(input.value);
                         if (value > 0) {
                             value--;
                             input.value = value;
+
                             if (value === 0) {
                                 delete selections[name];
                             } else {
@@ -316,52 +383,58 @@
                             updateSummary();
                         }
                     });
+
                 });
 
+
+                // ==========================
+                //  CẬP NHẬT TỔNG TIỀN
+                // ==========================
                 function updateSummary() {
                     summaryList.innerHTML = "";
                     totalAmount = 0;
 
-                    for (let name in selections) {
-                        if (selections.hasOwnProperty(name)) {
-                            const item = selections[name];
-                            const lineTotal = item.qty * item.price;
-                            totalAmount += lineTotal;
+                    for (let key in selections) {
+                        const item = selections[key];
+                        const lineTotal = item.qty * item.price;
 
-                            const div = document.createElement("div");
-                            div.className = "summary-item";
+                        totalAmount += lineTotal;
 
-                            const leftSpan = document.createElement("span");
-                            leftSpan.textContent = name + " × " + item.qty;
+                        let div = document.createElement("div");
+                        div.className = "summary-item";
 
-                            const rightSpan = document.createElement("span");
-                            rightSpan.textContent = lineTotal.toLocaleString("vi-VN") + " đ";
+                        let left = document.createElement("span");
+                        left.textContent = item.isSeat ? item.name : `${item.name} × ${item.qty}`;
 
-                            div.appendChild(leftSpan);
-                            div.appendChild(rightSpan);
-                            summaryList.appendChild(div);
-                        }
-                    }
+                                        let right = document.createElement("span");
+                                        right.textContent = lineTotal.toLocaleString("vi-VN") + " đ";
 
-                    totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
+                                        div.appendChild(left);
+                                        div.appendChild(right);
 
-                    btnContinue.disabled = totalAmount < 0;
-                }
+                                        summaryList.appendChild(div);
+                                    }
 
-                // Nút Tiếp tục (khi còn vé)
-                btnContinue.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    if (Object.keys(selections).length === 0) {
-                        alert("Vui lòng chọn ít nhất 1 vé");
-                        return;
-                    }
+                                    totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
+                                }
 
-                    const form = document.getElementById("checkoutForm");
-                    document.getElementById("selectionsJson").value = JSON.stringify(selections);
-                    document.getElementById("totalAmount").value = totalAmount;
-                    form.submit();
-                });
-            });
+
+                                // ==========================
+                                //  NÚT TIẾP TỤC
+                                // ==========================
+                                btnContinue.addEventListener("click", function (e) {
+                                    if (Object.keys(selections).length === 0) {
+                                        e.preventDefault();
+                                        alert("Vui lòng chọn ít nhất 1 vé");
+                                        return;
+                                    }
+
+                                    document.getElementById("selectionsJson").value = JSON.stringify(selections);
+                                    document.getElementById("totalAmount").value = totalAmount;
+                                    document.getElementById("checkoutForm").submit();
+                                });
+
+                            });
         </script>
     </body>
 </html>
