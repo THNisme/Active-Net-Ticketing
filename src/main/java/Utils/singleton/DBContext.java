@@ -15,28 +15,10 @@ import java.sql.DriverManager;
 public class DBContext {
 
     private static DBContext instance;
-    private Connection conn;
 
     private DBContext() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=Active-Net-Ticketing;"
-                    + "user=sa;"
-                    + "password=123456;"
-                    + "encrypt=true;trustServerCertificate=true;";
-            conn = DriverManager.getConnection(dbURL);
-            DatabaseMetaData dm = conn.getMetaData();
-            System.out.println("");
-            System.out.println("---------DBContext information---------");
-            System.out.println("Connected to " + dm.getDatabaseProductName());
-            System.out.println("Version DBContext: singleton");
-            System.out.println("Product version: "
-                    + dm.getDatabaseProductVersion());
-            System.out.println("Driver name: " + dm.getDriverName());
-            System.out.println("Driver version: " + dm.getDriverVersion());
-            System.out.println("----------------------------------------");
-            System.out.println("");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -50,6 +32,19 @@ public class DBContext {
     }
 
     public Connection getConnection() {
-        return conn;
+        try {
+            String dbURL = "jdbc:sqlserver://localhost:1433;"
+                    + "databaseName=EventManagementV7;"
+                    + "user=sa;"
+                    + "password=nd291005;"
+                    + "encrypt=true;trustServerCertificate=true;";
+
+            // ❗ Luôn mở mới Connection
+            return DriverManager.getConnection(dbURL);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

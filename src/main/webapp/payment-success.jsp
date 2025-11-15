@@ -159,7 +159,7 @@
             <div class="divider"></div>
 
             <div class="buttons">
-                <a href="home" class="btn"><i class="fa-solid fa-house"></i> Về trang chủ</a>
+                <a href="${pageContext.request.contextPath}/home" class="btn">Về trang chủ</a>
 
                 <c:if test="${not empty pdfPath}">
                     <a href="${pdfPath}" target="_blank" class="btn">
@@ -168,5 +168,17 @@
                 </c:if>
             </div>
         </div>
+        <script>
+            // URL trang home (sửa lại đúng servlet của bạn: "home", "events", "index" ...)
+            const HOME_URL = "${pageContext.request.contextPath}/home";
+
+            // Đẩy state hiện tại vào history
+            history.pushState(null, "", location.href);
+
+            // Khi người dùng bấm nút Back
+            window.addEventListener("popstate", function () {
+                window.location.replace(HOME_URL);
+            });
+        </script>
     </body>
 </html>

@@ -366,3 +366,15 @@ a:hover {
     margin-top: 3px;
     margin-left: 5px;
 }
+.error-text {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
+#email-feedback {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}

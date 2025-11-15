@@ -27,6 +27,7 @@ public class EventDao {
     private final Connection conn;
 
     public EventDao() {
+//        this.conn = DBContext.getInstance().getConnection();
         this.conn = DBContext.getInstance().getConnection();
     }
 

@@ -229,6 +229,9 @@
             setInterval(updateTimer, 1000);
             updateTimer();
         </script>
-
+        <script>
+            // Reset countdown khi thanh toán thành công
+            sessionStorage.removeItem("checkout_expire_time");
+        </script>
     </body>
 </html>

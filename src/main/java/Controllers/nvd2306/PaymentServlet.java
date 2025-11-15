@@ -160,7 +160,8 @@ public class PaymentServlet extends HttpServlet {
             return;
         }
 
-        if (wallet.getBalance().compareTo(totalAmount) < 0) {
+        if (totalAmount.compareTo(BigDecimal.ZERO) > 0
+                && wallet.getBalance().compareTo(totalAmount) < 0) {
             // Gán thêm 2 attribute cho JSP
             request.setAttribute("currentBalance", wallet.getBalance());
             request.setAttribute("requiredAmount", totalAmount);
@@ -217,11 +218,19 @@ public class PaymentServlet extends HttpServlet {
                 ticketDAO.markTicketsAsSold(conn, pickedTicketIds);
             }
             // 2️⃣ Cập nhật số dư ví
-            BigDecimal newBalance = wallet.getBalance().subtract(totalAmount);
-            walletDao.updateBalance(conn, wallet.getWalletID(), newBalance);
+            // === 2️⃣ & 3️⃣ Xử lý thanh toán ===
+            BigDecimal newBalance = wallet.getBalance(); // mặc định giữ nguyên
 
-            // 3️⃣ Ghi giao dịch thanh toán
-            transactionDAO.insertPayment(conn, wallet.getWalletID(), orderId, totalAmount.negate(), newBalance);
+            if (totalAmount.compareTo(BigDecimal.ZERO) > 0) {
+                // Chỉ khi tổng tiền > 0 mới cần trừ tiền
+                newBalance = wallet.getBalance().subtract(totalAmount);
+
+                // Cập nhật số dư ví
+                walletDao.updateBalance(conn, wallet.getWalletID(), newBalance);
+
+                // Ghi giao dịch thanh toán (amount phải âm)
+                transactionDAO.insertPayment(conn, wallet.getWalletID(), orderId, totalAmount.negate(), newBalance);
+            }
 
             conn.commit();
 

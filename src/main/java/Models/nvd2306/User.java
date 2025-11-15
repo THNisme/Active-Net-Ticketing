@@ -18,7 +18,9 @@ public class User {
     private int role;
     private Date createdAt;
     private String contactEmail;
-private String contactFullname;
+    private String contactFullname;
+    private String contactPhone;
+
     public User() {
     }
 
@@ -29,6 +31,14 @@ private String contactFullname;
         this.role = role;
         this.createdAt = createdAt;
         this.contactEmail = contactEmail;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 
     public String getContactFullname() {

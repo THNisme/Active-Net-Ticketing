@@ -18,32 +18,33 @@ import java.sql.SQLException;
  */
 public class WalletDao {
 
-    private final Connection conn;
-
-    public WalletDao() {
-        this.conn = DBContext.getInstance().getConnection();
-    }
-
     public Wallet getWalletByUserId(int userId) throws SQLException {
         String sql = "SELECT WalletID, UserID, Balance, LastUpdated, StatusID FROM Wallet WHERE UserID = ?";
-        try (PreparedStatement stm = conn.prepareStatement(sql)) {
+
+        try (Connection conn = DBContext.getInstance().getConnection(); PreparedStatement stm = conn.prepareStatement(sql)) {
+
             stm.setInt(1, userId);
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                Wallet w = new Wallet();
-                w.setWalletID(rs.getInt("WalletID"));
-                w.setUserID(rs.getInt("UserID"));
-                w.setBalance(rs.getBigDecimal("Balance")); // ✅ BigDecimal
-                w.setLastUpdated(rs.getTimestamp("LastUpdated"));
-                w.setStatusID(rs.getInt("StatusID"));
-                return w;
+
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    Wallet w = new Wallet();
+                    w.setWalletID(rs.getInt("WalletID"));
+                    w.setUserID(rs.getInt("UserID"));
+                    w.setBalance(rs.getBigDecimal("Balance"));
+                    w.setLastUpdated(rs.getTimestamp("LastUpdated"));
+                    w.setStatusID(rs.getInt("StatusID"));
+                    return w;
+                }
             }
         }
+
         return null;
     }
 
-    public void updateBalance(java.sql.Connection conn, int walletID, BigDecimal newBalance) throws SQLException {
+    // updateBalance dùng connection từ PaymentServlet (trong transaction)
+    public void updateBalance(Connection conn, int walletID, BigDecimal newBalance) throws SQLException {
         String sql = "UPDATE Wallet SET Balance = ?, LastUpdated = GETDATE() WHERE WalletID = ?";
+
         try (PreparedStatement stm = conn.prepareStatement(sql)) {
             stm.setBigDecimal(1, newBalance);
             stm.setInt(2, walletID);

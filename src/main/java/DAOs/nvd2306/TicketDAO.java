@@ -197,4 +197,32 @@ public class TicketDAO {
         }
         return null;
     }
+
+    public boolean ticketTypeHasSeat(int ticketTypeId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Tickets WHERE TicketTypeID = ? AND SeatID IS NOT NULL";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketTypeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int countAvailableByTypeAndSeat(int ticketTypeId, int seatId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Tickets WHERE TicketTypeID = ? AND SeatID = ? AND StatusID = 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketTypeId);
+            ps.setInt(2, seatId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+    
 }

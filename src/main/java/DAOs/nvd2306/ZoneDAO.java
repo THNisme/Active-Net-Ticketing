@@ -22,13 +22,15 @@ public class ZoneDAO {
         this.conn = DBContext.getInstance().getConnection();
     }
 
-    public List<Zone> getZonesByPlace(int placeId) {
+    public List<Zone> getZonesByEvent(int eventId) {
         List<Zone> list = new ArrayList<>();
-        String sql = "SELECT * FROM Zones WHERE PlaceID = ? AND StatusID = 1";
+        String sql = "SELECT DISTINCT z.ZoneID, z.PlaceID, z.ZoneName, z.StatusID "
+                + "FROM Zones z "
+                + "JOIN TicketTypes tt ON z.ZoneID = tt.ZoneID "
+                + "WHERE tt.EventID = ? AND z.StatusID = 1";
 
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, placeId);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, eventId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -39,7 +41,7 @@ public class ZoneDAO {
                 list.add(z);
             }
         } catch (Exception e) {
-            System.out.println("ZoneDAO error: " + e.getMessage());
+            e.printStackTrace();
         }
         return list;
     }

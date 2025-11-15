@@ -5,6 +5,7 @@
 package Models.nvd2306;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  *
@@ -19,6 +20,8 @@ public class TicketType {
     private BigDecimal price;
     private int statusID;
     private int availableCount;
+    private boolean hasSeat;
+    private List<Seat> seatList;
 
     // Constructor mặc định
     public TicketType() {
@@ -32,6 +35,22 @@ public class TicketType {
         this.typeName = typeName;
         this.price = price;
         this.statusID = statusID;
+    }
+
+    public List<Seat> getSeatList() {
+        return seatList;
+    }
+
+    public void setSeatList(List<Seat> seatList) {
+        this.seatList = seatList;
+    }
+
+    public boolean isHasSeat() {
+        return hasSeat;
+    }
+
+    public void setHasSeat(boolean hasSeat) {
+        this.hasSeat = hasSeat;
     }
 
     // Getter & Setter
