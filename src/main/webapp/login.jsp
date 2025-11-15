@@ -175,10 +175,11 @@
                 </div>
             </div>
         </div>
-        <script src="${pageContext.request.contextPath}/js/authentication-page/index.js"></script>
         <script>
                                 const CONTEXT = "${pageContext.request.contextPath}";
         </script>
+        <script src="${pageContext.request.contextPath}/js/authentication-page/index.js"></script>
+        
         <script src="${pageContext.request.contextPath}/js/authentication-page/register.js"></script>
 
         <c:if test="${not empty errorLogin}">
