@@ -57,9 +57,9 @@
                     <%= request.getAttribute("requiredAmount")%>
                 </span> đ</p>
 
-            <a href="view-wallet/wallet.jsp">Nạp thêm tiền vào ví</a>
+            <a href="wallet">Nạp thêm tiền vào ví</a>
 
-            <a href="home.jsp" class="back">Quay về trang chủ</a>
+            <a href="home" class="back">Quay về trang chủ</a>
         </div>
     </body>
 </html>
