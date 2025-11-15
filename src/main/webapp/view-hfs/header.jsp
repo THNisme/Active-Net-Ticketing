@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%> 
+<%@page pageEncoding="UTF-8"%> 
 <!-- Bootstrap 5 -->
 
 <!-- Font Awesome -->

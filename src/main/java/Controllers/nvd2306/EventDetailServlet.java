@@ -81,7 +81,7 @@ public class EventDetailServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        response.sendRedirect("home.jsp");
+        response.sendRedirect("home");
     }
 
     /**
