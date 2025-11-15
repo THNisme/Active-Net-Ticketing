@@ -19,6 +19,7 @@ import Utils.singleton.DBContext;
 
 import Utils.nvd2603.MailService;
 import Utils.nvd2603.TicketPDFGenerator;
+import Utils.original.DBContextOrigin;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
@@ -171,7 +172,7 @@ public class PaymentServlet extends HttpServlet {
         }
 
         // ==== Bắt đầu thanh toán ====
-        DBContext db = DBContext.getInstance();
+        DBContextOrigin db = new DBContextOrigin();
         try (Connection conn = db.getConnection()) {
             conn.setAutoCommit(false);
 
