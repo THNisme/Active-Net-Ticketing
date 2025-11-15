@@ -20,7 +20,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -93,18 +98,23 @@ public class SelectTicketServlet extends HttpServlet {
 
         List<TicketType> ticketTypes = ticketTypeDAO.getTicketTypesByEventAndZone(eventId, zoneId);
 
-        try {
-            for (TicketType t : ticketTypes) {
-                boolean hasSeat = ticketDAO.ticketTypeHasSeat(t.getTicketTypeID());
-                t.setHasSeat(hasSeat);
+        for (TicketType t : ticketTypes) {
+            boolean hasSeat = false;
+            try {
+                hasSeat = ticketDAO.ticketTypeHasSeat(t.getTicketTypeID());
+            } catch (SQLException ex) {
+                Logger.getLogger(SelectTicketServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (Exception e) {
-            throw new ServletException(e);
+            t.setHasSeat(hasSeat);
+
+            if (hasSeat) {
+                // 👇 lấy đúng ghế của loại vé này + zone này
+                List<Seat> seatList = seatDAO.getSeatsByTicketType(t.getTicketTypeID(), zoneId);
+                t.setSeatList(seatList);
+            }
         }
 
-        List<Seat> seats = seatDAO.getSeatsByZone(zoneId);
         request.setAttribute("ticketTypes", ticketTypes);
-        request.setAttribute("seats", seats);
 
         request.getRequestDispatcher("SelectTicket.jsp").forward(request, response);
     }

@@ -8,6 +8,7 @@ import Models.nvd2306.TicketType;
 import Utils.singleton.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author NguyenDuc
  */
-public class TicketTypeDAO  {
+public class TicketTypeDAO {
 
     private final java.sql.Connection conn;
 
@@ -71,5 +72,49 @@ public class TicketTypeDAO  {
         }
 
         return list;
+    }
+    // Kiểm tra ticketType này có seat hay không
+
+    public boolean ticketTypeHasSeat(int ticketTypeId) throws SQLException {
+
+        String sql = """
+            SELECT COUNT(*) 
+            FROM Tickets 
+            WHERE TicketTypeID = ? AND SeatID IS NOT NULL
+        """;
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, ticketTypeId);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+
+        return rs.getInt(1) > 0;
+    }
+
+    // Lấy số vé chưa bán (dành cho vé không seat)
+    public int getAvailableCount(int ticketTypeId) {
+
+        String sql = """
+            SELECT COUNT(*) 
+            FROM Tickets
+            WHERE TicketTypeID = ? 
+              AND SeatID IS NULL
+              AND StatusID != 4   -- 4 = sold
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketTypeId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 }

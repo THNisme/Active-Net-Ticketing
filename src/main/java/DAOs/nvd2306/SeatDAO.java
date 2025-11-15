@@ -60,4 +60,41 @@ public class SeatDAO {
         }
         return list;
     }
+
+    public List<Seat> getSeatsByTicketType(int ticketTypeID, int zoneId) {
+        List<Seat> list = new ArrayList<>();
+        String sql = """
+        SELECT  s.SeatID, s.ZoneID, s.RowLabel, s.SeatNumber,
+                t.StatusID AS TicketStatus
+        FROM    Tickets t
+        JOIN    Seats s ON s.SeatID = t.SeatID
+        WHERE   t.TicketTypeID = ?
+            AND s.ZoneID = ?
+        ORDER BY s.RowLabel, s.SeatNumber
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketTypeID);
+            ps.setInt(2, zoneId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Seat s = new Seat();
+                    s.setSeatID(rs.getInt("SeatID"));
+                    s.setZoneID(rs.getInt("ZoneID"));
+                    s.setRowLabel(rs.getString("RowLabel"));
+                    s.setSeatNumber(rs.getInt("SeatNumber"));
+
+                    int ticketStatus = rs.getInt("TicketStatus");
+                    s.setStatusID(ticketStatus);   // 1 = còn, 4 = soldout...
+
+                    list.add(s);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

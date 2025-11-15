@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -115,7 +114,12 @@
                 justify-content: space-between;
                 margin-bottom: 10px;
             }
-
+            .summary-item span:first-child {
+                white-space: normal !important;
+                color: #fff !important;
+                display: inline-block;
+                line-height: 1.2 !important;
+            }
             .summary-item span:last-child {
                 color: #ffb6b6;
             }
@@ -185,7 +189,9 @@
                 <h3>Loại vé</h3>
 
                 <c:forEach var="ticket" items="${ticketTypes}">
-                    <div class="ticket" data-ticketid="${ticket.ticketTypeID}">
+                    <div class="ticket"
+                         data-ticketid="${ticket.ticketTypeID}"
+                         data-ticketname="${ticket.typeName}">
                         <h3 class="ticket-name">${ticket.typeName}</h3>
                         <p class="price ticket-price" data-raw-price="${ticket.price}">
                             <fmt:formatNumber value="${ticket.price}" type="number" groupingUsed="true"/> đ
@@ -199,6 +205,9 @@
                                         <input class="qty-input" type="text" value="0"
                                                readonly data-available="${ticket.availableCount}"/>
                                         <button class="btn-plus" type="button">+</button>
+                                        <span class="available-count" style="margin-left: 10px; color: #ffb6b6;">
+                                            Còn lại: <span class="remaining">${ticket.availableCount}</span>
+                                        </span>
                                     </div>
                                 </c:if>
 
@@ -208,42 +217,28 @@
                                     <div class="seat-list" data-tickettype="${ticket.ticketTypeID}"
                                          style="display:flex; flex-wrap:wrap; gap:8px;">
 
-                                        <c:forEach var="s" items="${seats}">
+                                        <c:forEach var="s" items="${ticket.seatList}">
                                             <c:choose>
-
-                                                
                                                 <c:when test="${s.statusID == 4}">
+                                                    <!-- ghế đã bán -->
                                                     <button type="button"
                                                             disabled
                                                             class="seat-tag sold-out-seat"
-                                                            style="
-                                                            padding:6px 10px;
-                                                            background:#444;
-                                                            border:1px solid #555;
-                                                            border-radius:6px;
-                                                            cursor:not-allowed;
-                                                            opacity:0.4;
-                                                            color:#888;">
+                                                            style="padding:6px 10px; background:#444; border:1px solid #555;
+                                                            border-radius:6px; cursor:not-allowed; opacity:0.4; color:#888;">
                                                         ${s.rowLabel}${s.seatNumber}
                                                     </button>
                                                 </c:when>
-
-                                                
                                                 <c:otherwise>
+                                                    <!-- ghế còn -->
                                                     <button type="button"
                                                             class="seat-tag"
                                                             data-seat="${s.seatID}"
-                                                            style="
-                                                            padding:6px 10px;
-                                                            background:#222;
-                                                            border:1px solid #444;
-                                                            border-radius:6px;
-                                                            cursor:pointer;
-                                                            color:white;">
+                                                            style="padding:6px 10px; background:#222; border:1px solid #444;
+                                                            border-radius:6px; cursor:pointer; color:white;">
                                                         ${s.rowLabel}${s.seatNumber}
                                                     </button>
                                                 </c:otherwise>
-
                                             </c:choose>
                                         </c:forEach>
                                     </div>
@@ -302,21 +297,21 @@
                 let selections = {};
 
                 // ==========================
-                //  XỬ LÝ GHẾ (SEAT)
+                // 1. XỬ LÝ GHẾ (VÉ CÓ SEAT)
                 // ==========================
                 document.querySelectorAll(".seat-tag:not([disabled])").forEach(btn => {
                     btn.addEventListener("click", function () {
 
                         this.classList.toggle("active-seat");
 
-                        let seatId = this.dataset.seat;
-                        let seatLabel = this.textContent.trim();
-                        let ticketTypeId = this.closest(".seat-list").dataset.tickettype;
+                        const seatId = this.dataset.seat;
+                        const seatLabel = this.textContent.trim();
+                        const ticketEl = this.closest(".ticket");
+                        const ticketTypeId = ticketEl.dataset.ticketid;
+                        const ticketName = ticketEl.dataset.ticketname; // lấy từ data-ticketname
+                        const price = parseInt(ticketEl.querySelector(".ticket-price").dataset.rawPrice);
 
-                        let ticketName = this.closest(".ticket").querySelector(".ticket-name").textContent.trim();
-                        let price = parseInt(this.closest(".ticket").querySelector(".ticket-price").dataset.rawPrice);
-
-                        let key = "SEAT-" + ticketTypeId + "-" + seatLabel;
+                        const key = "SEAT-" + ticketTypeId + "-" + seatLabel;
 
                         if (this.classList.contains("active-seat")) {
                             selections[key] = {
@@ -335,106 +330,124 @@
                     });
                 });
 
+                /* ======================================================
+                 * 2️⃣ XỬ LÝ VÉ KHÔNG GHẾ (+ / -)
+                 * ====================================================== */
+                document.querySelectorAll(".ticket .quantity").forEach(qtyBox => {
 
-                // ==========================
-                //  XỬ LÝ + - CHO VÉ KHÔNG CÓ SEAT
-                // ==========================
-                document.querySelectorAll(".ticket").forEach(ticket => {
+                    const ticket = qtyBox.closest(".ticket");
 
-                    const minusBtn = ticket.querySelector(".btn-minus");
-                    const plusBtn = ticket.querySelector(".btn-plus");
-                    const input = ticket.querySelector(".qty-input");
+                    const plusBtn = qtyBox.querySelector(".btn-plus");
+                    const minusBtn = qtyBox.querySelector(".btn-minus");
+                    const input = qtyBox.querySelector(".qty-input");
 
-                    if (!minusBtn || !plusBtn || !input)
-                        return; // vé có seat sẽ bỏ qua
-
-                    const name = ticket.querySelector(".ticket-name").textContent.trim();
-                    const price = parseInt(ticket.querySelector(".ticket-price").dataset.rawPrice);
+                    const name = ticket.dataset.ticketname;
                     const ticketId = ticket.dataset.ticketid;
+                    const price = parseInt(ticket.querySelector(".ticket-price").dataset.rawPrice);
                     const available = parseInt(input.dataset.available);
 
+                    const key = "NOSEAT-" + ticketId;
+
+                    // PLUS
                     plusBtn.addEventListener("click", function () {
                         let value = parseInt(input.value);
+
                         if (value < available) {
                             value++;
                             input.value = value;
 
-                            selections[name] = {
+                            selections[key] = {
                                 ticketId: parseInt(ticketId),
                                 name: name,
                                 qty: value,
-                                price: price
+                                price: price,
+                                isSeat: false
                             };
-                            updateSummary();
                         }
+
+                        const remainEl = ticket.querySelector(".remaining");
+                        if (remainEl)
+                            remainEl.textContent = available - value;
+
+                        updateSummary();
                     });
 
+                    // MINUS
                     minusBtn.addEventListener("click", function () {
                         let value = parseInt(input.value);
+
                         if (value > 0) {
                             value--;
                             input.value = value;
 
-                            if (value === 0) {
-                                delete selections[name];
-                            } else {
-                                selections[name].qty = value;
-                            }
-                            updateSummary();
+                            if (value === 0)
+                                delete selections[key];
+                            else
+                                selections[key].qty = value;
                         }
+
+                        const remainEl = ticket.querySelector(".remaining");
+                        if (remainEl)
+                            remainEl.textContent = available - value;
+
+                        updateSummary();
                     });
 
                 });
 
-
                 // ==========================
-                //  CẬP NHẬT TỔNG TIỀN
+                // 3. UPDATE SUMMARY
                 // ==========================
                 function updateSummary() {
                     summaryList.innerHTML = "";
                     totalAmount = 0;
 
-                    for (let key in selections) {
-                        const item = selections[key];
+                    Object.values(selections).forEach(item => {
+                        if (!item || !item.name)
+                            return;
                         const lineTotal = item.qty * item.price;
-
                         totalAmount += lineTotal;
 
-                        let div = document.createElement("div");
+                        const div = document.createElement("div");
                         div.className = "summary-item";
 
-                        let left = document.createElement("span");
-                        left.textContent = item.isSeat ? item.name : `${item.name} × ${item.qty}`;
+                        const left = document.createElement("span");
 
-                                        let right = document.createElement("span");
-                                        right.textContent = lineTotal.toLocaleString("vi-VN") + " đ";
+                        if (item.isSeat) {
+                            // Ví dụ: "Vip - D3"
+                            left.textContent = item.name;
+                        } else {
+                            // Ví dụ: "Không Seat × 2"
+                          left.textContent = item.name + " × " + item.qty;
+                                            }
 
-                                        div.appendChild(left);
-                                        div.appendChild(right);
+                                            const right = document.createElement("span");
+                                            right.textContent = lineTotal.toLocaleString("vi-VN") + " đ";
 
-                                        summaryList.appendChild(div);
+                                            div.appendChild(left);
+                                            div.appendChild(right);
+                                            summaryList.appendChild(div);
+                                        });
+
+                                        totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
                                     }
 
-                                    totalDisplay.textContent = totalAmount.toLocaleString("vi-VN") + " đ";
-                                }
+                                    // ==========================
+                                    // 4. SUBMIT CHECKOUT
+                                    // ==========================
+                                    btnContinue.addEventListener("click", function (e) {
+                                        if (Object.keys(selections).length === 0) {
+                                            e.preventDefault();
+                                            alert("Vui lòng chọn ít nhất 1 vé");
+                                            return;
+                                        }
 
+                                        document.getElementById("selectionsJson").value = JSON.stringify(selections);
+                                        document.getElementById("totalAmount").value = totalAmount;
+                                    });
 
-                                // ==========================
-                                //  NÚT TIẾP TỤC
-                                // ==========================
-                                btnContinue.addEventListener("click", function (e) {
-                                    if (Object.keys(selections).length === 0) {
-                                        e.preventDefault();
-                                        alert("Vui lòng chọn ít nhất 1 vé");
-                                        return;
-                                    }
-
-                                    document.getElementById("selectionsJson").value = JSON.stringify(selections);
-                                    document.getElementById("totalAmount").value = totalAmount;
-                                    document.getElementById("checkoutForm").submit();
                                 });
-
-                            });
         </script>
+
     </body>
-</html>
+</html> 
