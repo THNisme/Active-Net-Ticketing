@@ -168,5 +168,17 @@
                 </c:if>
             </div>
         </div>
+        <script>
+            // URL trang home (sửa lại đúng servlet của bạn: "home", "events", "index" ...)
+            const HOME_URL = "${pageContext.request.contextPath}/home";
+
+            // Đẩy state hiện tại vào history
+            history.pushState(null, "", location.href);
+
+            // Khi người dùng bấm nút Back
+            window.addEventListener("popstate", function () {
+                window.location.replace(HOME_URL);
+            });
+        </script>
     </body>
 </html>

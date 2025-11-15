@@ -211,7 +211,7 @@
 
         <!-- ==== Countdown Script ==== -->
         <script>
-            const COUNTDOWN_MINUTES = 15;
+           const COUNTDOWN_MINUTES = 10;
             const STORAGE_KEY = "checkout_expire_time";
 
             let expireTime = sessionStorage.getItem(STORAGE_KEY);

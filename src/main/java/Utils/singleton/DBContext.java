@@ -15,28 +15,10 @@ import java.sql.DriverManager;
 public class DBContext {
 
     private static DBContext instance;
-    private Connection conn;
 
     private DBContext() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=EventManagementV7;"
-                    + "user=sa;"
-                    + "password=nd291005;"
-                    + "encrypt=true;trustServerCertificate=true;";
-            conn = DriverManager.getConnection(dbURL);
-            DatabaseMetaData dm = conn.getMetaData();
-            System.out.println("");
-            System.out.println("---------DBContext information---------");
-            System.out.println("Connected to " + dm.getDatabaseProductName());
-            System.out.println("Version DBContext: singleton");
-            System.out.println("Product version: "
-                    + dm.getDatabaseProductVersion());
-            System.out.println("Driver name: " + dm.getDriverName());
-            System.out.println("Driver version: " + dm.getDriverVersion());
-            System.out.println("----------------------------------------");
-            System.out.println("");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -51,21 +33,18 @@ public class DBContext {
 
     public Connection getConnection() {
         try {
-            // Nếu connection bị đóng hoặc null → mở lại
-            if (conn == null || conn.isClosed()) {
-                String dbURL = "jdbc:sqlserver://localhost:1433;"
-                        + "databaseName=EventManagementV7;"
-                        + "user=sa;"
-                        + "password=nd291005;"
-                        + "encrypt=true;trustServerCertificate=true;";
+            String dbURL = "jdbc:sqlserver://localhost:1433;"
+                    + "databaseName=EventManagementV7;"
+                    + "user=sa;"
+                    + "password=nd291005;"
+                    + "encrypt=true;trustServerCertificate=true;";
 
-                conn = DriverManager.getConnection(dbURL);
-                System.out.println("🔄 Reconnected to database!");
-            }
+            // ❗ Luôn mở mới Connection
+            return DriverManager.getConnection(dbURL);
+
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-
-        return conn;
     }
 }
