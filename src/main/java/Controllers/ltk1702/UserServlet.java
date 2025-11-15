@@ -151,7 +151,7 @@ public class UserServlet extends HttpServlet {
         if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
             req.getSession().setAttribute("error", "Vui lòng nhập mail đúng định dạng. Ví dụ: abc124@gmail.com");
             req.getSession().setAttribute("userManage", user);
-            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "user-manage?action=new");
             return;
         }
 
@@ -159,7 +159,7 @@ public class UserServlet extends HttpServlet {
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&]).{8,}$")) {
             req.getSession().setAttribute("error", "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ, số và ký tự đặc biệt!");
             req.getSession().setAttribute("userManage", user);
-            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "user-manage?action=new");
             return;
         }
 
@@ -167,7 +167,7 @@ public class UserServlet extends HttpServlet {
         if (!password.equals(confirmPassword)) {
             req.getSession().setAttribute("error", "Mật khẩu xác nhận không khớp!");
             req.getSession().setAttribute("userManage", user);
-            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "User-manage?action=new");
+            res.sendRedirect(id != 0 ? "user-manage?action=edit&id=" + id : "user-manage?action=new");
             return;
         }
 
