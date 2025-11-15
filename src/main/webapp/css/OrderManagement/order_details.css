@@ -1,0 +1,39 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Nov 15, 2025, 10:34:58 PM
+    Author     : NGUYEN
+*/
+
+body {
+    background-color: #111827; /* nền tối */
+    color: #fff; /* chữ trắng */
+    font-family: 'Inter', sans-serif;
+    padding: 20px;
+}
+.card-custom {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+.section-title {
+    color: #22c55e;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+.table-custom thead th {
+    background-color: #222;
+    color: #22c55e;
+}
+.table-custom tbody tr:hover {
+    background-color: #2a2a2a;
+}
+.text {
+    color: #22c55e;
+}

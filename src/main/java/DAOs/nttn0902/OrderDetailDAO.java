@@ -31,7 +31,7 @@ public class OrderDetailDAO {
                 + "o.OrderID, o.ContactFullname, o.ContactEmail, o.ContactPhone, o.OrderDate, "
                 + "e.EventName, c.CategoryName, e.StartDate, e.EndDate, "
                 + "p.PlaceName, p.Address AS PlaceAddress, "
-                + "t.SerialNumber, tt.TypeName AS TicketTypeName, "
+                + "t.SerialNumber, tt.TypeName AS TicketTypeName, tt.Price AS TicketPrice, "
                 + "z.ZoneName, s.RowLabel, s.SeatNumber "
                 + "FROM Orders o "
                 + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
@@ -72,6 +72,7 @@ public class OrderDetailDAO {
                 // Ticket info
                 d.setSerialNumber(rs.getString("SerialNumber"));
                 d.setTicketTypeName(rs.getString("TicketTypeName"));
+                d.setTicketPrice(rs.getDouble("TicketPrice")); 
                 d.setZoneName(rs.getString("ZoneName"));
                 d.setRowLabel(rs.getString("RowLabel"));
                 d.setSeatNumber(rs.getInt("SeatNumber"));

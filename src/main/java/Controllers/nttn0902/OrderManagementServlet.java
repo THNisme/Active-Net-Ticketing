@@ -83,6 +83,15 @@ public class OrderManagementServlet extends HttpServlet {
         request.setAttribute("eventID", eventId);
         request.setAttribute("eventName", eventName);
 
+        // Lấy danh sách các sự kiện khác (dropdown)
+        List<Models.nttn0902.Event> otherEvents;
+        if (eventId != null) {
+            otherEvents = dao.getOtherEvents(eventId); // trừ sự kiện hiện tại
+        } else {
+            otherEvents = dao.getAllEvents(); // nếu chưa chọn event, hiển thị tất cả
+        }
+        request.setAttribute("otherEvents", otherEvents);
+
         //  SEARCH
         if (keyword != null && !keyword.trim().isEmpty()) {
 

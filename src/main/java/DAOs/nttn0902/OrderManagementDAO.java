@@ -271,7 +271,7 @@ public class OrderManagementDAO {
         return false;
     }
 
-// ✅ Lấy danh sách tất cả sự kiện
+//  Lấy danh sách tất cả sự kiện
     public List<Event> getAllEvents() {
         List<Event> list = new ArrayList<>();
         String sql = "SELECT EventID, EventName FROM Events WHERE StatusID = 1 ORDER BY EventName";
@@ -288,6 +288,25 @@ public class OrderManagementDAO {
             e.printStackTrace();
         }
 
+        return list;
+    }
+    // Lấy tất cả sự kiện trừ eventID hiện tại
+
+    public List<Event> getOtherEvents(int currentEventId) {
+        List<Event> list = new ArrayList<>();
+        String sql = "SELECT EventID, EventName FROM Events WHERE StatusID = 1 AND EventID <> ? ORDER BY EventName";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, currentEventId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Event e = new Event();
+                e.setEventID(rs.getInt("EventID"));
+                e.setEventName(rs.getString("EventName"));
+                list.add(e);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return list;
     }
 

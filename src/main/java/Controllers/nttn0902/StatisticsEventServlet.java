@@ -100,7 +100,7 @@ public class StatisticsEventServlet extends HttpServlet {
         request.setAttribute("percentageOfRevenue", percentageOfRevenue);
         request.setAttribute("totalTicketsSold", soldTickets);
         request.setAttribute("totalTicketsIssued", totalTickets );
-        request.setAttribute("percentageOfRevenue", percentTicketsSold);
+        request.setAttribute("percentTicketsSold", percentTicketsSold);
         request.setAttribute("currentTime", new java.util.Date());
 
         RequestDispatcher rd = request.getRequestDispatcher("/statistic/StatisticEvent.jsp");

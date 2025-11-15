@@ -1,64 +1,54 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // ===== progress-ring =====
+
+    /* ===== PROGRESS RING ===== */
     document.querySelectorAll('.progress-ring').forEach(ring => {
-        const circle = ring.querySelector('.fg');
+        const fg = ring.querySelector('.fg');
         const text = ring.querySelector('.percent-text');
-        const radius = circle.r.baseVal.value;
+        const radius = fg.r.baseVal.value;
         const circumference = 2 * Math.PI * radius;
-        const targetPercent = parseFloat(ring.getAttribute('data-percent')) || 0;
 
-        circle.style.strokeDasharray = `${circumference}`;
-        circle.style.strokeDashoffset = circumference;
+        fg.style.strokeDasharray = `${circumference}`;
+        fg.style.strokeDashoffset = circumference;
 
-        function setProgress(percent) {
-            const offset = circumference - (percent / 100) * circumference;
-            circle.style.strokeDashoffset = offset;
-            text.textContent = Math.round(percent) + '%';
-        }
-
+        let target = parseFloat(ring.getAttribute('data-percent')) || 0;
         let current = 0;
-        function animate() {
-            if (current <= targetPercent) {
-                setProgress(current);
+
+        function animateRing() {
+            if (current <= target) {
+                fg.style.strokeDashoffset =
+                    circumference - (current / 100) * circumference;
+                text.innerHTML = current + "%";
                 current++;
-                requestAnimationFrame(animate);
-            } else {
-                setProgress(targetPercent);
+                requestAnimationFrame(animateRing);
             }
         }
-        animate();
+        animateRing();
     });
 
-    // ===== progress-bar =====
+
+    /* ===== PROGRESS BARS ===== */
     document.querySelectorAll('.progress-bar').forEach(bar => {
-        const target = parseFloat(bar.getAttribute('data-target')) || 0;
-        const percentText = bar.closest('td').querySelector('.percent');
+        const target = parseFloat(bar.dataset.target) || 0;
+        const label = bar.closest('td').querySelector('.percent');
         let width = 0;
 
-        const animateBar = () => {
+        function animateBar() {
             if (width <= target) {
-                bar.style.width = width + '%';
-                percentText.textContent = Math.floor(width) + '%';
-                width += 1;
+                bar.style.width = width + "%";
+                label.textContent = width + "%";
+                width++;
                 requestAnimationFrame(animateBar);
-            } else {
-                bar.style.width = target + '%';
-                percentText.textContent = Math.floor(target) + '%';
             }
-        };
+        }
         animateBar();
     });
 
-    // ===== dropdown =====
-    const toggleBtn = document.getElementById("toggleEventList");
+
+    /* ===== DROPDOWN ===== */
+    const btn = document.getElementById("toggleEventList");
     const dropdown = document.getElementById("eventDropdown");
-    const container = toggleBtn.parentElement;
+    const box = btn.parentElement;
 
-    container.addEventListener("mouseenter", () => {
-        dropdown.classList.add("show");
-    });
-
-    container.addEventListener("mouseleave", () => {
-        dropdown.classList.remove("show");
-    });
+    box.addEventListener("mouseenter", () => dropdown.classList.add("show"));
+    box.addEventListener("mouseleave", () => dropdown.classList.remove("show"));
 });
