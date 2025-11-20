@@ -16,13 +16,13 @@ public class TransactionDAO {
     public List<Transaction> getTransactionsByUserId(int userId) {
         List<Transaction> list = new ArrayList<>();
         try {
-         String sql = "SELECT t.TransactionID, t.WalletID, t.OrderID, t.TransactionTypeID, "
-           + "t.Amount, t.Remain, t.CreatedAt "
-           + "FROM Transactions t "
-           + "JOIN Wallet w ON t.WalletID = w.WalletID "
-           + "WHERE w.UserID = ? "
-           + "ORDER BY t.CreatedAt DESC";
-
+            String sql = "SELECT t.TransactionID, t.WalletID, t.OrderID, t.TransactionTypeID, "
+                    + "t.Amount, t.Remain, t.CreatedAt, "
+                    + "t.PromotionAmount, t.PromotionID "
+                    + "FROM Transactions t "
+                    + "JOIN Wallet w ON t.WalletID = w.WalletID "
+                    + "WHERE w.UserID = ? "
+                    + "ORDER BY t.CreatedAt DESC";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, userId);
@@ -37,6 +37,9 @@ public class TransactionDAO {
                 tr.setAmount(rs.getLong("Amount"));
                 tr.setRemain(rs.getLong("Remain"));
                 tr.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                tr.setPromotionAmount(rs.getLong("PromotionAmount"));
+                tr.setPromotionID(rs.getObject("PromotionID") != null ? rs.getInt("PromotionID") : null);
+
                 list.add(tr);
             }
         } catch (Exception e) {
