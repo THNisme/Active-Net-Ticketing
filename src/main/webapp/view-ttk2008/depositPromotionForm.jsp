@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Số tiền tối đa</label>
-                    <input type="number" name="maxAmount" class="form-control" min="0" step="1000" id="maxAmount" placeholder="Để trống nếu không giới hạn">
+                    <input type="number" name="maxAmount" class="form-control" min="0" max="5000000" step="1000" id="maxAmount" placeholder="Để trống nếu không giới hạn">
                 </div>
             </div>
 

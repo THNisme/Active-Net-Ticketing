@@ -47,4 +47,26 @@ public class TransactionDAO {
         }
         return list;
     }
+    public boolean insertTransaction(Transaction tr) {
+        boolean success = false;
+        String sql = "INSERT INTO Transactions (WalletID, OrderID, TransactionTypeID, Amount, Remain, CreatedAt, PromotionAmount, PromotionID) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, tr.getWalletID());
+            ps.setObject(2, tr.getOrderID() != 0 ? tr.getOrderID() : null); // OrderID có thể null
+            ps.setInt(3, tr.getTransactionTypeID());
+            ps.setLong(4, tr.getAmount());
+            ps.setLong(5, tr.getRemain());
+            ps.setTimestamp(6, tr.getCreatedAt());
+            ps.setLong(7, tr.getPromotionAmount());
+            ps.setObject(8, tr.getPromotionID() != 0 ? tr.getPromotionID() : null); // PromotionID có thể null
+
+            int rows = ps.executeUpdate();
+            success = rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
 }

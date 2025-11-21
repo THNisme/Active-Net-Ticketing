@@ -17,8 +17,7 @@ public class DepositPromotionDAO {
         String sql = "SELECT dp.*, s.Code AS StatusCode, s.Description AS StatusName "
                 + "FROM DepositPromotions dp "
                 + "LEFT JOIN Status s ON dp.StatusID = s.StatusID "
-                                + "WHERE s.StatusID <> 3  "
-
+                + "WHERE s.StatusID <> 3  "
                 + "ORDER BY dp.PromotionID DESC";
 
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
@@ -31,14 +30,14 @@ public class DepositPromotionDAO {
         return list;
     }
 
-    // Lấy promotion đang active (cho deposit flow)
+// Lấy promotion đang active (cho deposit flow)
     public List<DepositPromotion> getActivePromotions() {
         List<DepositPromotion> list = new ArrayList<>();
         String sql = "SELECT dp.*, s.Code AS StatusCode, s.Description AS StatusName "
                 + "FROM DepositPromotions dp "
                 + "JOIN Status s ON dp.StatusID = s.StatusID "
-                + // chỉ lấy 2 trạng thái này
-                "ORDER BY dp.PromotionID DESC";
+                + "WHERE s.Code = 'active' " // chỉ lấy active
+                + "ORDER BY dp.PromotionID DESC";
 
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -51,24 +50,23 @@ public class DepositPromotionDAO {
     }
 
     // Lấy promotion theo ID
-   public DepositPromotion getById(int id) {
-    String sql = "SELECT dp.*, s.Code AS StatusCode, s.Description AS StatusName "
-               + "FROM DepositPromotions dp "
-               + "JOIN Status s ON dp.StatusID = s.StatusID "
-               + "WHERE dp.PromotionID = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, id);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                return mapPromotion(rs);
+    public DepositPromotion getById(int id) {
+        String sql = "SELECT dp.*, s.Code AS StatusCode, s.Description AS StatusName "
+                + "FROM DepositPromotions dp "
+                + "JOIN Status s ON dp.StatusID = s.StatusID "
+                + "WHERE dp.PromotionID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapPromotion(rs);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
-
 
     // Tạo promotion mới
     public boolean create(DepositPromotion p) {
@@ -120,7 +118,7 @@ public class DepositPromotionDAO {
         String sql = "UPDATE DepositPromotions SET StatusID = 3 WHERE PromotionID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, promotionId); // ví dụ DELETED = 3
-           
+
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
