@@ -26,7 +26,7 @@ public class RoleRedirectFilter implements Filter {
 
         int role = user.getRole();
        
-        if (role == 1 && (req.getRequestURI().endsWith("/login") || req.getRequestURI().endsWith("/home"))) {
+        if ((role == 1 || role == 2) && (req.getRequestURI().endsWith("/login") || req.getRequestURI().endsWith("/home"))) {
             res.sendRedirect(req.getContextPath() + "/admincenter");
             return;
         }

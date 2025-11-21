@@ -62,8 +62,7 @@ public class MailService {
         }
         if (roleChanged) {
             body.append("- Quyền hệ thống mới: ").append(
-                    newRole == 1 ? "Admin"
-                            : newRole == 0 ? "Customer" : "Staff"
+                    newRole == 0 ? "Customer" : "Staff"
             ).append("\n");
         }
 
