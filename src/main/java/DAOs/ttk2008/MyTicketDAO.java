@@ -23,7 +23,8 @@ public class MyTicketDAO {
             + "LEFT JOIN Seats s ON t.SeatID = s.SeatID "
             + "JOIN Status so ON o.StatusID = so.StatusID "
             + "JOIN Status st ON t.StatusID = st.StatusID "
-            + "WHERE o.UserID = ? ";
+            + "WHERE o.UserID = ? "
+            + "AND st.StatusID <> 3 AND so.StatusID <> 3 ";
 
     public List<MyTicket> getAllTicketsByUser(int userId) {
         return getTickets(userId, "");
@@ -68,7 +69,16 @@ public class MyTicketDAO {
         return list;
     }
 
-    
+    public void deleteTicket(int ticketId) {
+        String sql = "UPDATE Tickets SET StatusID = 3 WHERE TicketID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         MyTicketDAO dao = new MyTicketDAO();
 

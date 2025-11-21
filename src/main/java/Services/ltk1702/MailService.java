@@ -61,7 +61,10 @@ public class MailService {
             body.append("- Mật khẩu mới: ").append(password).append("\n");
         }
         if (roleChanged) {
-            body.append("- Quyền hệ thống mới: ").append(newRole == 1 ? "Admin" : "User").append("\n");
+            body.append("- Quyền hệ thống mới: ").append(
+                    newRole == 1 ? "Admin"
+                            : newRole == 0 ? "Customer" : "Staff"
+            ).append("\n");
         }
 
         body.append("\nNếu bạn không thực hiện thay đổi này, vui lòng liên hệ hỗ trợ ngay.\n\n");
