@@ -79,8 +79,42 @@ public class UsersDAO {
         return null;
     }
 
+    public List<User> getUsersByRole(int role) {
+        List<User> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM Users WHERE Role = ? AND StatusID <> ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, role);
+            ps.setInt(2, STATUS_DELETED);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User u = new User();
+                u.setUserID(rs.getInt("UserID"));
+                u.setUsername(rs.getString("Username"));
+                u.setPassword(rs.getString("PasswordHash"));
+                u.setRole(rs.getInt("Role"));
+                u.setCreatedAt(rs.getDate("CreatedAt"));
+                u.setStatusID(rs.getInt("StatusID"));
+
+                u.setContactFullname(rs.getString("ContactFullname"));
+                u.setContactEmail(rs.getString("ContactEmail"));
+                u.setContactPhone(rs.getString("ContactPhone"));
+
+                list.add(u);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public void addUser(User user) {
-        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactFullname, ContactEmail, ContactPhone) VALUES (?, ?, ?, GETDATE(), ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactFullname, ContactEmail, ContactPhone)"
+                + " VALUES (?, ?, ?, GETDATE(), ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
@@ -96,7 +130,8 @@ public class UsersDAO {
     }
 
     public void updateUser(User user) {
-        String sql = "UPDATE Users SET Username = ?, PasswordHash = ?, Role = ?, ContactFullname = ?, ContactEmail = ?, ContactPhone = ? WHERE UserID = ?";
+        String sql = "UPDATE Users SET Username = ?, PasswordHash = ?, Role = ?, ContactFullname = ?, ContactEmail = ?, ContactPhone = ? "
+                + "WHERE UserID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());

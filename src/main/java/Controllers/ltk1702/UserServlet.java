@@ -88,9 +88,18 @@ public class UserServlet extends HttpServlet {
                 break;
 
             default:
-                List<User> list = dao.getAllUsers();
+                String roleFilter = req.getParameter("roleFilter");
+                List<User> list;
+
+                if (roleFilter != null && !roleFilter.isEmpty() && !roleFilter.equals("all")) {
+                    list = dao.getUsersByRole(Integer.parseInt(roleFilter));
+                } else {
+                    list = dao.getAllUsers();
+                }
+
                 req.setAttribute("userList", list);
-                req.getRequestDispatcher("/manage-user-view/userList.jsp").forward(req, res);
+                req.setAttribute("roleFilter", roleFilter); 
+                req.getRequestDispatcher("/manage-user-view/userList.jsp").forward(req, res);                
                 break;
         }
     }
@@ -120,15 +129,15 @@ public class UserServlet extends HttpServlet {
         String email = req.getParameter("email");
         String phone = req.getParameter("phone");
         String actionType = req.getParameter("actionType");
-        
-        if (fullname == null ) {
+
+        if (fullname == null) {
             fullname = "";
         }
-        
+
         if (phone == null) {
             phone = "";
         }
-        
+
         User user = new User();
         user.setUserID(id);
         user.setUsername(username);
@@ -210,7 +219,7 @@ public class UserServlet extends HttpServlet {
                                 role,
                                 password,
                                 fullname,
-                                phone                                
+                                phone
                         );
                         req.getSession().setAttribute("mailStatus", "Đã gửi mail thông báo thay đổi tài khoản đến " + email);
                     }
