@@ -38,7 +38,7 @@ public class TransactionDAO {
                 tr.setRemain(rs.getLong("Remain"));
                 tr.setCreatedAt(rs.getTimestamp("CreatedAt"));
                 tr.setPromotionAmount(rs.getLong("PromotionAmount"));
-                tr.setPromotionID(rs.getObject("PromotionID") != null ? rs.getInt("PromotionID") : null);
+                tr.setPromotionID(rs.getInt("PromotionID"));
 
                 list.add(tr);
             }

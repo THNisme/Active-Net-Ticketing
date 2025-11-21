@@ -276,6 +276,7 @@
 
             <!-- Bộ lọc -->
             <div class="filters">
+                <a href="promotions" class="filter">Quản lý khuyến mãi</a>
                 <a href="event-form" class="filter">Tạo sự kiện mới</a>
                 <a href="eventcategories" class="filter">Danh mục sự kiện</a>
                 <a href="place-overview" class="filter">Quản lí nơi tổ chức</a>
