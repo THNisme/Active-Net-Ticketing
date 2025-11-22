@@ -116,7 +116,7 @@ public class MailService {
 
         body.append(">>> ").append(otp).append(" <<<\n\n");
 
-        body.append("Mã OTP có hiệu lực trong một thời gian ngắn.\n");
+        body.append("Mã OTP có hiệu lực trong sau 5 phút.\n");
         body.append("Vui lòng không chia sẻ mã này với bất kỳ ai.\n\n");
 
         body.append("Trân trọng,\n");
