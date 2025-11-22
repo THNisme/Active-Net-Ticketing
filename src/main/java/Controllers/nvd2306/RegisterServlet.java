@@ -7,6 +7,7 @@ package Controllers.nvd2306;
 import DAOs.nvd2306.UserDAO;
 import MD5.HashPassword;
 import Models.nvd2306.User;
+import Utils.nvd2603.MailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
+import java.util.Random;
 
 /**
  *
@@ -85,18 +88,19 @@ public class RegisterServlet extends HttpServlet {
 
         UserDAO userDAO = new UserDAO();
 
-        // ====== Kiểm tra dữ liệu cơ bản ======
+        // ====== VALIDATION ======
         if (username == null || username.isBlank()
                 || email == null || email.isBlank()
                 || password == null || password.isBlank()
                 || repassword == null || repassword.isBlank()) {
+
             request.setAttribute("errorRegister", "Vui lòng nhập đầy đủ thông tin!");
             request.setAttribute("showRegister", true);
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // ====== Kiểm tra độ mạnh mật khẩu ======
+        // Check strong password
         String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$";
         if (!password.matches(passwordPattern)) {
             request.setAttribute("errorRegister",
@@ -106,7 +110,6 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // ====== Kiểm tra khớp mật khẩu ======
         if (!password.equals(repassword)) {
             request.setAttribute("errorRegister", "Mật khẩu nhập lại không khớp!");
             request.setAttribute("showRegister", true);
@@ -114,33 +117,45 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // ====== Kiểm tra username/email trùng (chỉ để ngăn insert, không in lỗi ở đây) ======
-        if (userDAO.checkUsernameExists(username) || userDAO.checkEmailExists(email)) {
-            // Không in lỗi ở JSP vì realtime đã có
-            request.setAttribute("errorRegister", "Thông tin đăng ký không hợp lệ hoặc email đã tồn tại, vui lòng kiểm tra lại!");
-            request.setAttribute("showRegister", true);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        }
+//        if (userDAO.checkUsernameExists(username) || userDAO.checkEmailExists(email)) {
+//            request.setAttribute("errorRegister", "Username hoặc Email đã tồn tại!");
+//            request.setAttribute("showRegister", true);
+//            request.getRequestDispatcher("login.jsp").forward(request, response);
+//            return;
+//        }
 
-        // ====== Lưu DB ======
+        // ====== INSERT USER ======
         String hashedPassword = HashPassword.hashMD5(password);
+
         User user = new User();
         user.setUsername(username);
         user.setPasswordHash(hashedPassword);
         user.setRole(0);
         user.setContactEmail(email);
 
-        boolean success = userDAO.register(user);
-        if (success) {
-            request.setAttribute("message", "Đăng ký thành công, vui lòng đăng nhập!");
-            request.setAttribute("showRegister", false);
-        } else {
+        int newUserID = userDAO.register(user);  // now returns userID
+
+        if (newUserID <= 0) {
             request.setAttribute("errorRegister", "Có lỗi khi đăng ký, vui lòng thử lại!");
             request.setAttribute("showRegister", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
         }
 
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        // ====== TẠO OTP ======
+        String otp = String.format("%06d", new Random().nextInt(999999));
+        Timestamp expire = new Timestamp(System.currentTimeMillis() + 60 * 1000);
+
+        userDAO.updateOTP(newUserID, otp, expire);
+
+        // Gửi email OTP
+        MailService.sendOTP(email, otp);
+
+        // Lưu userID vào session để verify sử dụng
+        request.getSession().setAttribute("pendingUserID", newUserID);
+
+        // Chuyển sang verify.jsp
+        response.sendRedirect(request.getContextPath() + "/verify.jsp");
     }
 
     /**

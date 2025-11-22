@@ -224,5 +224,23 @@ public class TicketDAO {
         }
         return 0;
     }
-    
+
+    public boolean unlockTicketsByOrder(int orderId) {
+        String sql = """
+        UPDATE Tickets
+        SET StatusID = 6   -- AVAILABLE
+        WHERE TicketID IN (
+            SELECT TicketID FROM OrderDetails WHERE OrderID = ?
+        )
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

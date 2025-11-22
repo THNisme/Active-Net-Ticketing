@@ -18,7 +18,8 @@ import java.util.Properties;
  */
 public class MailService {
 
-    private static final String FROM_EMAIL = "ducnvce191611@gmail.com"; ; // Gmail của bạn
+    private static final String FROM_EMAIL = "ducnvce191611@gmail.com";
+    ; // Gmail của bạn
     private static final String APP_PASSWORD = "amsz jorw lgmz hiwj";   // App Password Gmail
 
     public static void sendEmail(String to, String subject, String htmlBody, List<File> attachments)
@@ -62,5 +63,30 @@ public class MailService {
 
         message.setContent(multipart);
         Transport.send(message);
+    }
+    // =======================
+// Gửi OTP Verification Code
+// =======================
+
+    public static void sendOTP(String to, String otp) {
+        String subject = "Mã OTP xác thực tài khoản của bạn";
+
+        String htmlBody = ""
+                + "<div style='font-family:Arial,sans-serif;'>"
+                + "<h2 style='color:#ff6b6b;'>Xin chào!</h2>"
+                + "<p>Mã OTP của bạn là:</p>"
+                + "<h1 style='letter-spacing:4px;color:#d9534f;'>" + otp + "</h1>"
+                + "<p><b>Mã chỉ có hiệu lực trong 1 phút.</b></p>"
+                + "<p>Vui lòng không chia sẻ mã này cho bất kỳ ai.</p>"
+                + "<br>"
+                + "<p>Trân trọng,<br><b>Active-Net Ticketing</b></p>"
+                + "</div>";
+
+        try {
+            sendEmail(to, subject, htmlBody, null); // gọi hàm sendEmail có sẵn
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("❌ Lỗi gửi OTP đến email: " + to);
+        }
     }
 }

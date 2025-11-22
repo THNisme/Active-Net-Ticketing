@@ -65,4 +65,29 @@ public class TransactionDAO {
             ps.executeUpdate();
         }
     }
+
+    public boolean insertPaymentTransaction(int userId, int orderId, BigDecimal amount) {
+
+        String sql = """
+        INSERT INTO Transactions(WalletID, OrderID, TransactionTypeID, Amount, Remain)
+        SELECT WalletID, ?, 
+               (SELECT TransactionTypeID FROM TransactionTypes WHERE Code = 'PAYMENT'),
+               ?, Balance - ?
+        FROM Wallet
+        WHERE UserID = ?
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.setBigDecimal(2, amount);
+            ps.setBigDecimal(3, amount);
+            ps.setInt(4, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

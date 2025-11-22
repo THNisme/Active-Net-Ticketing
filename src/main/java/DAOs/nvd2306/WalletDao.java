@@ -51,4 +51,20 @@ public class WalletDao {
             stm.executeUpdate();
         }
     }
+
+    public BigDecimal getWalletBalance(int userId) {
+        String sql = "SELECT Balance FROM Wallet WHERE UserID = ?";
+        Connection conn = DBContext.getInstance().getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getBigDecimal("Balance");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return BigDecimal.ZERO;
+    }
 }

@@ -34,17 +34,15 @@ public class DBContext {
     public Connection getConnection() {
         try {
             String dbURL = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=Active-Net-Ticketing;"
+                    + "databaseName=EventManagementV7;"
                     + "user=sa;"
-                    + "password=123456;"
+                    + "password=nd291005;"
                     + "encrypt=true;trustServerCertificate=true;";
 
-            // ❗ Luôn mở mới Connection
-            return DriverManager.getConnection(dbURL);
+            return DriverManager.getConnection(dbURL);  // KHÔNG setAutoCommit ở đây
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Không thể kết nối Database", e);  // ❗ không return null
         }
     }
 }

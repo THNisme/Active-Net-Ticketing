@@ -156,6 +156,9 @@ public class AuthFilter implements Filter {
         boolean isPublic
                 = uri.startsWith(ctx + "/login")
                 || uri.startsWith(ctx + "/register")
+                || uri.startsWith(ctx + "/verify.jsp")
+                || uri.startsWith(ctx + "/verify-otp")
+                || uri.startsWith(ctx + "/resend-otp")
                 || uri.startsWith(ctx + "/assets")
                 || uri.startsWith(ctx + "/css")
                 || uri.startsWith(ctx + "/js")
@@ -166,9 +169,9 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/home")
                 || uri.startsWith(ctx + "/event-detail")
                 || uri.startsWith(ctx + "/filter-events")
-//                || uri.startsWith(ctx + "/select-ticket")
-//                || uri.startsWith(ctx + "/checkout")
-//                || uri.startsWith(ctx + "/payments")
+                //                || uri.startsWith(ctx + "/select-ticket")
+                //                || uri.startsWith(ctx + "/checkout")
+                //                || uri.startsWith(ctx + "/payments")
                 || uri.startsWith(ctx + "/check")
                 || uri.startsWith(ctx + "/search")
                 || uri.startsWith(ctx + "/accessDenied");

@@ -22,7 +22,7 @@
         <div class="container" id="container">
             <!-- Register -->
             <div class="form-container register-container">
-                <form action="register" method="post">
+                <form action="${pageContext.request.contextPath}/register" method="post" id="register-form">
                     <h1>Đăng ký ngay.</h1>
 
                     <!-- Username -->
@@ -56,6 +56,19 @@
                         <c:if test="${not empty errorEmail}">
                             <span class="error-text"><c:out value="${errorEmail}"/></span>
                         </c:if>
+                    </div>
+                    <div class="user-box">
+                        <div class="input-with-icon">
+                            <input type="text" name="contactFullname" id="contact-fullname" required />
+                            <label>Họ tên liên hệ</label>
+                        </div>
+                    </div>
+
+                    <div class="user-box">
+                        <div class="input-with-icon">
+                            <input type="tel" name="contactPhone" id="contact-phone" required />
+                            <label>Số điện thoại</label>
+                        </div>
                     </div>
                     <!-- Password -->
                     <div class="user-box">
@@ -182,7 +195,6 @@
         </script>
         <script src="${pageContext.request.contextPath}/js/authentication-page/index.js"></script>
 
-        <script src="${pageContext.request.contextPath}/js/authentication-page/register.js"></script>
 
         <c:if test="${not empty errorLogin}">
             <script>
@@ -240,6 +252,12 @@
                     alert("${message}");
                 });
             </script>
+        </c:if>
+        <c:if test="${not empty successMsg}">
+            <script>
+                alert("${successMsg}");
+            </script>
+            <c:remove var="successMsg"/>
         </c:if>
 
     </body>

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class UserDAO {
 
@@ -50,53 +51,43 @@ public class UserDAO {
     // =========================================================
     //                 REGISTER + AUTO CREATE WALLET
     // =========================================================
-    public boolean register(User user) {
+    public int register(User user) {
         String sqlInsertUser
-                = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail) "
-                + "VALUES (?, ?, ?, GETDATE(), 1, ?)";
+                = "INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, StatusID, ContactEmail, ContactFullname, ContactPhone) "
+                + "VALUES (?, ?, ?, GETDATE(), 1, ?, ?, ?)";
 
         try {
-            // 1️⃣ Insert vào Users
             PreparedStatement ps = conn.prepareStatement(sqlInsertUser, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPasswordHash());
             ps.setInt(3, user.getRole());
             ps.setString(4, user.getContactEmail());
+            ps.setString(5, user.getContactFullname());
+            ps.setString(6, user.getContactPhone());
 
             int rows = ps.executeUpdate();
             if (rows == 0) {
-                return false;
+                return -1;
             }
 
-            // 2️⃣ Lấy UserID vừa tạo
             ResultSet rs = ps.getGeneratedKeys();
-            int newUserId = -1;
             if (rs.next()) {
-                newUserId = rs.getInt(1);
+                int newID = rs.getInt(1);
+
+                // tạo wallet
+                PreparedStatement psWallet = conn.prepareStatement(
+                        "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) VALUES (?, 0, GETDATE(), 1)"
+                );
+                psWallet.setInt(1, newID);
+                psWallet.executeUpdate();
+
+                return newID;
             }
-
-            if (newUserId <= 0) {
-                return false;
-            }
-
-            // 3️⃣ Insert vào Wallet với Balance mặc định = 0
-            String sqlInsertWallet
-                    = "INSERT INTO Wallet (UserID, Balance, LastUpdated, StatusID) "
-                    + "VALUES (?, 0, GETDATE(), 1)";
-
-            PreparedStatement psWallet = conn.prepareStatement(sqlInsertWallet);
-            psWallet.setInt(1, newUserId);
-
-            psWallet.executeUpdate();
-
-            return true;
 
         } catch (SQLException e) {
-            System.out.println("Lỗi register (User + Wallet): " + e.getMessage());
             e.printStackTrace();
         }
-
-        return false;
+        return -1;
     }
 
     public boolean checkUsernameExists(String username) {
@@ -126,5 +117,80 @@ public class UserDAO {
         }
         return false;
     }
-    
+
+    public void updateOTP(int userID, String otp, Timestamp expiry) {
+        String sql = "UPDATE Users SET OTPCode=?, OTPExpiredAt=? WHERE UserID=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, otp);
+            ps.setTimestamp(2, expiry);
+            ps.setInt(3, userID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public User getUserByEmail(String email) {
+        String sql = "SELECT * FROM Users WHERE contactEmail=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+
+                User u = new User(
+                        rs.getInt("userID"),
+                        rs.getString("username"),
+                        rs.getString("passwordHash"),
+                        rs.getInt("role"),
+                        rs.getDate("createdAt"),
+                        rs.getString("contactEmail")
+                );
+
+                // ⭐⭐ THÊM 2 DÒNG NÀY ⭐⭐
+                u.setOTPCode(rs.getString("OTPCode"));
+                u.setOTPExpiredAt(rs.getTimestamp("OTPExpiredAt"));
+
+                return u;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User getUserByID(int userID) {
+        String sql = "SELECT * FROM Users WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                User u = new User();
+                u.setUserID(rs.getInt("userID"));
+                u.setUsername(rs.getString("username"));
+                u.setPasswordHash(rs.getString("passwordHash"));
+                u.setRole(rs.getInt("role"));
+                u.setCreatedAt(rs.getDate("createdAt"));
+                u.setContactEmail(rs.getString("contactEmail"));
+
+                u.setOTPCode(rs.getString("OTPCode"));
+                u.setOTPExpiredAt(rs.getTimestamp("OTPExpiredAt"));
+
+                return u;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void markVerified(int userID) {
+        String sql = "UPDATE Users SET isVerified = 1, OTPCode = NULL, OTPExpiredAt = NULL WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
