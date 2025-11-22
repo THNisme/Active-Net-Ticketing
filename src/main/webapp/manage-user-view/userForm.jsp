@@ -372,9 +372,8 @@
                 <div class="mb-3">
                     <label class="form-label">Vai trò</label>
                     <select name="role" class="form-select">
-                        <option value="0" <%= role == 0 ? "selected" : ""%>>User</option>
-                        <option value="1" <%= role == 1 ? "selected" : ""%>>Admin</option>
-
+                        <option value="0" <%= role == 0 ? "selected" : ""%>>User</option>                      
+                        <option value="2" <%= role == 2 ? "selected" : ""%>>Staff</option>
                     </select>
                 </div>
 

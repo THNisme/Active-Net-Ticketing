@@ -262,6 +262,16 @@
                     </a>
                 </div>
             </div>   
+            <form method="get" action="user-manage" class="d-flex mb-2">
+                <input type="hidden" name="action" value="list"/>
+                <select name="roleFilter" class="form-select me-2" style="width:160px">
+                    <option value="">-- Tất cả --</option>
+                    <option value="1" ${param.roleFilter == '1' ? "selected" : ""}>Admin</option>
+                    <option value="0" ${param.roleFilter == '0' ? "selected" : ""}>Customer</option>
+                    <option value="2" ${param.roleFilter == '2' ? "selected" : ""}>Staff</option>
+                </select>
+                <button type="submit" class="btn btn-light">Lọc</button>
+            </form>
             <div class="mx-auto"  
                  style="max-width: 600px; width: fit-content;">
                 <%
@@ -309,8 +319,10 @@
                             <td>
                                 <% if (u.getRole() == 1) { %>
                                 <span class="badge bg-danger">Admin</span>
-                                <% } else { %>
-                                <span class="badge bg-primary">User</span>
+                                <% } else if (u.getRole() == 0) { %>
+                                <span class="badge bg-primary">Customer</span>
+                                <% } else {%>
+                                <span class="badge bg-success">Staff</span>
                                 <% }%>
                             </td>
                             <td><%= u.getCreatedAt()%></td>

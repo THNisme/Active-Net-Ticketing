@@ -166,16 +166,16 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/home")
                 || uri.startsWith(ctx + "/event-detail")
                 || uri.startsWith(ctx + "/filter-events")
-//                || uri.startsWith(ctx + "/select-ticket")
-//                || uri.startsWith(ctx + "/checkout")
-//                || uri.startsWith(ctx + "/payments")
+                //                || uri.startsWith(ctx + "/select-ticket")
+                //                || uri.startsWith(ctx + "/checkout")
+                //                || uri.startsWith(ctx + "/payments")
                 || uri.startsWith(ctx + "/check")
                 || uri.startsWith(ctx + "/search")
                 || uri.startsWith(ctx + "/accessDenied");
 
         // ===== 2. Đang login mà user đã đăng nhập rồi → chuyển hướng đúng trang =====
         if (uri.startsWith(ctx + "/login") && user != null) {
-            if (role != null && role == 1) {
+            if (role != null && (role == 1 || role == 2)) {
                 res.sendRedirect(ctx + "/admincenter");
             } else {
                 res.sendRedirect(ctx + "/home");
@@ -203,16 +203,17 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/config")
                 || uri.startsWith(ctx + "/statistic")
                 || uri.startsWith(ctx + "/froala")
+                || uri.startsWith(ctx + "/promotions")
                 || uri.startsWith(ctx + "/place")) {
 
-            if (r != 1) { // không phải admin
+            if ((r != 1 && r != 2)) { // không phải admin
                 res.sendRedirect(ctx + "/accessDenied");
                 return;
             }
         }
 
         // ===== 6. Chặn admin đi vào khu chỉ dành cho user thường =====
-        if (r == 1 && (uri.startsWith(ctx + "/wallet")
+        if ((r == 1 || r == 2) && (uri.startsWith(ctx + "/wallet")
                 || uri.startsWith(ctx + "/deposit")
                 || uri.startsWith(ctx + "/payment") // nếu servlet là /payments thì đổi lại
                 || uri.startsWith(ctx + "/payments")
@@ -222,7 +223,10 @@ public class AuthFilter implements Filter {
             res.sendRedirect(ctx + "/accessDenied");
             return;
         }
-
+        if (r == 2 && uri.startsWith(ctx + "/user-manage")) {
+            res.sendRedirect(ctx + "/accessDenied");
+            return;
+        }
         // ===== 7. Mọi thứ hợp lệ → tiếp tục =====
         chain.doFilter(request, response);
 

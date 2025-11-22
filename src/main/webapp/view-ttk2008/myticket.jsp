@@ -11,6 +11,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
         <link href="<%= request.getContextPath()%>/css/myticket-page/myticket.css" rel="stylesheet" type="text/css"/>
         <link href="<%= request.getContextPath()%>/css/wallet-page/wallet.css" rel="stylesheet" type="text/css"/>
@@ -50,6 +52,7 @@
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
                                 <th>Giá (VNĐ)</th>
+                                <th> </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,6 +71,12 @@
                                 <td><%= t.getStartDate()%></td>
                                 <td><%= t.getEndDate()%></td>
                                 <td><%= String.format("%,.0f", t.getPrice())%></td>
+                                <td>                                    
+                                    <a class="btn btn-danger"
+                                       onclick="deleteTicket(<%= t.getTicketId()%>)">
+                                        Xóa
+                                    </a>
+                                </td>
                             </tr>
                             <%
                                 }
@@ -88,6 +97,21 @@
                 <a href="home" class="btn btn-accent"> Mua thêm vé</a>
             </div>
         </div>
-
+        <script>
+            function deleteTicket(ticketId) {
+                Swal.fire({
+                    title: "Xác nhận xóa?",
+                    text: "Bạn có chắc muốn xóa vé này không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xóa",
+                    cancelButtonText: "Hủy",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "myticket?action=delete&ticketId=" + ticketId;
+                    }
+                });
+            }
+        </script>
     </body>
 </html>

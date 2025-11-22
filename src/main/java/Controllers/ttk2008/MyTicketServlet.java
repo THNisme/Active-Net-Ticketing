@@ -17,9 +17,7 @@ public class MyTicketServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
-       
-              HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
         User loginUser = (session != null) ? (User) session.getAttribute("user") : null;
 
         if (loginUser == null) {
@@ -30,6 +28,7 @@ public class MyTicketServlet extends HttpServlet {
         int userId = loginUser.getUserID();
 
         String filter = request.getParameter("filter");
+        String action = request.getParameter("action");
         MyTicketDAO dao = new MyTicketDAO();
         List<MyTicket> tickets;
 
@@ -44,10 +43,16 @@ public class MyTicketServlet extends HttpServlet {
         } else {
             tickets = dao.getAllTicketsByUser(userId);
         }
-
+        if ("delete".equals(action)) {
+            int ticketId = Integer.parseInt(request.getParameter("ticketId"));
+            dao.deleteTicket(ticketId);
+            response.sendRedirect("myticket?filter=all");
+            return;
+        }
         request.setAttribute("tickets", tickets);
         request.setAttribute("filter", filter);
         RequestDispatcher rd = request.getRequestDispatcher("/view-ttk2008/myticket.jsp");
         rd.forward(request, response);
+
     }
 }

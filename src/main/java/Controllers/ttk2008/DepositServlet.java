@@ -4,6 +4,8 @@
  */
 package Controllers.ttk2008;
 
+import DAOs.ttk2008.DepositPromotionDAO;
+import Models.ttk2008.DepositPromotion;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -57,8 +60,14 @@ public class DepositServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         request.getRequestDispatcher("deposit.jsp")
-            .forward(request, response);
+           DepositPromotionDAO dao = new DepositPromotionDAO();
+
+        // Chỉ lấy promotion ACTIVE
+        List<DepositPromotion> list = dao.getAllActivePromotions();
+
+        request.setAttribute("promotions", list);
+        request.getRequestDispatcher("/deposit.jsp").forward(request, response);
+    
     }
 
     /**

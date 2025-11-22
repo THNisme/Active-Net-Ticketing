@@ -61,7 +61,9 @@ public class MailService {
             body.append("- Mật khẩu mới: ").append(password).append("\n");
         }
         if (roleChanged) {
-            body.append("- Quyền hệ thống mới: ").append(newRole == 1 ? "Admin" : "User").append("\n");
+            body.append("- Quyền hệ thống mới: ").append(
+                    newRole == 0 ? "Customer" : "Staff"
+            ).append("\n");
         }
 
         body.append("\nNếu bạn không thực hiện thay đổi này, vui lòng liên hệ hỗ trợ ngay.\n\n");
@@ -96,6 +98,31 @@ public class MailService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void sendOtpEmail(String toEmail, String fullName, String otp) throws UnsupportedEncodingException {
+        String subject = "Mã xác thực OTP - Đổi mật khẩu";
+
+        StringBuilder body = new StringBuilder();
+
+        if (fullName == null || fullName.isEmpty()) {
+            body.append("Xin chào,\n\n");
+        } else {
+            body.append("Xin chào ").append(fullName).append(",\n\n");
+        }
+
+        body.append("Bạn vừa yêu cầu thay đổi mật khẩu trong hệ thống Active Net Ticketing.\n");
+        body.append("Mã xác thực OTP của bạn là:\n\n");
+
+        body.append(">>> ").append(otp).append(" <<<\n\n");
+
+        body.append("Mã OTP có hiệu lực trong sau 5 phút.\n");
+        body.append("Vui lòng không chia sẻ mã này với bất kỳ ai.\n\n");
+
+        body.append("Trân trọng,\n");
+        body.append("Active Net Ticketing");
+
+        sendMail(toEmail, subject, body.toString());
     }
 
 }

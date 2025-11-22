@@ -12,6 +12,10 @@ public class Transaction {
     private long remain;
     private Timestamp createdAt;
 
+    // NEW
+    private long promotionAmount;
+    private Integer promotionID;
+
     public int getTransactionID() {
         return transactionID;
     }
@@ -66,5 +70,22 @@ public class Transaction {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    // === NEW ===
+    public long getPromotionAmount() {
+        return promotionAmount;
+    }
+
+    public void setPromotionAmount(long promotionAmount) {
+        this.promotionAmount = promotionAmount;
+    }
+
+    public Integer getPromotionID() {
+        return promotionID;
+    }
+
+    public void setPromotionID(Integer promotionID) {
+        this.promotionID = promotionID;
     }
 }
