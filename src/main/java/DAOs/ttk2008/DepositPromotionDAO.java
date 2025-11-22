@@ -30,24 +30,47 @@ public class DepositPromotionDAO {
         return list;
     }
 
-// Lấy promotion đang active (cho deposit flow)
-    public List<DepositPromotion> getActivePromotions() {
-        List<DepositPromotion> list = new ArrayList<>();
-        String sql = "SELECT dp.*, s.Code AS StatusCode, s.Description AS StatusName "
-                + "FROM DepositPromotions dp "
-                + "JOIN Status s ON dp.StatusID = s.StatusID "
-                + "WHERE s.Code = 'active' " // chỉ lấy active
-                + "ORDER BY dp.PromotionID DESC";
+public List<DepositPromotion> getAllActivePromotions() {
+    List<DepositPromotion> list = new ArrayList<>();
+    PreparedStatement ps = null;
+    ResultSet rs = null;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                list.add(mapPromotion(rs));
-            }
-        } catch (Exception e) {
+    try {
+        String sql = "SELECT dp.*, s.Code AS StatusCode " +
+                     "FROM DepositPromotions dp " +
+                     "JOIN Status s ON dp.StatusID = s.StatusID " +
+                     "WHERE s.Code = 'ACTIVE'";
+
+        ps = conn.prepareStatement(sql);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            DepositPromotion p = new DepositPromotion();
+            p.setPromotionID(rs.getInt("PromotionID"));
+            p.setMinAmount(rs.getBigDecimal("MinAmount"));
+            p.setMaxAmount(rs.getBigDecimal("MaxAmount"));
+            p.setDiscountPercent(rs.getBigDecimal("DiscountPercent"));
+            p.setStartDate(rs.getTimestamp("StartDate"));
+            p.setEndDate(rs.getTimestamp("EndDate"));
+            p.setStatusID(rs.getInt("StatusID"));
+            p.setStatusCode(rs.getString("StatusCode"));
+
+            list.add(p);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
     }
+
+    return list;
+}
 
     // Lấy promotion theo ID
     public DepositPromotion getById(int id) {

@@ -86,22 +86,30 @@ public class WalletDAO {
         return wallet;
     }
 
-    public boolean updateBalance(int userId, long amount, Timestamp lastUpdated) {
+    public boolean updateBalance(int userId, long totalAmount, Timestamp lastUpdated, long promotionAmount) {
         PreparedStatement ps = null;
         boolean success = false;
 
         try {
             conn.setAutoCommit(false);
 
-            String sql = "UPDATE Wallet SET Balance = Balance + ?, LastUpdated = ? WHERE UserID = ?";
+            String sql = "UPDATE Wallet SET Balance = Balance + ?, PromotionAmount = PromotionAmount + ?, LastUpdated = ? WHERE UserID = ?";
             ps = conn.prepareStatement(sql);
-            ps.setLong(1, amount);
-            ps.setTimestamp(2, lastUpdated);
-            ps.setInt(3, userId);
+
+            ps.setLong(1, totalAmount);      // tổng tiền cộng
+            ps.setLong(2, promotionAmount);  // bonus riêng
+            ps.setTimestamp(3, lastUpdated);
+            ps.setInt(4, userId);
+
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-                TransactionLoggerDAO.log(conn, userId, "Naptien", amount, "người dùng nạp tiền vnpay", "thành công");
+                TransactionLoggerDAO.log(conn,
+                        userId,
+                        "Naptien",
+                        totalAmount,
+                        "Nạp tiền VNPay - bonus: " + promotionAmount,
+                        "thành công");
 
                 conn.commit();
                 success = true;
@@ -123,7 +131,7 @@ public class WalletDAO {
                 if (ps != null) {
                     ps.close();
                 }
-                conn.setAutoCommit(true); // trả về chế độ bình thường
+                conn.setAutoCommit(true);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -138,7 +146,7 @@ public class WalletDAO {
         long amountToAdd = 500000; // nạp 500,000 VND
         Timestamp now = new Timestamp(System.currentTimeMillis());
 
-        boolean success = dao.updateBalance(userID, amountToAdd, now);
+        boolean success = dao.updateBalance(userID, amountToAdd, now, amountToAdd);
 
         if (success) {
             System.out.println("Cập nhật số dư thành công cho userID = " + userID);

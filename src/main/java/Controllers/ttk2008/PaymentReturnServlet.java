@@ -13,17 +13,36 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 @WebServlet("/payment-return")
 public class PaymentReturnServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String status = request.getParameter("vnp_TransactionStatus");
 
         if ("00".equals(status)) {
             String txnRef = request.getParameter("vnp_TxnRef");
+
+            // Tiền nạp từ VNPay
             long Balance = Long.parseLong(request.getParameter("vnp_Amount")) / 100;
+
+            // Bonus nhận thêm (từ form javscript gửi lên)
+            long promotionAmount = 0;
+            try {
+                HttpSession promoSession = request.getSession(false);
+                if (promoSession != null && promoSession.getAttribute("promotionAmount") != null) {
+                    promotionAmount = Long.parseLong(promoSession.getAttribute("promotionAmount").toString());
+
+                    // ✅ sau khi dùng thì xóa luôn khỏi session để tránh cộng 2 lần
+                    promoSession.removeAttribute("promotionAmount");
+                }
+            } catch (Exception e) {
+                promotionAmount = 0;
+            }
+
+            long totalAmount = Balance + promotionAmount;
+
             String payDateStr = request.getParameter("vnp_PayDate");
 
             Timestamp lastUpdated = null;
@@ -45,7 +64,14 @@ public class PaymentReturnServlet extends HttpServlet {
 
             int userId = user.getUserID();
             WalletDAO dao = new WalletDAO();
-            dao.updateBalance(userId, Balance, lastUpdated);
+
+            // ✅ cộng cả tiền nạp + bonus
+            dao.updateBalance(userId, totalAmount, lastUpdated, promotionAmount);
+
+            request.setAttribute("amount", Balance);
+            request.setAttribute("bonus", promotionAmount);
+            request.setAttribute("total", totalAmount);
+
             request.getRequestDispatcher("view-wallet/deposit_success.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("view-wallet/deposit_failure.jsp").forward(request, response);
