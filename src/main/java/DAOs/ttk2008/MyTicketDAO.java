@@ -10,7 +10,10 @@ public class MyTicketDAO {
     private Connection conn = DBContext.getInstance().getConnection();
 
     private static final String Myticket_SQL
-            = "SELECT o.OrderID, t.TicketID, e.EventName, z.ZoneName, "
+            = "SELECT o.OrderID, t.TicketID, "
+            + "       o.StatusID AS OrderStatus, "
+            + "       t.StatusID AS TicketStatus, "
+            + "       e.EventName, z.ZoneName, "
             + "       (s.RowLabel + CAST(s.SeatNumber AS NVARCHAR)) AS SeatLabel, "
             + "       e.StartDate, e.EndDate, "
             + "       od.UnitPrice "
@@ -21,8 +24,6 @@ public class MyTicketDAO {
             + "JOIN Events e ON tt.EventID = e.EventID "
             + "JOIN Zones z ON tt.ZoneID = z.ZoneID "
             + "LEFT JOIN Seats s ON t.SeatID = s.SeatID "
-            + "JOIN Status so ON o.StatusID = so.StatusID "
-            + "JOIN Status st ON t.StatusID = st.StatusID "
             + "WHERE o.UserID = ? ";
 
     public List<MyTicket> getAllTicketsByUser(int userId) {
@@ -60,6 +61,8 @@ public class MyTicketDAO {
                 t.setStartDate(rs.getTimestamp("StartDate"));
                 t.setEndDate(rs.getTimestamp("EndDate"));
                 t.setPrice(rs.getDouble("UnitPrice"));
+                t.setOrderStatus(rs.getInt("OrderStatus"));
+                t.setTicketStatus(rs.getInt("TicketStatus"));
                 list.add(t);
             }
         } catch (SQLException e) {
@@ -68,7 +71,6 @@ public class MyTicketDAO {
         return list;
     }
 
-    
     public static void main(String[] args) {
         MyTicketDAO dao = new MyTicketDAO();
 

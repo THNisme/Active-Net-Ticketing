@@ -70,5 +70,17 @@ public class OrderDetailDAO {
         }
         return ids;
     }
+
+    public int getOrderIdByTicketId(Connection conn, int ticketId) throws SQLException {
+        String sql = "SELECT OrderID FROM OrderDetails WHERE TicketID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return -1;
+    }
+
 }
-    

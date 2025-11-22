@@ -243,4 +243,89 @@ public class TicketDAO {
         return false;
     }
 
+    public String getEventNameByTicketId(Connection conn, int ticketId) throws SQLException {
+        String sql = """
+        SELECT e.EventName
+        FROM Tickets t
+        JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID
+        JOIN Events e ON tt.EventID = e.EventID
+        WHERE t.TicketID = ?
+    """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        }
+        return null;
+    }
+
+    public String getPlaceNameByTicketId(Connection conn, int ticketId) throws SQLException {
+        String sql = """
+        SELECT p.PlaceName
+        FROM Tickets t
+        JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID
+        JOIN Places p ON tt.PlaceID = p.PlaceID
+        WHERE t.TicketID = ?
+    """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        }
+        return null;
+    }
+
+    public String getEventTimeByTicketId(Connection conn, int ticketId) throws SQLException {
+        String sql = """
+        SELECT CONCAT(e.StartDate, ' - ', e.EndDate)
+        FROM Tickets t
+        JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID
+        JOIN Events e ON tt.EventID = e.EventID
+        WHERE t.TicketID = ?
+    """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        }
+        return null;
+    }
+
+    public TicketFullInfo getFullTicketInfo(int ticketId) throws Exception {
+        String sql = """
+        SELECT 
+            e.EventName,
+            p.PlaceName,
+            FORMAT(e.StartDate, 'dd/MM/yyyy HH:mm') AS StartStr,
+            tt.TypeName,
+            t.SerialNumber
+        FROM Tickets t
+        JOIN TicketTypes tt ON t.TicketTypeID = tt.TicketTypeID
+        JOIN Events e ON tt.EventID = e.EventID
+        JOIN Places p ON e.PlaceID = p.PlaceID
+        WHERE t.TicketID = ?
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new TicketFullInfo(
+                        rs.getString("EventName"),
+                        rs.getString("PlaceName"),
+                        rs.getString("StartStr"),
+                        rs.getString("TypeName"),
+                        rs.getString("SerialNumber")
+                );
+            }
+        }
+        return null;
+    }
 }

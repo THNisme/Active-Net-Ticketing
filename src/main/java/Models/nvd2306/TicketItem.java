@@ -3,12 +3,14 @@ package Models.nvd2306;
 import java.math.BigDecimal;
 
 public class TicketItem {
-   private int ticketTypeId;
+
+    private int ticketTypeId;
     private int ticketId;     // = TicketTypeID
     private String name;      // = TicketTypeName
     private int qty;          // = Quantity
     private double price;     // giữ lịch sử double
     private double total;
+    private int orderStatus;
 
     public TicketItem() {
     }
@@ -20,8 +22,15 @@ public class TicketItem {
         this.price = price;
         this.total = total;
     }
-    
-    // cũ
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public int getTicketId() {
         return ticketId;
     }

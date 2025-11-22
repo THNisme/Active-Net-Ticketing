@@ -140,14 +140,17 @@ public class StaffConfirmOrderServlet extends HttpServlet {
                 int ticketTypeId = ticketDAO.getTypeIdByTicketId(conn, ticketId);
                 String typeName = ticketDAO.getTicketTypeName(conn, ticketTypeId);
 
+                // Lấy full info của vé
+                TicketFullInfo info = ticketDAO.getFullTicketInfo(ticketId);
+
                 File pdf = TicketPDFGenerator.createTicketPDF(
                         "C:/ActiveNetTickets",
-                        "Sự kiện", // bạn thay bằng order.getEventName() nếu lưu
-                        "Địa điểm", // bạn thay bằng order.getPlaceName()
-                        "",
+                        info.eventName,
+                        info.placeName,
+                        info.time,
                         order.getContactFullname(),
-                        typeName,
-                        serial
+                        info.typeName,
+                        info.serial
                 );
                 attachments.add(pdf);
             }

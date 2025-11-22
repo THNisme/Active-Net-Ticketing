@@ -16,6 +16,8 @@ public class MyTicket {
     private Date startDate;
     private Date endDate;
     private double price;
+    private int orderStatus;
+    private int ticketStatus;
 
     public MyTicket() {
     }
@@ -28,11 +30,27 @@ public class MyTicket {
         this.seatLabel = seatLabel;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.price = price; 
+        this.price = price;
     }
 
     public int getOrderId() {
         return orderId;
+    }
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public int getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(int ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
 
     public void setOrderId(int orderId) {

@@ -50,6 +50,8 @@
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
                                 <th>Giá (VNĐ)</th>
+                                <th>Trạng thái</th>       <!-- thêm vào -->
+                                <th>Tải vé</th>            <!-- thêm vào -->
                             </tr>
                         </thead>
                         <tbody>
@@ -68,6 +70,27 @@
                                 <td><%= t.getStartDate()%></td>
                                 <td><%= t.getEndDate()%></td>
                                 <td><%= String.format("%,.0f", t.getPrice())%></td>
+                                <td>
+                                    <% if (t.getOrderStatus() == 11) { %>
+                                    <span class="badge bg-warning text-dark">⏳ Chờ xác nhận</span>
+                                    <% } else if (t.getOrderStatus() == 12) { %>
+                                    <span class="badge bg-success">✔ Đã xác nhận</span>
+                                    <% } else { %>
+                                    <span class="badge bg-secondary">Khác</span>
+                                    <% } %>
+                                </td>
+
+                                <td>
+                                    <% if (t.getOrderStatus() == 12) {%>
+                                    <a href="download-ticket?ticketId=<%= t.getTicketId()%>" 
+                                       class="btn btn-sm btn-primary">
+                                        <i class="fa fa-download"></i> Tải vé
+                                    </a>
+                                    <% } else { %>
+                                    <span class="text-muted">Chưa có vé</span>
+                                    <% } %>
+                                </td>
+
                             </tr>
                             <%
                                 }
