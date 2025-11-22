@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Lịch sử giao dịch</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>        <style>
@@ -91,8 +91,6 @@
                                         <th>Số tiền</th>
                                         <th>Số dư còn lại</th>
                                         <th>Ngày giao dịch</th>
-                                        <th>Khuyến mãi</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -121,25 +119,14 @@
                                             <td>${t.createdAt}</td>
                                         </tr>
                                     </c:forEach>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${t.promotionAmount > 0}">
-                                            +<fmt:formatNumber value="${t.promotionAmount}" type="currency" currencySymbol="" maxFractionDigits="0"/> ₫
-                                        </c:when>
-                                        <c:otherwise>
-                                            -
-                                        </c:otherwise>
-                                    </c:choose>
-                                </td>
 
-
-                                <c:if test="${empty transactions}">
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted py-4">
-                                            <i>Không có giao dịch nào để hiển thị.</i>
-                                        </td>
-                                    </tr>
-                                </c:if>
+                                    <c:if test="${empty transactions}">
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">
+                                                <i>Không có giao dịch nào để hiển thị.</i>
+                                            </td>
+                                        </tr>
+                                    </c:if>
                                 </tbody>
                             </table>
                         </div>
