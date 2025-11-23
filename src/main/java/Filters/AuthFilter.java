@@ -149,7 +149,19 @@ public class AuthFilter implements Filter {
         String ctx = req.getContextPath();     // /Active_Net_Ticketing
 
         // Lấy user trong session (nếu có)
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
+        User user = null;
+
+        if (session != null) {
+            // Trường hợp bạn lưu object User
+            user = (User) session.getAttribute("user");
+
+            // Trường hợp bạn chỉ lưu userID → tự build User object
+            if (user == null && session.getAttribute("userID") != null) {
+                user = new User();
+                user.setUserID((Integer) session.getAttribute("userID"));
+                user.setRole(0); // user thường
+            }
+        }
         Integer role = (user != null) ? user.getRole() : null;   // 0: user, 1: admin
 
         // ===== 1. Các đường dẫn PUBLIC (không cần đăng nhập) =====
@@ -166,7 +178,7 @@ public class AuthFilter implements Filter {
                 || uri.startsWith(ctx + "/uploads")
                 || uri.contains(ctx + "/event-detail")
                 || uri.equals(ctx + "/")
-                || uri.startsWith(ctx + "/home")
+                || uri.equals(ctx + "/home")
                 || uri.startsWith(ctx + "/event-detail")
                 || uri.startsWith(ctx + "/filter-events")
                 //                || uri.startsWith(ctx + "/select-ticket")
@@ -225,7 +237,11 @@ public class AuthFilter implements Filter {
             res.sendRedirect(ctx + "/accessDenied");
             return;
         }
-
+// ===== Cho phép user thường dùng cancel-order =====
+        if (r == 0 && uri.startsWith(ctx + "/cancel-order")) {
+            chain.doFilter(request, response);
+            return;
+        }
         // ===== 7. Mọi thứ hợp lệ → tiếp tục =====
         chain.doFilter(request, response);
 

@@ -4,25 +4,23 @@
  */
 package Controllers.nvd2306;
 
-import DAOs.nvd2306.UserDAO;
-import Models.nvd2306.User;
+import DAOs.nvd2306.OrderDAO;
+import Models.nvd2306.Order;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.util.List;
 
 /**
- * A
  *
  * @author NguyenDuc
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "StaffPendingOrdersServlet", urlPatterns = {"/staff/orders-pending"})
+public class StaffPendingOrdersServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +39,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet StaffPendingOrdersServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet StaffPendingOrdersServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,7 +60,12 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        OrderDAO dao = new OrderDAO();
+        List<Order> list = dao.getOrdersByStatus(11); // 11 = PENDING
+
+        request.setAttribute("orders", list);
+        request.getRequestDispatcher("/staff/staff-orders-pending.jsp")
+                .forward(request, response);
     }
 
     /**
@@ -76,42 +79,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        UserDAO dao = new UserDAO();
-        User u = dao.login(username, password);
-
-        if (u != null && u.getUserID() != -1) {
-
-            HttpSession session = request.getSession();
-
-            // LƯU USER VÀ ROLE
-            session.setAttribute("user", u);
-            session.setAttribute("role", u.getRole());
-            session.setAttribute("userID", u.getUserID());
-            int role = u.getRole();
-
-            // REDIRECT THEO ROLE
-            if (role == 1) {
-                response.sendRedirect(request.getContextPath() + "/admincenter");
-                return;
-            }
-
-            if (role == 2) {
-                response.sendRedirect(request.getContextPath() + "/staff/home");
-                return;
-            }
-
-            // role == 0 (customer)
-            response.sendRedirect(request.getContextPath() + "/home");
-            return;
-
-        } else {
-            request.setAttribute("errorLogin", "Sai tên đăng nhập hoặc mật khẩu!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**

@@ -89,4 +89,13 @@ public class MailService {
             System.out.println("❌ Lỗi gửi OTP đến email: " + to);
         }
     }
+
+    public static void sendMail(String to, String subject, String body) {
+        try {
+            sendEmail(to, subject, body, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

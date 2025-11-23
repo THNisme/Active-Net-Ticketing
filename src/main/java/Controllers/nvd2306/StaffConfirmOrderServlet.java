@@ -167,7 +167,7 @@ public class StaffConfirmOrderServlet extends HttpServlet {
 
             conn.commit();
 
-            response.sendRedirect(request.getContextPath() + "/staff/orders");
+            response.sendRedirect(request.getContextPath() + "/staff/orders-pending");
 
         } catch (Exception e) {
             e.printStackTrace();

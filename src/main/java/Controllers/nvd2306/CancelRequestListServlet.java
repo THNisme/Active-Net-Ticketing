@@ -6,7 +6,6 @@ package Controllers.nvd2306;
 
 import DAOs.nvd2306.OrderDAO;
 import Models.nvd2306.Order;
-import Models.nvd2306.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,18 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author NguyenDuc
  */
-@WebServlet(name = "StaffOrderListServlet", urlPatterns = {"/staff/orders"})
-public class StaffOrderListServlet extends HttpServlet {
-
-    private final OrderDAO orderDAO = new OrderDAO();
+@WebServlet(name = "CancelRequestListServlet", urlPatterns = {"/staff/cancel-requests"})
+public class CancelRequestListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +39,10 @@ public class StaffOrderListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet StaffOrderListServlet</title>");
+            out.println("<title>Servlet CancelRequestListServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet StaffOrderListServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CancelRequestListServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,36 +61,24 @@ public class StaffOrderListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        User u = (session != null) ? (User) session.getAttribute("user") : null;
+        OrderDAO dao = new OrderDAO();
+        List<Order> list = dao.getOrdersByStatus(14);
 
-        if (u == null || u.getRole() != 2) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
-        // Lấy cả status 11 và 12
-        List<Integer> statuses = new ArrayList<>();
-        statuses.add(11);
-        statuses.add(12);
-
-        List<Order> orders = orderDAO.getOrdersByStatusList(statuses);
-        request.setAttribute("orders", orders);
-
-        request.getRequestDispatcher("/staff/staff-orders.jsp")
+        request.setAttribute("orders", list);
+        request.getRequestDispatcher("/staff/staff-cancel-requests.jsp")
                 .forward(request, response);
-    }
+}
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+/**
+ * Handles the HTTP <code>POST</code> method.
+ *
+ * @param request servlet request
+ * @param response servlet response
+ * @throws ServletException if a servlet-specific error occurs
+ * @throws IOException if an I/O error occurs
+ */
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -106,7 +89,7 @@ public class StaffOrderListServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

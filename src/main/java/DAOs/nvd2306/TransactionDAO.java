@@ -90,4 +90,26 @@ public class TransactionDAO {
         return false;
     }
 
+    public void insert(Transaction t) {
+
+        String sql = "INSERT INTO Transactions "
+                + "(WalletID, OrderID, TransactionTypeID, Amount, Remain, Description, CreatedAt, StatusID) "
+                + "VALUES (?, ?, ?, ?, ?, ?, GETDATE(), 1)";
+
+        try (Connection conn = DBContext.getInstance().getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, t.getWalletID());
+            ps.setObject(2, t.getOrderID());          // Integer → Object
+            ps.setInt(3, t.getTransactionTypeID());
+            ps.setBigDecimal(4, t.getAmount());
+            ps.setBigDecimal(5, t.getRemain());
+            ps.setString(6, t.getDescription());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("❌ Lỗi insert transaction");
+        }
+    }
 }
