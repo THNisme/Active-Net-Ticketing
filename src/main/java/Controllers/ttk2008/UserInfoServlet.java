@@ -45,8 +45,6 @@ public class UserInfoServlet extends HttpServlet {
 
         int userId = loginUser.getUserID();
         String username = request.getParameter("username");
-        String newPassword = request.getParameter("newPassword");
-        String confirmPassword = request.getParameter("confirmPassword");
         String fullname = request.getParameter("fullname");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -54,15 +52,7 @@ public class UserInfoServlet extends HttpServlet {
         UserInfoDAO dao = new UserInfoDAO();
         UserInfo userInfo = dao.getUserById(userId);
 
-        if (newPassword != null && !newPassword.isEmpty()) {
-            if (!newPassword.equals(confirmPassword)) {
-                request.setAttribute("error", "Mật khẩu không trùng khớp!");
-                request.setAttribute("user", userInfo);
-                request.getRequestDispatcher("view-ttk2008/userinfo.jsp").forward(request, response);
-                return;
-            }
-            userInfo.setPasswordHash(HashPassword.hashMD5(newPassword));
-        }
+      
 
         if (dao.isUsernameTaken(username, userId)) {
             request.setAttribute("error", "Tên đăng nhập đã tồn tại!");

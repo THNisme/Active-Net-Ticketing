@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ChangePasswordServlet extends HttpServlet {
 
     // Thời gian OTP hợp lệ (ms)
-    private static final long OTP_EXPIRATION_TIME = 5 * 60 * 1000; // 5 phút
+    private static final long OTP_EXPIRATION_TIME = 2 * 60 * 1000; // 2 phút
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
