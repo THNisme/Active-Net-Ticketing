@@ -12,7 +12,10 @@
     <head>
         <meta charset="UTF-8">
         <title>Quản lý Khuyến mãi Nạp tiền</title>
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <style>
             body {
                 background:#0b1220;
@@ -46,6 +49,7 @@
             }
         </style>
     </head>
+
     <body>
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -75,6 +79,7 @@
                                 <th style="width:160px">Hành động</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             <c:forEach var="p" items="${promotions}">
                                 <tr>
@@ -90,9 +95,11 @@
                                             <c:otherwise>—</c:otherwise>
                                         </c:choose>
                                     </td>
+
                                     <td>${p.discountPercent}%</td>
                                     <td><fmt:formatDate value="${p.startDate}" pattern="dd/MM/yyyy"/></td>
                                     <td><fmt:formatDate value="${p.endDate}" pattern="dd/MM/yyyy"/></td>
+
                                     <td>
                                         <c:choose>
                                             <c:when test="${p.statusCode == 'ACTIVE'}">
@@ -103,12 +110,21 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
+
                                     <td>
-                                        <a class="btn btn-sm btn-warning" href="${pageContext.request.contextPath}/promotions?action=edit&id=${p.promotionID}">Sửa</a>
-                                        <a class="btn btn-sm btn-danger" href="${pageContext.request.contextPath}/promotions?action=delete&id=${p.promotionID}" onclick="return confirm('Bạn có chắc chắn muốn vô hiệu hóa khuyến mãi này?')">Xóa</a>
+                                        <a class="btn btn-sm btn-warning" 
+                                           href="${pageContext.request.contextPath}/promotions?action=edit&id=${p.promotionID}">
+                                            Sửa
+                                        </a>
+
+                                        <button class="btn btn-sm btn-danger"
+                                                onclick="deletePromotion(${p.promotionID})">
+                                            Xóa
+                                        </button>
                                     </td>
                                 </tr>
                             </c:forEach>
+
                             <c:if test="${empty promotions}">
                                 <tr><td colspan="8" class="text-center">Không có khuyến mãi</td></tr>
                             </c:if>
@@ -117,5 +133,25 @@
                 </div>
             </div>
         </div>
+
+        <!-- SweetAlert2 Delete -->
+        <script>
+            function deletePromotion(id) {
+                Swal.fire({
+                    title: "Xác nhận vô hiệu hóa?",
+                    text: "Bạn có chắc muốn vô hiệu hóa khuyến mãi này không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xóa",
+                    cancelButtonText: "Hủy"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href =
+                                "${pageContext.request.contextPath}/promotions?action=delete&id=" + id;
+                    }
+                });
+            }
+        </script>
+
     </body>
 </html>
