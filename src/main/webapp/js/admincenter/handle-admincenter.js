@@ -50,6 +50,7 @@ function renderEvents() {
                 <a href="statisticsevent?eventId=${evt.id}"><i class="fas fa-chart-pie"></i><span>Doanh thu</span></a>
                 <a href="order_management?eventID=${evt.id}"><i class="fas fa-receipt"></i><span>Đơn hàng</span></a>
                 <a href="event-form?action=update&eid=${evt.id}"><i class="fas fa-pen"></i><span>Chỉnh sửa</span></a>
+                <a href="ticket_management?eventID=${evt.id}"><i class="bi bi-ticket-perforated"></i><span>Quản lí vé</span></a>
                 <a class="btn-delete" data-id="${evt.id}" data-title="${evt.title}" data-bs-toggle="modal" data-bs-target="#modalDelete">
                     <i class="fas fa-trash"></i><span>Xóa</span>
                 </a>
@@ -72,7 +73,8 @@ function renderPagination() {
     pagination.innerHTML = "";
     updatePaginationInfo();
 
-    if (totalPages === 0) return;
+    if (totalPages === 0)
+        return;
 
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "<";
@@ -89,7 +91,8 @@ function renderPagination() {
     for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
-        if (i === currentPage) btn.classList.add("active");
+        if (i === currentPage)
+            btn.classList.add("active");
         btn.addEventListener("click", () => {
             currentPage = i;
             renderEvents();
@@ -129,7 +132,8 @@ function performSearch() {
 
 searchBtn.addEventListener("click", performSearch);
 searchInput.addEventListener("keyup", e => {
-    if (e.key === "Enter") performSearch();
+    if (e.key === "Enter")
+        performSearch();
 });
 
 // Render lần đầu
