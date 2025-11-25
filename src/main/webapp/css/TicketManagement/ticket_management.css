@@ -1,0 +1,148 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Nov 21, 2025, 7:13:22 PM
+    Author     : NGUYEN
+*/
+/* Body & font */
+body {
+    background-color: #111827; /* nền tối */
+    color: #fff; /* chữ trắng */
+    font-family: 'Inter', sans-serif;
+    padding: 20px;
+}
+
+/* Tiêu đề section */
+.section-title {
+    color: #fff; /* chữ trắng */
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+/* Tên sự kiện trong tiêu đề */
+.section-title .text-event {
+    color: #22c55e; /* xanh lá */
+}
+
+.name{
+    color: #22c55e; /* xanh lá */
+}
+/* Card bảng */
+.card {
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    padding: 0;
+}
+
+/* Bảng đơn hàng */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-custom th, .table-custom td {
+    padding: 12px 10px;
+    border: 1px solid #333;
+    text-align: center;
+}
+
+.table-custom th {
+    background-color: #222;
+    color: #22c55e; /* tiêu đề bảng màu xanh lá */
+    font-weight: 600;
+    border-right: 1px solid #333;
+}
+
+.table-custom th:last-child {
+    border-right: none;
+}
+
+.table-custom td {
+    color: #fff;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+/* Không có dữ liệu */
+.no-data {
+    color: #777;
+    text-align: center;
+    padding: 40px 0;
+}
+.modal-title{
+    color: #22c55e;
+}
+
+/* Buttons 
+.btn-outline-success, .btn-outline-info, .btn-outline-primary, .btn-outline-danger {
+    color: #22c55e;  chữ xanh lá 
+    border-color: #22c55e;  viền xanh lá 
+}
+
+.btn-outline-success:hover, .btn-outline-info:hover, .btn-outline-primary:hover, .btn-outline-danger:hover {
+    background-color: #22c55e;  nền xanh lá khi hover 
+    color: #fff;  chữ trắng khi hover 
+}*/
+
+/* Dropdown danh sách sự kiện */
+.event-dropdown {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: #1c1c1c;
+    border: 1px solid #22c55e; /* viền xanh lá */
+    border-radius: 8px;
+    min-width: 250px;
+    display: none;
+    z-index: 1000;
+}
+
+.event-dropdown ul li a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+}
+
+.event-dropdown ul li a:hover {
+    color: #22c55e; /* chữ xanh lá khi hover */
+}
+.event-dropdown ul.no-bullets {
+    list-style-type: none;
+    padding: 0; 
+    margin: 0;
+}
+/*.ticket-status {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.ticket-status.active {
+    color: #22c55e;
+}
+
+.ticket-status.inactive {
+    color: #ef4444;
+}
+
+
+*/
+.status-toggle {
+    cursor: pointer;
+    font-weight: 600;
+    color: #22c55e;
+}
+
+.status-toggle.inactive {
+    color: #ef4444;
+}
+
+
+.card {
+    overflow: visible !important;
+}
+
